@@ -5,7 +5,6 @@
 #include <chrono>
 #include <cstdlib>
 #include <functional>
-#include "Button.h"
 
 int main() {
 	int stateI = 1;
