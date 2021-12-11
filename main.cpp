@@ -5,9 +5,11 @@
 #include <chrono>
 #include <cstdlib>
 #include <functional>
+#include "Button.h"
 
 int main() {
 	int stateI = 1;
+	int stateEvent = 0;
 
 	sf::Music music;
 	music.openFromFile("sound/Mighty and Meek - Kevin MacLeod.wav");
@@ -57,28 +59,32 @@ int main() {
 	};
 
 	// game display
+	// background
 	sf::RectangleShape background(sf::Vector2f(1920.f, 1080.f));
-	sf::RectangleShape JukkyJung(sf::Vector2f(450.f, 450.f));
-	sf::RectangleShape statusBar(sf::Vector2f(310, 36));
-
 	// button
 	sf::RectangleShape Inventory_button(sf::Vector2f(286.f, 154.f));
 	sf::RectangleShape NextState_button(sf::Vector2f(286.f, 154.f));
 
+	// character
+	// main character
+	sf::RectangleShape JukkyJung(sf::Vector2f(450.f, 450.f));
+	// monster
+	sf::RectangleShape monster(sf::Vector2f(318.f, 415.f));
+
+
 	sf::Texture backgroundTexture;
 	sf::Texture jukkyjungTexture;
-	sf::Texture statusBarTexture;
-	sf::Texture hpBarTexture;
+	sf::Texture monsterTexture;
 	sf::Texture buttonTexture;
 
 	background.setPosition(0.f, 0.f);
 	JukkyJung.setPosition(-50.f, 430.f);
-	statusBar.setPosition(1540.f, 50.f);
-	
+	monster.setPosition(1480.f, 460.f);
+
+	monsterTexture.loadFromFile("picture/truefaster.png");
 	backgroundTexture.loadFromFile("picture/Jukkyjung_adventure_background1.png");
 	jukkyjungTexture.loadFromFile("picture/Jukubot_FA2.png");
-	statusBarTexture.loadFromFile("picture/statusBar.png");
-	hpBarTexture.loadFromFile("picture/hpBar.png");
+	
 	buttonTexture.loadFromFile("picture/button.png");
 
 	sf::Text nextstate("Next State", ReadexPro);
@@ -88,7 +94,7 @@ int main() {
 
 	background.setTexture(&backgroundTexture);
 	JukkyJung.setTexture(&jukkyjungTexture);
-	statusBar.setTexture(&statusBarTexture);
+	monster.setTexture(&monsterTexture);
 	
 	sf::Text state("STATE 1", ReadexPro);
 	sf::Text Hp("HP: 10", ReadexPro);
@@ -126,9 +132,10 @@ int main() {
 				break;
 			case sf::Event::MouseButtonPressed:
 				if (isHover(Inventory_button)) {
-					std::cout << "You clicked!" << std::endl;
+					std::cout << "If you want to play the full game, you can wait to follow on Github." << std::endl << "aHR0cHM6Ly9naXRodWIuY29tL1Bhc2l0aGEvSnVra3lKdW5nLUFkdmVudHVyZQ==";
 				}
 				if (isHover(NextState_button)) {
+					stateEvent = (rand() % 100) + 1;
 					state.setString("State " + std::to_string(++stateI));
 
 					backgroundTexture.loadFromFile("picture/Jukkyjung_adventure_background" + std::to_string((rand() % 2) + 1) + ".png");
@@ -141,7 +148,17 @@ int main() {
 		window.clear();
 		// picture
 		window.draw(background);
+
+		// main character
 		window.draw(JukkyJung);
+		// monster
+		if (stateEvent > 50) {
+			window.draw(monster);
+			nextstate.setString("ATTACK");
+		}
+		else {
+			nextstate.setString("Next State");
+		}
 
 		// dispolay text
 		window.draw(state);
