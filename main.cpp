@@ -4,9 +4,12 @@
 
 // STL
 #include <iostream>
+#include<cmath>
+
+#define PI 3.1415926535898
 
 enum eScene {
-	menu, game, pause
+	menu, setting, credit, game, choose_character
 };
 
 // Function used to create sf::Texture
@@ -103,12 +106,17 @@ int main() {
 	// initializer game scene
 	// menu game
 	sf::RectangleShape GameTitle({ 1080, 720 });
+	sf::RectangleShape picJukkyJung({ 900, 900 });
 	sf::RectangleShape b_Start({ 289.f, 154.f });
+	sf::RectangleShape b_Setting({ 289.f, 154.f });
 	sf::Texture GameTitleTexture = createTexture("picture/title.png");
 	sf::Text t_Start("START", ReadexPro);
+	sf::Text t_Setting("SETTING", ReadexPro);
 	
+	createRectangleTexture(picJukkyJung, JukkyJung, { 1000, 200 });
 	createRectangleTexture(GameTitle, GameTitleTexture, { 0, 0 });
 	createButton(b_Start, button, t_Start, { 50, 250 });
+	createButton(b_Setting, button, t_Setting, { 50, 550 });
 
 	// pause menu
 	sf::RectangleShape PauseBackground({ 1920, 1080 });
@@ -148,6 +156,31 @@ int main() {
 	createTextBold(t_MonsterDEF, "DEF: 10", 32, { 1380.f, 910.f }, ReadexPro);
 	createTextBold(t_MonsterATK, "ATK: 10", 32, { 1380.f, 950.f }, ReadexPro);
 
+	// choose_character
+	//math for ellipse
+	float radius_x = 50;
+	float radius_y = 20;
+	unsigned short quality = 700;
+
+	sf::ConvexShape ellipse;
+	ellipse.setPointCount(quality);
+
+	for (unsigned short i = 0; i < quality; ++i) {
+		float rad = (360 / quality * i) / (360 / PI / 2);
+		float x = cos(rad) * radius_x;
+		float y = sin(rad) * radius_y;
+
+		ellipse.setPoint(i, sf::Vector2f(x, y));
+	};
+
+	ellipse.setPosition(100, 100);
+
+
+	sf::RectangleShape b_BackToGame({ 289.f, 154.f });
+	sf::Text t_BackToGame("EXIT", ReadexPro);
+
+	createButton(b_BackToGame, button, t_BackToGame, { 50, 50 });
+
 	// main loop
 	while (window.isOpen()) {
 		// Event loop
@@ -158,41 +191,39 @@ int main() {
 				window.close();
 				break;
 			case sf::Event::MouseMoved:
-				if (isHover(b_Start)) {
-					b_Start.setFillColor(sf::Color(155, 155, 155, 255));
-				}
-				else {
-					b_Start.setFillColor(sf::Color(255, 255, 255, 255));
-				}
-				
-				if (Pause) {
-					if (isHover(b_Resume)) {
-						b_Resume.setFillColor(sf::Color(155, 155, 155, 255));
-					}
-					else {
-						b_Resume.setFillColor(sf::Color(255, 255, 255, 255));
-					}
+				// game menu
+				b_Start.setFillColor(isHover(b_Start) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+				b_Setting.setFillColor(isHover(b_Setting) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 
-					if (isHover(b_Exit)) {
-						b_Exit.setFillColor(sf::Color(155, 155, 155, 255));
-					}
-					else {
-						b_Exit.setFillColor(sf::Color(255, 255, 255, 255));
-					}
+				// choose_character
+				b_BackToGame.setFillColor(isHover(b_BackToGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+
+				// pause menu
+				if (Pause) {
+					b_Resume.setFillColor(isHover(b_Resume) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					
+					b_Exit.setFillColor(isHover(b_Exit) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 				}
 				break;
 			case sf::Event::MouseButtonPressed:
 				if (isHover(b_Start)) {
 					scene = game;
 				}
+				else if (isHover(b_Setting)) {
+					scene = setting;
+				}
 
 				if (Pause) {
 					if (isHover(b_Resume)) {
 						Pause = false;
+
+						b_Resume.setFillColor(sf::Color(255, 255, 255, 255));
 					}
 					if (isHover(b_Exit)) {
 						scene = menu;
 						Pause = false;
+
+						b_Exit.setFillColor(sf::Color(255, 255, 255, 255));
 					}
 				}
 				break;
@@ -205,9 +236,18 @@ int main() {
 		switch (scene) {
 		case menu:
 			window.draw(GameTitle);
+			window.draw(picJukkyJung);
 			window.draw(b_Start);
 			window.draw(t_Start);
+			window.draw(b_Setting);
+			window.draw(t_Setting);
 
+			break;
+		case setting:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				scene = menu;
+			}
+			window.draw(picJukkyJung);
 			break;
 		case game:
 			window.draw(background);
@@ -228,10 +268,6 @@ int main() {
 				Pause = true;
 				std::cout << "Escape press from game" << std::endl;
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Pause && !event.KeyReleased) {
-				Pause = false;
-				std::cout << "Escape press from pause menu" << std::endl;
-			}
 			if (Pause) {
 				window.draw(PauseBackground);
 				window.draw(b_Resume);
@@ -240,8 +276,16 @@ int main() {
 				window.draw(t_Exit);
 			}
 			break;
+		case choose_character:
+			window.draw(b_BackToGame);
+			window.draw(t_BackToGame);
+
+			window.draw(ellipse);
+			break;
 		}
 
 		window.display();
 	}
+
+	return 0;
 }
