@@ -4,7 +4,7 @@
 
 // STL
 #include <iostream>
-#include<cmath>
+#include <cmath>
 
 #define PI 3.1415926535898
 
@@ -107,16 +107,21 @@ int main() {
 	// menu game
 	sf::RectangleShape GameTitle({ 1080, 720 });
 	sf::RectangleShape picJukkyJung({ 900, 900 });
+
 	sf::RectangleShape b_Start({ 289.f, 154.f });
 	sf::RectangleShape b_Setting({ 289.f, 154.f });
+	sf::RectangleShape b_ExitGame({ 289.f, 154.f });
+
 	sf::Texture GameTitleTexture = createTexture("picture/title.png");
 	sf::Text t_Start("START", ReadexPro);
 	sf::Text t_Setting("SETTING", ReadexPro);
+	sf::Text t_ExitGame("EXIT", ReadexPro);
 	
 	createRectangleTexture(picJukkyJung, JukkyJung, { 1000, 200 });
 	createRectangleTexture(GameTitle, GameTitleTexture, { 0, 0 });
 	createButton(b_Start, button, t_Start, { 50, 250 });
 	createButton(b_Setting, button, t_Setting, { 50, 550 });
+	createButton(b_ExitGame, button, t_ExitGame, { 50, 850 });
 
 	// pause menu
 	sf::RectangleShape PauseBackground({ 1920, 1080 });
@@ -137,12 +142,15 @@ int main() {
 	sf::RectangleShape guiMonsterStats({ 500.f, 180.f });
 	sf::RectangleShape mainCharacter({ 450.f, 450.f });
 
+	sf::RectangleShape b_ChooseCharacter({ 289.f, 154.f });
+
 	sf::Text t_PlayerHP;
 	sf::Text t_PlayerDEF;
 	sf::Text t_PlayerATK;
 	sf::Text t_MonsterHP;  
 	sf::Text t_MonsterDEF;
 	sf::Text t_MonsterATK;
+	sf::Text t_ChooseCharacter("Character", ReadexPro);
 		
 	createRectangleTexture(guiBar, border, { 50, 860 });
 	createRectangleTexture(guiPlayerStats, border, { 50, 860 });
@@ -156,11 +164,13 @@ int main() {
 	createTextBold(t_MonsterDEF, "DEF: 10", 32, { 1380.f, 910.f }, ReadexPro);
 	createTextBold(t_MonsterATK, "ATK: 10", 32, { 1380.f, 950.f }, ReadexPro);
 
+	createButton(b_ChooseCharacter, button, t_ChooseCharacter, { 800.f, 880.f });
+
 	// choose_character
 	//math for ellipse
 	float radius_x = 50;
 	float radius_y = 20;
-	unsigned short quality = 700;
+	unsigned short quality = 70;
 
 	sf::ConvexShape ellipse;
 	ellipse.setPointCount(quality);
@@ -173,8 +183,7 @@ int main() {
 		ellipse.setPoint(i, sf::Vector2f(x, y));
 	};
 
-	ellipse.setPosition(100, 100);
-
+	ellipse.setPosition(100, 100);	
 
 	sf::RectangleShape b_BackToGame({ 289.f, 154.f });
 	sf::Text t_BackToGame("EXIT", ReadexPro);
@@ -191,40 +200,67 @@ int main() {
 				window.close();
 				break;
 			case sf::Event::MouseMoved:
-				// game menu
-				b_Start.setFillColor(isHover(b_Start) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-				b_Setting.setFillColor(isHover(b_Setting) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+				switch (scene) {
+				case menu:
+					// game menu
+					b_Start.setFillColor(isHover(b_Start) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					b_Setting.setFillColor(isHover(b_Setting) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					b_ExitGame.setFillColor(isHover(b_ExitGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 
-				// choose_character
-				b_BackToGame.setFillColor(isHover(b_BackToGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-
-				// pause menu
-				if (Pause) {
-					b_Resume.setFillColor(isHover(b_Resume) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					break;
+				case game:
+					// choose character
+					b_ChooseCharacter.setFillColor(isHover(b_ChooseCharacter) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					
-					b_Exit.setFillColor(isHover(b_Exit) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					// pause menu
+					if (Pause) {
+						b_Resume.setFillColor(isHover(b_Resume) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						
+						b_ExitGame.setFillColor(isHover(b_ExitGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					}
+					break;
+				case choose_character:
+					b_BackToGame.setFillColor(isHover(b_BackToGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+
+					break;
 				}
 				break;
 			case sf::Event::MouseButtonPressed:
-				if (isHover(b_Start)) {
-					scene = game;
-				}
-				else if (isHover(b_Setting)) {
-					scene = setting;
-				}
-
-				if (Pause) {
-					if (isHover(b_Resume)) {
-						Pause = false;
-
-						b_Resume.setFillColor(sf::Color(255, 255, 255, 255));
+				switch (scene) {
+				case menu:
+					if (isHover(b_Start)) {
+						scene = game;
 					}
-					if (isHover(b_Exit)) {
-						scene = menu;
-						Pause = false;
-
-						b_Exit.setFillColor(sf::Color(255, 255, 255, 255));
+					else if (isHover(b_Setting)) {
+						scene = setting;
 					}
+					else if (isHover(b_ExitGame)) {
+						window.close();
+					}
+					break;
+				case game:
+					if (isHover(b_ChooseCharacter)) {
+						scene = choose_character;
+					}
+					if (Pause) {
+						if (isHover(b_Resume)) {
+							Pause = false;
+
+							b_Resume.setFillColor(sf::Color(255, 255, 255, 255));
+						}
+						if (isHover(b_Exit)) {
+							scene = menu;
+							Pause = false;
+
+							b_Exit.setFillColor(sf::Color(255, 255, 255, 255));
+						}
+					}
+					break;
+				case choose_character:
+					if (isHover(b_BackToGame)) {
+						scene = game;
+					}
+					break;
 				}
 				break;
 			}
@@ -237,10 +273,13 @@ int main() {
 		case menu:
 			window.draw(GameTitle);
 			window.draw(picJukkyJung);
+
 			window.draw(b_Start);
 			window.draw(t_Start);
 			window.draw(b_Setting);
 			window.draw(t_Setting);
+			window.draw(b_ExitGame);
+			window.draw(t_ExitGame);
 
 			break;
 		case setting:
@@ -263,6 +302,9 @@ int main() {
 			window.draw(t_MonsterHP);
 			window.draw(t_MonsterDEF);
 			window.draw(t_MonsterATK);
+
+			window.draw(b_ChooseCharacter);
+			window.draw(t_ChooseCharacter);
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !Pause) {
 				Pause = true;
