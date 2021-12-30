@@ -4,9 +4,8 @@
 
 // STL
 #include <iostream>
-#include <cmath>
-
-#define PI 3.1415926535898
+#include <chrono>
+#include <thread>
 
 enum eScene {
 	menu, setting, credit, game, choose_character
@@ -38,7 +37,9 @@ void createRectangleTexture(sf::RectangleShape& rectangle, sf::Texture& texture,
 }
 
 void createRectangleTexture(sf::RectangleShape& rectangle, std::string path, sf::Vector2f position = { 0, 0 }) {
-
+	sf::Texture texture = createTexture(path);
+	rectangle.setTexture(&texture);
+	rectangle.setPosition(position);
 }
 
 void createButton(sf::RectangleShape& button, sf::Texture& buttonTexture, sf::Text& buttonLable, sf::Vector2f position, sf::Color TextColor = sf::Color::Black) {
@@ -78,12 +79,19 @@ int main() {
 	// initializer vairable
 	// RectangleShape
 	sf::RectangleShape background({ 1920.f, 1080.f });
+	sf::RectangleShape fade({ 300.f, 1080.f });
+	sf::RectangleShape BigBlackBox({ 1920.f, 1080.f });
 	
 	// Texture
 	sf::Texture backgroundTexture = createTexture("picture/Jukkyjung_adventure_background1.png");
 	sf::Texture JukkyJung = createTexture("picture/JukkyJung.png");
 	sf::Texture border = createTexture("picture/border.png");
 	sf::Texture button = createTexture("picture/button.png");
+	sf::Texture fadeTexture = createTexture("picture/fade.png");
+
+	BigBlackBox.setFillColor(sf::Color(0, 0, 0, 255));
+	BigBlackBox.setPosition({ 300.f, 0.f });
+	fade.setTexture(&fadeTexture);
 
 	// sound
 	music[0].openFromFile("sound/Mighty and Meek - Kevin MacLeod.wav");
@@ -167,28 +175,24 @@ int main() {
 	createButton(b_ChooseCharacter, button, t_ChooseCharacter, { 800.f, 880.f });
 
 	// choose_character
-	//math for ellipse
-	float radius_x = 50;
-	float radius_y = 20;
-	unsigned short quality = 70;
-
-	sf::ConvexShape ellipse;
-	ellipse.setPointCount(quality);
-
-	for (unsigned short i = 0; i < quality; ++i) {
-		float rad = (360 / quality * i) / (360 / PI / 2);
-		float x = cos(rad) * radius_x;
-		float y = sin(rad) * radius_y;
-
-		ellipse.setPoint(i, sf::Vector2f(x, y));
-	};
-
-	ellipse.setPosition(100, 100);	
+	sf::RectangleShape box_MainCharacter({ 450, 450 });
+	sf::RectangleShape box_Character1({ 450, 450 });
+	sf::RectangleShape box_Character2({ 450, 450 });
+	sf::RectangleShape characterJukkyJung({ 450, 450 });
 
 	sf::RectangleShape b_BackToGame({ 289.f, 154.f });
 	sf::Text t_BackToGame("EXIT", ReadexPro);
 
-	createButton(b_BackToGame, button, t_BackToGame, { 50, 50 });
+	box_MainCharacter.setFillColor(sf::Color::White);
+	box_Character1.setFillColor(sf::Color::White);
+	box_Character2.setFillColor(sf::Color::White);
+
+	box_MainCharacter.setPosition({ 100, 100 });
+	box_Character1.setPosition({ 600, 100 });
+	box_Character2.setPosition({ 1100, 100 });
+
+	createButton(b_BackToGame, button, t_BackToGame, { 45, 900 });
+	createRectangleTexture(characterJukkyJung, JukkyJung, { 600, 100 });
 
 	// main loop
 	while (window.isOpen()) {
@@ -216,7 +220,7 @@ int main() {
 					if (Pause) {
 						b_Resume.setFillColor(isHover(b_Resume) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 						
-						b_ExitGame.setFillColor(isHover(b_ExitGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						b_Exit.setFillColor(isHover(b_Exit) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					}
 					break;
 				case choose_character:
@@ -235,11 +239,34 @@ int main() {
 						scene = setting;
 					}
 					else if (isHover(b_ExitGame)) {
+						for (int i = 0; i < 200; i++) {
+							window.clear(sf::Color(255, 170, 0, 155));
+							fade.move({ 10.f, 0.0f });
+							BigBlackBox.move({ 10.f, 0.0f });
+
+							window.draw(BigBlackBox);
+							window.draw(fade);
+
+							std::this_thread::sleep_for(std::chrono::milliseconds(10));
+							window.display();
+						}
 						window.close();
 					}
 					break;
 				case game:
 					if (isHover(b_ChooseCharacter)) {
+						for (int i = 0; i < 50; i++) {
+							window.clear(sf::Color(255, 170, 0, 155));
+							fade.move({ 30.f, 0.0f });
+							BigBlackBox.move({ 30.f, 0.0f });
+
+							window.draw(BigBlackBox);
+							window.draw(fade);
+
+							std::this_thread::sleep_for(std::chrono::milliseconds(10));
+							window.display();
+						}
+
 						scene = choose_character;
 					}
 					if (Pause) {
@@ -296,6 +323,7 @@ int main() {
 
 			window.draw(mainCharacter);
 			window.draw(t_PlayerHP);
+
 			window.draw(t_PlayerDEF);
 			window.draw(t_PlayerATK);
 
@@ -306,7 +334,8 @@ int main() {
 			window.draw(b_ChooseCharacter);
 			window.draw(t_ChooseCharacter);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !Pause) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !Pause && event.KeyReleased) {
+
 				Pause = true;
 				std::cout << "Escape press from game" << std::endl;
 			}
@@ -319,10 +348,17 @@ int main() {
 			}
 			break;
 		case choose_character:
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				scene = game;
+
+			window.draw(box_MainCharacter);
+			window.draw(box_Character1);
+			window.draw(box_Character2);
+
+			window.draw(characterJukkyJung);
+
 			window.draw(b_BackToGame);
 			window.draw(t_BackToGame);
-
-			window.draw(ellipse);
 			break;
 		}
 
