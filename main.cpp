@@ -250,6 +250,9 @@ int main() {
 							std::this_thread::sleep_for(std::chrono::milliseconds(10));
 							window.display();
 						}
+
+						fade.setPosition({ .0f, .0f });
+						BigBlackBox.setPosition({ 300.0f, .0f });
 						window.close();
 					}
 					break;
@@ -257,8 +260,18 @@ int main() {
 					if (isHover(b_ChooseCharacter)) {
 						for (int i = 0; i < 50; i++) {
 							window.clear(sf::Color(255, 170, 0, 155));
-							fade.move({ 30.f, 0.0f });
-							BigBlackBox.move({ 30.f, 0.0f });
+							fade.move({ 35.f, 0.0f });
+							BigBlackBox.move({ 35.f, 0.0f });
+
+							window.draw(box_MainCharacter);
+							window.draw(box_Character1);
+							window.draw(box_Character2);
+
+							window.draw(characterJukkyJung);
+
+							window.draw(b_BackToGame);
+							window.draw(t_BackToGame);
+
 
 							window.draw(BigBlackBox);
 							window.draw(fade);
@@ -267,6 +280,8 @@ int main() {
 							window.display();
 						}
 
+						fade.setPosition({ .0f, .0f });
+						BigBlackBox.setPosition({ 300.0f, .0f });
 						scene = choose_character;
 					}
 					if (Pause) {
