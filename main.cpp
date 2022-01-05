@@ -7,6 +7,8 @@
 #include <chrono>
 #include <thread>
 
+#include "Pasitha.h"
+
 enum eScene {
 	menu, setting, credit, game, choose_character
 };
