@@ -3,6 +3,8 @@
 
 namespace pasitha {
 	namespace sfml {
+		sf::Font ReadexPro;
+		
 		// Function used to create sf::Texture
 		sf::Texture createTexture(std::string path) {
 			sf::Texture texture;
@@ -13,13 +15,26 @@ namespace pasitha {
 		
 		class Button {
 		public:
-			Button() {
+			Button(std::string text, sf::Vector2f size, sf::Texture& buttonTexture, int characterSize = 36) {
+				button.setTexture(&buttonTexture);
+				button.setSize(size);
 
+				lable.setString(text);
+				lable.setFont(ReadexPro);
+				lable.setCharacterSize(characterSize);
+				lable.setStyle(sf::Text::Bold);
+				lable.setFillColor(sf::Color::Black);
+				lable.setPosition({ button.getPosition().x + button.getGlobalBounds().width / 2.f - lable.getGlobalBounds().width / 2.f, button.getPosition().y + button.getGlobalBounds().height / 2.2f - lable.getGlobalBounds().height / 2.2f });
 			}
+
 		private:
 			sf::RectangleShape button;
+			sf::Text lable;
 		public:
-
+			void draw(sf::RenderWindow& window) {
+				window.draw(button);
+				window.draw(lable);
+			}
 		};
 
 		class Sprite {
