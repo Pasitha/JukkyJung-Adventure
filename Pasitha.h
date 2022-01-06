@@ -3,6 +3,14 @@
 
 namespace pasitha {
 	namespace sfml {
+		// Function used to create sf::Texture
+		sf::Texture createTexture(std::string path) {
+			sf::Texture texture;
+			if (!texture.loadFromFile(path))
+				std::cerr << "Can't loadFile at: " << path << "\n";
+			return texture;
+		}
+		
 		class Button {
 		public:
 			Button() {
