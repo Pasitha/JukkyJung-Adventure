@@ -1,18 +1,18 @@
-// SFML
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
-// STL
-#include <iostream>
-#include <chrono>
-#include <thread>
-
 #include "Pasitha.h"
 
 enum eScene {
 	menu, setting, credit, game, choose_character
 };
 
+#define UPDATE
+#ifdef UPDATE
+
+int main() {
+	
+	return 0;
+}
+
+#else
 // Function used to create sf::Texture
 sf::Texture createTexture(std::string path) {
 	sf::Texture texture;
@@ -384,3 +384,4 @@ int main() {
 
 	return 0;
 }
+#endif
