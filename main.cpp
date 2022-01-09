@@ -6,12 +6,78 @@ enum eScene {
 
 #define UPDATE
 #ifdef UPDATE
-
 int main() {
+	unsigned short int scene = menu;
+	sf::Image icon;
+	icon.loadFromFile("picture/JukkyJung.png");
+
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
+	window.setFramerateLimit(60);
+	window.setIcon(1800, 1800, icon.getPixelsPtr());
+
+	// set pasitha default font
+	pasitha::sfml::ReadexPro.loadFromFile("font/ReadexPro.ttf");
+	// set textures that are often used
+	sf::Texture JukkJungTexture = pasitha::sfml::createTexture("picture/JukkyJung.png");
+	sf::Texture ButtonTexture = pasitha::sfml::createTexture("picture/Button.png");
 	
+	pasitha::sfml::Sprite JukkyJung(JukkJungTexture, 900, 900, { 1000, 200 });
+
+	// initializer game scene
+	// menu
+	pasitha::sfml::Button bStart("START", { 289.f, 154.f }, ButtonTexture, 36, { 50.f, 250.f });
+	pasitha::sfml::Button bSetting("SETTING", { 289.f, 154.f }, ButtonTexture, 36, { 50.f, 550.f });
+	pasitha::sfml::Button bExit("EXIT", { 289.f, 154.f }, ButtonTexture, 36, { 50.f, 850.f });
+
+	while (1) {
+
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			switch (event.type) {
+			case sf::Event::Closed:
+				window.close();
+				break;
+			case sf::Event::MouseMoved:
+				switch (scene) {
+				case menu:
+					bStart.setFillColor((bStart.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
+					bSetting.setFillColor((bSetting.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
+					bExit.setFillColor((bExit.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
+					break;
+
+				case setting: 
+					
+					break;
+
+				case game:
+
+					break;
+				}
+				break;
+			}
+		}
+
+		window.clear(sf::Color(255, 170, 0));
+		switch (menu) {
+		case menu:
+			window.draw(JukkyJung.GetSprite());
+			bStart.draw(window);
+			bSetting.draw(window);
+			bExit.draw(window);
+			break;
+
+		case setting:
+
+			break;
+
+		}
+
+
+		window.display();
+	}
+
 	return 0;
 }
-
 #else
 // Function used to create sf::Texture
 sf::Texture createTexture(std::string path) {
