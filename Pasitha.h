@@ -117,6 +117,10 @@ namespace pasitha {
 			sf::Sprite GetSprite() {
 				return sprite;
 			}
+			
+			void setPosition(sf::Vector2f position = { 0,0 }) {
+				sprite.setPosition(position);
+			}
 		};
 	}
 }
