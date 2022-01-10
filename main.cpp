@@ -21,6 +21,7 @@ int main() {
 	sf::Texture JukkJungTexture = pasitha::sfml::createTexture("picture/JukkyJung.png");
 	sf::Texture ButtonTexture = pasitha::sfml::createTexture("picture/Button.png");
 	
+	pasitha::sfml::Sprite gameTitle("picture/title.png", 1080, 720);
 	pasitha::sfml::Sprite JukkyJung(JukkJungTexture, 900, 900, { 1000, 200 });
 
 	// initializer game scene
@@ -28,6 +29,13 @@ int main() {
 	pasitha::sfml::Button bStart("START", { 289.f, 154.f }, ButtonTexture, 36, { 50.f, 250.f });
 	pasitha::sfml::Button bSetting("SETTING", { 289.f, 154.f }, ButtonTexture, 36, { 50.f, 550.f });
 	pasitha::sfml::Button bExit("EXIT", { 289.f, 154.f }, ButtonTexture, 36, { 50.f, 850.f });
+
+	// game
+	sf::Texture backgroundGameTexture[2];
+	backgroundGameTexture[0] = pasitha::sfml::createTexture("picture/Jukkyjung_adventure_background1.png");
+	backgroundGameTexture[1] = pasitha::sfml::createTexture("picture/Jukkyjung_adventure_background2.png");
+
+	pasitha::sfml::Sprite background(backgroundGameTexture[0], 1920, 1080);
 
 	while (1) {
 
@@ -37,9 +45,13 @@ int main() {
 			case sf::Event::Closed:
 				window.close();
 				break;
+
 			case sf::Event::MouseMoved:
+
 				switch (scene) {
 				case menu:
+					window.draw(gameTitle.GetSprite());
+
 					bStart.setFillColor((bStart.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
 					bSetting.setFillColor((bSetting.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
 					bExit.setFillColor((bExit.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
@@ -50,10 +62,31 @@ int main() {
 					break;
 
 				case game:
-
+					
 					break;
 				}
+
 				break;
+
+			case sf::Event::MouseButtonPressed:
+
+				switch (scene) {
+
+				case menu:
+					if (bStart.isHover(window)) {
+						scene = game;
+					}
+					if (bSetting.isHover(window)) {
+						scene = setting;
+					}
+					if (bExit.isHover(window)) {
+						window.close();
+					}
+					break;
+
+				}
+
+				break;	
 			}
 		}
 
