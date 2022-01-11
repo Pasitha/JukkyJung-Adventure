@@ -122,5 +122,24 @@ namespace pasitha {
 				sprite.setPosition(position);
 			}
 		};
+		
+		class Picture {
+		public:
+			Picture(sf::Texture texture, sf::Vector2f size, sf::Vector2f position) {
+				rectangle.setSize(size);
+				rectangle.setPosition(position);
+				rectangle.setTexture(&texture);
+			}
+		private:
+			sf::RectangleShape rectangle;
+		public:
+			void draw(sf::RenderWindow& window) {
+				window.draw(rectangle);
+			}
+
+			void setPosition(sf::Vector2f position) {
+				rectangle.setPosition(position);
+			}
+		};
 	}
 }
