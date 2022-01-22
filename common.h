@@ -5,6 +5,12 @@
 #include <sstream>
 #include <cstdlib>
 #include <functional>
+#include <thread>
+#include <csignal>
+#include <ctime>
+
+// Discord SDK
+#include <discord.h>
 
 // SFML
 #include <SFML/Graphics.hpp>
