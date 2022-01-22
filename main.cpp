@@ -6,112 +6,17 @@ enum eScene {
 	menu, setting, credit, game, choose_character
 };
 
-// #define UPDATE
-#ifdef UPDATE
+struct DiscordState {
+	std::unique_ptr <discord::Core> core;
+};
+
+namespace {
+	volatile bool interrupted{ false };
+}
+
+// #define TEST
+#ifdef TEST
 int main() {
-	unsigned short int scene = menu;
-	sf::Image icon;
-	icon.loadFromFile("picture/JukkyJung.png");
-
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
-	window.setFramerateLimit(60);
-	window.setIcon(1800, 1800, icon.getPixelsPtr());
-
-	// set pasitha default font
-	pasitha::sfml::ReadexPro.loadFromFile("font/ReadexPro.ttf");
-	// set textures that are often used
-	sf::Texture JukkJungTexture = pasitha::sfml::createTexture("picture/JukkyJung.png");
-	sf::Texture ButtonTexture = pasitha::sfml::createTexture("picture/Button.png");
-	
-	pasitha::sfml::Sprite gameTitle("picture/title.png", 1080, 720);
-	pasitha::sfml::Sprite JukkyJung(JukkJungTexture, 900, 900, { 1000, 200 });
-
-	// initializer game scene
-	// menu
-	pasitha::sfml::Button bStart("START", BUTTONSIZE, ButtonTexture, 36, { 50.f, 250.f });
-	pasitha::sfml::Button bSetting("SETTING", BUTTONSIZE, ButtonTexture, 36, { 50.f, 550.f });
-	pasitha::sfml::Button bExit("EXIT", BUTTONSIZE, ButtonTexture, 36, { 50.f, 850.f });
-
-	// game
-	sf::Texture backgroundGameTexture[2];
-	backgroundGameTexture[0] = pasitha::sfml::createTexture("picture/Jukkyjung_adventure_background1.png");
-	backgroundGameTexture[1] = pasitha::sfml::createTexture("picture/Jukkyjung_adventure_background2.png");
-
-	pasitha::sfml::Picture background(backgroundGameTexture[0], { 1920.f, 1080.f }, { 0, 0 });
-
-	while (1) {
-
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			switch (event.type) {
-			case sf::Event::Closed:
-				window.close();
-				break;
-
-			case sf::Event::MouseMoved:
-
-				switch (scene) {
-				case menu:
-					window.draw(gameTitle.GetSprite());
-
-					bStart.setFillColor((bStart.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
-					bSetting.setFillColor((bSetting.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
-					bExit.setFillColor((bExit.isHover(window)) ? sf::Color(155, 155, 155) : sf::Color(255, 255, 255));
-					break;
-
-				case setting: 
-					
-					break;
-
-				case game:
-					
-					break;
-				}
-
-				break;
-
-			case sf::Event::MouseButtonPressed:
-
-				switch (scene) {
-
-				case menu:
-					if (bStart.isHover(window)) {
-						scene = game;
-					}
-					else if (bSetting.isHover(window)) {
-						scene = setting;
-					}
-					else if (bExit.isHover(window)) {
-						window.close();
-						return 0;
-					}
-					break;
-
-				}
-
-				break;	
-			}
-		}
-
-		window.clear(sf::Color(255, 170, 0));
-
-		switch (menu) {
-		case menu:
-			window.draw(JukkyJung.GetSprite());
-			bStart.draw(window);
-			bSetting.draw(window);
-			bExit.draw(window);
-			break;
-
-		case game:
-			bStart.draw(window);
-			break;
-
-		}
-
-		window.display();
-	}
-
 	return 0;
 }
 #else
@@ -157,331 +62,370 @@ void createButton(sf::RectangleShape& button, sf::Texture& buttonTexture, sf::Te
 };
 
 int main() {
-	unsigned short int scene = menu;
-	bool Pause = false;
+	std::vector<std::thread*> threads;
 
-	// set pasitha default font
-	pasitha::sfml::ReadexPro.loadFromFile("font/ReadexPro.ttf");
+	// Discord SDK thread
+	threads.push_back(new std::thread([&]() -> void {
+		DiscordState state{};
 
-	sf::Image icon;
-	icon.loadFromFile("picture/JukkyJung.png");
+		discord::Core* core{};
+		auto response = discord::Core::Create(742258552550195321, DiscordCreateFlags_Default, &core);
 
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
-	window.setIcon(1800, 1800, icon.getPixelsPtr());
-	window.setFramerateLimit(60);
+		state.core.reset(core);
 
-	// sound
-	sf::Music music[2];
-	music[0].openFromFile("sound/Mighty and Meek - Kevin MacLeod.wav");
-	music[0].setVolume(18.f);
-	music[0].play();
-	music[0].setLoop(true);
-
-	music[1].openFromFile("sound/March of the Mind - Kevin MacLeod.wav");
-	music[1].setVolume(18.f);
-	music[1].setLoop(true);
-
-	// font
-	sf::Font ReadexPro;
-	ReadexPro.loadFromFile("font/ReadexPro.ttf");
-
-	// Function used to check mouse is hover the sf::Rectangle
-	auto isHover = [&window](sf::RectangleShape& button) -> bool {
-		float mouseX = sf::Mouse::getPosition(window).x;
-		float mouseY = sf::Mouse::getPosition(window).y;
-
-		float btnPosX = button.getPosition().x;
-		float btnPosY = button.getPosition().y;
-
-		float btnxPosWidth = btnPosX + button.getLocalBounds().width;
-		float btnyPosHeight = btnPosY + button.getLocalBounds().height;
-
-		return mouseX < btnxPosWidth && mouseX > btnPosX && mouseY < btnyPosHeight && mouseY > btnPosY;
-	};
-
-	// initializer vairable
-	// RectangleShape
-	sf::RectangleShape background({ 1920.f, 1080.f });
-	sf::RectangleShape fade({ 300.f, 1080.f });
-	sf::RectangleShape BigBlackBox({ 1920.f, 1080.f });
-	
-	// Texture
-	sf::Texture backgroundTexture = createTexture("picture/Jukkyjung_adventure_background1.png");
-	sf::Texture JukkyJung = createTexture("picture/JukkyJung.png");
-	sf::Texture border = createTexture("picture/border.png");
-	sf::Texture button = createTexture("picture/button.png");
-	sf::Texture fadeTexture = createTexture("picture/fade.png");
-
-	BigBlackBox.setFillColor(sf::Color(0, 0, 0, 255));
-	BigBlackBox.setPosition({ 300.f, 0.f });
-	fade.setTexture(&fadeTexture);
-	// end initializer vairable section
-
-	// initializer game scene
-	// menu game
-	sf::Texture GameTitleTexture = createTexture("picture/title.png");
-
-	sf::RectangleShape GameTitle({ 1080, 720 });
-	sf::RectangleShape picJukkyJung({ 900, 900 });
-	createRectangleTexture(picJukkyJung, JukkyJung, { 1000, 200 });
-	createRectangleTexture(GameTitle, GameTitleTexture, { 0, 0 });
-
-	pasitha::sfml::Button bStart("START", BUTTONSIZE, button, 36, { 50, 250 });
-	pasitha::sfml::Button bSetting("SETTING", BUTTONSIZE, button, 36, { 50, 550 });
-	pasitha::sfml::Button bExit("EXIT", BUTTONSIZE, button, 36, { 50, 850 });	
-	
-	// pause menu
-	sf::RectangleShape PauseBackground({ 1920, 1080 });
-	PauseBackground.setFillColor(sf::Color(0, 0, 0, 200));
-
-	pasitha::sfml::Button bPauseResume("RESUME", BUTTONSIZE, button, 36, { 800, 300 });
-	pasitha::sfml::Button bPauseExit("EXIT", BUTTONSIZE, button, 36, { 800, 500 });
-	
-	// game
-	background.setTexture(&backgroundTexture);
-
-	sf::RectangleShape guiBar({ 1820.f, 180.f });
-	sf::RectangleShape guiPlayerStats({ 500.f, 180.f });
-	sf::RectangleShape guiMonsterStats({ 500.f, 180.f });
-	sf::RectangleShape mainCharacter({ 450.f, 450.f });
-
-	pasitha::sfml::Button bChooseCharacter("Character", BUTTONSIZE, button, 36, { 800.f, 880.f });
-	sf::RectangleShape b_ChooseCharacter(BUTTONSIZE);
-	sf::Text t_ChooseCharacter("Character", ReadexPro);
-
-	sf::Text t_PlayerHP;
-	sf::Text t_PlayerDEF;
-	sf::Text t_PlayerATK;
-	sf::Text t_MonsterHP;  
-	sf::Text t_MonsterDEF;
-	sf::Text t_MonsterATK;
-		
-	createRectangleTexture(guiBar, border, { 50, 860 });
-	createRectangleTexture(guiPlayerStats, border, { 50, 860 });
-	createRectangleTexture(guiMonsterStats, border, { 1370, 860 });
-	createRectangleTexture(mainCharacter, JukkyJung, { 70, 410 });
-
-	createTextBold(t_PlayerHP, "HP: 500", 32, { 60.f, 870.f }, ReadexPro);
-	createTextBold(t_PlayerDEF, "DEF: 100", 32, { 60.f, 910.f }, ReadexPro);
-	createTextBold(t_PlayerATK, "ATK: 100", 32, { 60.f, 950.f }, ReadexPro);
-	createTextBold(t_MonsterHP, "HP: 100", 32, { 1380.f, 870.f }, ReadexPro);
-	createTextBold(t_MonsterDEF, "DEF: 10", 32, { 1380.f, 910.f }, ReadexPro);
-	createTextBold(t_MonsterATK, "ATK: 10", 32, { 1380.f, 950.f }, ReadexPro);
-
-	createButton(b_ChooseCharacter, button, t_ChooseCharacter, { 800.f, 880.f });
-
-	// choose_character
-	sf::RectangleShape box_MainCharacter({ 450, 450 });
-	sf::RectangleShape box_Character1({ 450, 450 });
-	sf::RectangleShape box_Character2({ 450, 450 });
-	sf::RectangleShape characterJukkyJung({ 450, 450 });
-
-	sf::RectangleShape b_BackToGame(BUTTONSIZE);
-	sf::Text t_BackToGame("EXIT", ReadexPro);
-	createButton(b_BackToGame, button, t_BackToGame, { 45, 900 });
-
-	box_MainCharacter.setFillColor(sf::Color::White);
-	box_Character1.setFillColor(sf::Color::White);
-	box_Character2.setFillColor(sf::Color::White);
-
-	box_MainCharacter.setPosition({ 100, 100 });
-	box_Character1.setPosition({ 600, 100 });
-	box_Character2.setPosition({ 1100, 100 });
-
-	createRectangleTexture(characterJukkyJung, JukkyJung, { 600, 100 });
-
-	// main loop
-	while (window.isOpen()) {
-		// Event loop
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			switch (event.type) {
-			case sf::Event::Closed:
-				window.close();
-				break;
-			case sf::Event::MouseMoved:
-				switch (scene) {
-				case menu:
-					// game menu
-					bStart.setFillColor(bStart.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-					bSetting.setFillColor(bSetting.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-					bExit.setFillColor(bExit.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-
-					break;
-				case game:
-					// choose character
-					b_ChooseCharacter.setFillColor(isHover(b_ChooseCharacter) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-					
-					// pause menu
-					if (Pause) {
-						bPauseResume.setFillColor(bPauseResume.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-						bPauseExit.setFillColor(bPauseExit.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-					}
-					break;
-				case choose_character:
-					b_BackToGame.setFillColor(isHover(b_BackToGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
-
-					break;
-				}
-				break;
-			case sf::Event::MouseButtonPressed:
-				switch (scene) {
-				case menu:
-					if (bStart.isHover(window)) {
-						bStart.setFillColor(sf::Color(255, 255, 255, 255));
-						scene = game;
-					}
-					else if (bSetting.isHover(window)) {
-						bStart.setFillColor(sf::Color(255, 255, 255, 255));
-						scene = setting;
-					}
-					else if (bExit.isHover(window)) {
-						bStart.setFillColor(sf::Color(255, 255, 255, 255));
-						for (int i = 0; i < 200; i++) {
-							window.clear(sf::Color(255, 170, 0, 155));
-
-							window.draw(GameTitle);
-							window.draw(picJukkyJung);
-
-							bStart.draw(window);
-							bSetting.draw(window);
-							bExit.draw(window);
-
-							fade.move({ 10.f, 0.0f });
-							BigBlackBox.move({ 10.f, 0.0f });
-
-							window.draw(BigBlackBox);
-							window.draw(fade);
-
-							std::this_thread::sleep_for(std::chrono::milliseconds(10));
-							window.display();
-						}
-
-						fade.setPosition({ .0f, .0f });
-						BigBlackBox.setPosition({ 300.0f, .0f });
-						window.close();
-					}
-					break;
-				case game:
-					if (isHover(b_ChooseCharacter)) {
-						for (int i = 0; i < 50; i++) {
-							window.clear(sf::Color(255, 170, 0, 155));
-
-							fade.move({ 37.f, 0.0f });
-							BigBlackBox.move({ 37.f, 0.0f });
-
-							window.draw(box_MainCharacter);
-							window.draw(box_Character1);
-							window.draw(box_Character2);
-
-							window.draw(characterJukkyJung);
-
-							window.draw(b_BackToGame);
-							window.draw(t_BackToGame);
-
-
-							window.draw(BigBlackBox);
-							window.draw(fade);
-
-							window.display();
-							std::this_thread::sleep_for(std::chrono::milliseconds(10));
-						}
-
-						fade.setPosition({ .0f, .0f });
-						BigBlackBox.setPosition({ 300.0f, .0f });
-						scene = choose_character;
-					}
-					if (Pause) {
-						if (bPauseResume.isHover(window)) {
-							Pause = false;
-
-							bPauseResume.setFillColor(sf::Color(255, 255, 255, 255));
-						}
-						if (bPauseExit.isHover(window)) {
-							scene = menu;
-							Pause = false;
-
-							bPauseExit.setFillColor(sf::Color(255, 255, 255, 255));
-						}
-					}
-					break;
-				case choose_character:
-					if (isHover(b_BackToGame)) {
-						scene = game;
-					}
-					break;
-				}
-				break;
-			}
+		if (!state.core) {
+			std::cout << "Failed to instantiate Discord!";
+			std::exit(-1);
 		}
 
-		// display
-		window.clear(sf::Color(255, 170, 0, 155));
+		discord::Activity activity{};
+		activity.SetDetails("Where is JukkyJung??");
+		activity.SetState("Let's Help JukkyJung!!");
+		activity.GetAssets().SetSmallImage("jukucrush");
+		activity.GetAssets().SetSmallText("Jukucrush game");
+		activity.GetAssets().SetLargeImage("jukubot");
+		activity.GetAssets().SetLargeText("JukkyJung Adventure");
+		activity.GetTimestamps().SetStart(time(0));
+		activity.SetType(discord::ActivityType::Playing);
 
-		switch (scene) {
-		case menu:
-			window.draw(GameTitle);
-			window.draw(picJukkyJung);
+		state.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+			std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed") << " updating activity!\n";
+		});
 
-			bStart.draw(window);
-			bSetting.draw(window);
-			bExit.draw(window);
+		std::signal(SIGINT, [](int) {
+			interrupted = true;
+		});
+
+		// void Uodate
+		do {
+			state.core->RunCallbacks();
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		} while (!interrupted);
+	}));
+
+	// sfml thread
+	threads.push_back(new std::thread([&]() -> void {
+		unsigned short int scene = menu;
+		bool Pause = false;
+
+		// set pasitha default font
+		pasitha::sfml::ReadexPro.loadFromFile("font/ReadexPro.ttf");
+
+		sf::Image icon;
+		icon.loadFromFile("picture/JukkyJung.png");
+
+		sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
+		window.setIcon(1800, 1800, icon.getPixelsPtr());
+		window.setFramerateLimit(60);
+
+		// sound
+		sf::Music music[2];
+		music[0].openFromFile("sound/Mighty and Meek - Kevin MacLeod.wav");
+		music[0].setVolume(18.f);
+		music[0].play();
+		music[0].setLoop(true);
+
+		music[1].openFromFile("sound/March of the Mind - Kevin MacLeod.wav");
+		music[1].setVolume(18.f);
+		music[1].setLoop(true);
+
+		// font
+		sf::Font ReadexPro;
+		ReadexPro.loadFromFile("font/ReadexPro.ttf");
+
+		// Function used to check mouse is hover the sf::Rectangle
+		auto isHover = [&window](sf::RectangleShape& button) -> bool {
+			float mouseX = sf::Mouse::getPosition(window).x;
+			float mouseY = sf::Mouse::getPosition(window).y;
+
+			float btnPosX = button.getPosition().x;
+			float btnPosY = button.getPosition().y;
+
+			float btnxPosWidth = btnPosX + button.getLocalBounds().width;
+			float btnyPosHeight = btnPosY + button.getLocalBounds().height;
+
+			return mouseX < btnxPosWidth && mouseX > btnPosX && mouseY < btnyPosHeight && mouseY > btnPosY;
+		};
+
+		// initializer vairable
+		// RectangleShape
+		sf::RectangleShape background({ 1920.f, 1080.f });
+		sf::RectangleShape fade({ 300.f, 1080.f });
+		sf::RectangleShape BigBlackBox({ 1920.f, 1080.f });
 		
-			break;
-		case setting:
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-				scene = menu;
+		// Texture
+		sf::Texture backgroundTexture = createTexture("picture/Jukkyjung_adventure_background1.png");
+		sf::Texture JukkyJung = createTexture("picture/JukkyJung.png");
+		sf::Texture border = createTexture("picture/border.png");
+		sf::Texture button = createTexture("picture/button.png");
+		sf::Texture fadeTexture = createTexture("picture/fade.png");
+
+		BigBlackBox.setFillColor(sf::Color(0, 0, 0, 255));
+		BigBlackBox.setPosition({ 300.f, 0.f });
+		fade.setTexture(&fadeTexture);
+		// end initializer vairable section
+
+		// initializer game scene
+		// menu game
+		sf::Texture GameTitleTexture = createTexture("picture/title.png");
+
+		sf::RectangleShape GameTitle({ 1080, 720 });
+		sf::RectangleShape picJukkyJung({ 900, 900 });
+		createRectangleTexture(picJukkyJung, JukkyJung, { 1000, 200 });
+		createRectangleTexture(GameTitle, GameTitleTexture, { 0, 0 });
+
+		pasitha::sfml::Button bStart("START", BUTTONSIZE, button, 36, { 50, 250 });
+		pasitha::sfml::Button bSetting("SETTING", BUTTONSIZE, button, 36, { 50, 550 });
+		pasitha::sfml::Button bExit("EXIT", BUTTONSIZE, button, 36, { 50, 850 });	
+		
+		// pause menu
+		sf::RectangleShape PauseBackground({ 1920, 1080 });
+		PauseBackground.setFillColor(sf::Color(0, 0, 0, 200));
+
+		pasitha::sfml::Button bPauseResume("RESUME", BUTTONSIZE, button, 36, { 800, 300 });
+		pasitha::sfml::Button bPauseExit("EXIT", BUTTONSIZE, button, 36, { 800, 500 });
+		
+		// game
+		background.setTexture(&backgroundTexture);
+
+		sf::RectangleShape guiBar({ 1820.f, 180.f });
+		sf::RectangleShape guiPlayerStats({ 500.f, 180.f });
+		sf::RectangleShape guiMonsterStats({ 500.f, 180.f });
+		sf::RectangleShape mainCharacter({ 450.f, 450.f });
+
+		pasitha::sfml::Button bChooseCharacter("Character", BUTTONSIZE, button, 36, { 800.f, 880.f });
+
+		sf::Text t_PlayerHP;
+		sf::Text t_PlayerDEF;
+		sf::Text t_PlayerATK;
+		sf::Text t_MonsterHP;  
+		sf::Text t_MonsterDEF;
+		sf::Text t_MonsterATK;
+			
+		createRectangleTexture(guiBar, border, { 50, 860 });
+		createRectangleTexture(guiPlayerStats, border, { 50, 860 });
+		createRectangleTexture(guiMonsterStats, border, { 1370, 860 });
+		createRectangleTexture(mainCharacter, JukkyJung, { 70, 410 });
+
+		createTextBold(t_PlayerHP, "HP: 500", 32, { 60.f, 870.f }, ReadexPro);
+		createTextBold(t_PlayerDEF, "DEF: 100", 32, { 60.f, 910.f }, ReadexPro);
+		createTextBold(t_PlayerATK, "ATK: 100", 32, { 60.f, 950.f }, ReadexPro);
+		createTextBold(t_MonsterHP, "HP: 100", 32, { 1380.f, 870.f }, ReadexPro);
+		createTextBold(t_MonsterDEF, "DEF: 10", 32, { 1380.f, 910.f }, ReadexPro);
+		createTextBold(t_MonsterATK, "ATK: 10", 32, { 1380.f, 950.f }, ReadexPro);
+
+		// choose_character
+		sf::RectangleShape box_MainCharacter({ 450, 450 });
+		sf::RectangleShape box_Character1({ 450, 450 });
+		sf::RectangleShape box_Character2({ 450, 450 });
+		sf::RectangleShape characterJukkyJung({ 450, 450 });
+
+		pasitha::sfml::Button bbackToGame("EXIT", BUTTONSIZE, button, 36, { 45, 900 });
+
+		box_MainCharacter.setFillColor(sf::Color::White);
+		box_Character1.setFillColor(sf::Color::White);
+		box_Character2.setFillColor(sf::Color::White);
+
+		box_MainCharacter.setPosition({ 100, 100 });
+		box_Character1.setPosition({ 600, 100 });
+		box_Character2.setPosition({ 1100, 100 });
+
+		createRectangleTexture(characterJukkyJung, JukkyJung, { 600, 100 });
+
+		// main loop
+		while (window.isOpen()) {
+			// Event loop
+			sf::Event event;
+			while (window.pollEvent(event)) {
+				switch (event.type) {
+				case sf::Event::Closed:
+					window.close();
+					break;
+				case sf::Event::MouseMoved:
+					switch (scene) {
+					case menu:
+						// game menu
+						bStart.setFillColor(bStart.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						bSetting.setFillColor(bSetting.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						bExit.setFillColor(bExit.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+
+						break;
+					case game:
+						// choose character
+						bChooseCharacter.setFillColor(bChooseCharacter.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						
+						// pause menu
+						if (Pause) {
+							bPauseResume.setFillColor(bPauseResume.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+							bPauseExit.setFillColor(bPauseExit.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						}
+						break;
+					case choose_character:
+						bbackToGame.setFillColor(bbackToGame.isHover(window) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+
+						break;
+					}
+					break;
+				case sf::Event::MouseButtonPressed:
+					switch (scene) {
+					case menu:
+						if (bStart.isHover(window)) {
+							scene = game;
+							bStart.setFillColor(sf::Color(255, 255, 255, 255));
+						}
+						else if (bSetting.isHover(window)) {
+							scene = setting;
+							bSetting.setFillColor(sf::Color(255, 255, 255, 255));
+						}
+						else if (bExit.isHover(window)) {
+							bExit.setFillColor(sf::Color(255, 255, 255, 255));
+							for (int i = 0; i < 200; i++) {
+								window.clear(sf::Color(255, 170, 0, 155));
+
+								window.draw(GameTitle);
+								window.draw(picJukkyJung);
+
+								bStart.draw(window);
+								bSetting.draw(window);
+								bExit.draw(window);
+
+								fade.move({ 10.f, 0.0f });
+								BigBlackBox.move({ 10.f, 0.0f });
+
+								window.draw(BigBlackBox);
+								window.draw(fade);
+
+								std::this_thread::sleep_for(std::chrono::milliseconds(10));
+								window.display();
+							}
+
+							fade.setPosition({ .0f, .0f });
+							BigBlackBox.setPosition({ 300.0f, .0f });
+							window.close();
+						}
+						break;
+					case game:
+						if (bChooseCharacter.isHover(window)) {
+							for (int i = 0; i < 50; i++) {
+								window.clear(sf::Color(255, 170, 0, 155));
+
+								fade.move({ 37.f, 0.0f });
+								BigBlackBox.move({ 37.f, 0.0f });
+
+								window.draw(box_MainCharacter);
+								window.draw(box_Character1);
+								window.draw(box_Character2);
+
+								window.draw(characterJukkyJung);
+
+								bbackToGame.draw(window);
+
+								window.draw(BigBlackBox);
+								window.draw(fade);
+
+								window.display();
+								std::this_thread::sleep_for(std::chrono::milliseconds(10));
+							}
+
+							fade.setPosition({ .0f, .0f });
+							BigBlackBox.setPosition({ 300.0f, .0f });
+							scene = choose_character;
+						}
+						if (Pause) {
+							if (bPauseResume.isHover(window)) {
+								Pause = false;
+
+								bPauseResume.setFillColor(sf::Color(255, 255, 255, 255));
+							}
+							if (bPauseExit.isHover(window)) {
+								scene = menu;
+								Pause = false;
+
+								bPauseExit.setFillColor(sf::Color(255, 255, 255, 255));
+							}
+						}
+						break;
+					case choose_character:
+						if (bbackToGame.isHover(window)) {
+							scene = game;
+						}
+						break;
+					}
+					break;
+				}
 			}
-			window.draw(picJukkyJung);
-			break;
-		case game:
-			window.draw(background);
-			window.draw(guiBar);
-			window.draw(guiPlayerStats);
-			window.draw(guiMonsterStats);
 
-			window.draw(mainCharacter);
-			window.draw(t_PlayerHP);
+			// display
+			window.clear(sf::Color(255, 170, 0, 155));
 
-			window.draw(t_PlayerDEF);
-			window.draw(t_PlayerATK);
+			switch (scene) {
+			case menu:
+				window.draw(GameTitle);
+				window.draw(picJukkyJung);
 
-			window.draw(t_MonsterHP);
-			window.draw(t_MonsterDEF);
-			window.draw(t_MonsterATK);
+				bStart.draw(window);
+				bSetting.draw(window);
+				bExit.draw(window);
+			
+				break;
+			case setting:
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+					scene = menu;
+				}
+				window.draw(picJukkyJung);
+				break;
+			case game:
+				window.draw(background);
+				window.draw(guiBar);
+				window.draw(guiPlayerStats);
+				window.draw(guiMonsterStats);
 
-			window.draw(b_ChooseCharacter);
-			window.draw(t_ChooseCharacter);
+				window.draw(mainCharacter);
+				window.draw(t_PlayerHP);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !Pause && event.KeyReleased) {
+				window.draw(t_PlayerDEF);
+				window.draw(t_PlayerATK);
 
-				Pause = true;
-				std::cout << "Escape press from game" << std::endl;
+				window.draw(t_MonsterHP);
+				window.draw(t_MonsterDEF);
+				window.draw(t_MonsterATK);
+
+				bChooseCharacter.draw(window);
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !Pause && event.KeyReleased) {
+
+					Pause = true;
+					std::cout << "Escape press from game" << std::endl;
+				}
+				if (Pause) {
+					window.draw(PauseBackground);
+					bPauseResume.draw(window);
+					bPauseExit.draw(window);
+				}
+				break;
+			case choose_character:
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+					scene = game;
+
+				window.draw(box_MainCharacter);
+				window.draw(box_Character1);
+				window.draw(box_Character2);
+
+				window.draw(characterJukkyJung);
+
+				bbackToGame.draw(window);
+				break;
 			}
-			if (Pause) {
-				window.draw(PauseBackground);
-				bPauseResume.draw(window);
-				bPauseExit.draw(window);
-			}
-			break;
-		case choose_character:
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				scene = game;
 
-			window.draw(box_MainCharacter);
-			window.draw(box_Character1);
-			window.draw(box_Character2);
-
-			window.draw(characterJukkyJung);
-
-			window.draw(b_BackToGame);
-			window.draw(t_BackToGame);
-			break;
+			window.display();
 		}
+		interrupted = true;
+	}));
 
-		window.display();
-	}
+	threads.at(0)->join();
+	threads.at(1)->join();
 
+	delete threads.at(0);
+	delete threads.at(1);
 	return 0;
 }
 #endif
