@@ -1,35 +1,21 @@
-#include "Pasitha.h"
-#define BUTTONSIZE { 259.f, 154.f }
+#include "common.h"
 
-enum Scene {
-	menu, setting, credit, game, choose_character
-};
-
-struct DiscordState {
-	std::unique_ptr<discord::Core> core;
-};
-
+// discord
 namespace {
+	struct DiscordState {
+		std::unique_ptr<discord::Core> core;
+	};
+
 	volatile bool interrupted{ false };
 }
 
-unsigned short int scene = menu;
-bool Pause = false;
+// sfml
+namespace {
 
-// render function
-void renderingthread(sf::RenderWindow* window) {
-	window->setActive(true);
-
-	// the rendering loop
-	while (window->isOpen()) {
-		window->clear(sf::Color::Black); 
-
-		window->display();
-	}
 }
 
-// Discord Thread set Activities to user
-void discordThread() {
+// discord Thread set Activities to user
+void discordRPC() {
 	DiscordState state{};
 
 	discord::Core* core{};
@@ -60,12 +46,25 @@ void discordThread() {
 		interrupted = true;
 	});
 
-	// void Update()
+	// void Uodate
 	do {
 		state.core->RunCallbacks();
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 	} while (!interrupted);
 }
+
+// render function
+void renderingthread(sf::RenderWindow* window) {
+	window->setActive(true);
+
+	// the rendering loop
+	while (window->isOpen()) {
+		window->clear(sf::Color::Black);
+
+		window->display();
+	}
+}
+
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
@@ -73,20 +72,9 @@ int main() {
 
 	window.setActive(false);
 
-	sf::SoundBuffer buffer;
-	if (!buffer.loadFromFile("sound/Main-Theme.wav"))
-		return -1;
+	std::vector<std::thread*> gameThreads;
 
-	sf::Sound sound;
-	sound.setBuffer(buffer);
-	sound.setLoop(true);
-	sound.play();
-
-	sf::Thread renderThread(&renderingthread, &window);
-	sf::Thread discordSDK(&discordThread);
-
-	renderThread.launch();
-	discordSDK.launch();
+	gameThreads.push_back(new std::thread(discordRPC));
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -101,5 +89,6 @@ int main() {
 		}
 	}
 
+	gameThreads.at(0)->join();
 	return 0;
 }
