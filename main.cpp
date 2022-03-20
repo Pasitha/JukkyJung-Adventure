@@ -1,4 +1,4 @@
-#include "common.h"
+"
 
 // discord
 namespace {
@@ -7,11 +7,6 @@ namespace {
 	};
 
 	volatile bool interrupted{ false };
-}
-
-// sfml
-namespace {
-
 }
 
 // discord Thread set Activities to user
@@ -53,18 +48,30 @@ void discordRPC() {
 	} while (!interrupted);
 }
 
+// sfml variable
+namespace {
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+}
+
+// game variable
+namespace {
+	enum scene {
+		menu, setting, game, character
+	};
+}
+
 // render function
-void renderingthread(sf::RenderWindow* window) {
+void render(sf::RenderWindow* window) {
 	window->setActive(true);
 
 	// the rendering loop
 	while (window->isOpen()) {
-		window->clear(sf::Color::Black);
+		window->clear(sf::Color::Yellow);
 
 		window->display();
 	}
 }
-
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
@@ -72,9 +79,20 @@ int main() {
 
 	window.setActive(false);
 
-	std::vector<std::thread*> gameThreads;
+	std::vector<std::thread*> gameThreads {
+		new std::thread(discordRPC),
+		new std::thread(render, &window)
+	};
 
-	gameThreads.push_back(new std::thread(discordRPC));
+	if (!buffer.loadFromFile("sound/Main-Theme.wav"))
+		return -1;
+
+	sound.setBuffer(buffer);
+	sound.setLoop(true);
+	sound.play();
+
+	gameThreads.at(0)->join();
+	gameThreads.at(1)->join();
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -89,6 +107,5 @@ int main() {
 		}
 	}
 
-	gameThreads.at(0)->join();
 	return 0;
 }
