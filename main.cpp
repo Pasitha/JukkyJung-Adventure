@@ -52,6 +52,12 @@ void discordRPC() {
 namespace {
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
+
+	// main menu
+	sf::Sprite jukkyjung;
+	sf::Sprite gameTitle;
+
+	sf::Texture jukkyjungTexture;
 }
 
 // game variable
@@ -69,6 +75,8 @@ void render(sf::RenderWindow* window) {
 	while (window->isOpen()) {
 		window->clear(sf::Color::Yellow);
 
+		window->draw(jukkyjung);
+
 		window->display();
 	}
 }
@@ -84,12 +92,22 @@ int main() {
 		new std::thread(render, &window)
 	};
 
+	// init sound
 	if (!buffer.loadFromFile("sound/Main-Theme.wav"))
 		return -1;
 
+	// main theme
 	sound.setBuffer(buffer);
 	sound.setLoop(true);
 	sound.play();
+	
+	// init sprite and texture
+	if (!jukkyjungTexture.loadFromFile("picture/JukkyJung.png"))
+		return -1;
+
+	// jukkyjung
+	jukkyjung.setTexture(jukkyjungTexture);
+	jukkyjung.setScale({ .6f, .6f });
 
 	gameThreads.at(0)->join();
 	gameThreads.at(1)->join();
