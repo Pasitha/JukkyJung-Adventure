@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Pasitha.h"
 
 // discord
 namespace {
@@ -85,9 +85,13 @@ void render(sf::RenderWindow* window) {
 }
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
-	window.setFramerateLimit(60);
+	sf::Image icon;
+	icon.loadFromFile("picture/JukkyJung.png");
 
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
+
+	window.setIcon(1800, 1800, icon.getPixelsPtr());
+	window.setFramerateLimit(60);
 	window.setActive(false);
 
 	std::vector<std::thread*> gameThreads {
@@ -118,9 +122,6 @@ int main() {
 	jukkyjung.setScale({ .6f, .6f });
 	jukkyjung.setPosition({ 800, 0 });
 
-	gameThreads.at(0)->join();
-	gameThreads.at(1)->join();
-
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -134,5 +135,10 @@ int main() {
 		}
 	}
 
+	gameThreads.at(0)->join();
+	gameThreads.at(1)->join();
+
+	delete gameThreads.at(0);
+	delete gameThreads.at(1);
 	return 0;
 }
