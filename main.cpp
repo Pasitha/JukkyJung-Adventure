@@ -50,6 +50,7 @@ void discordRPC() {
 
 // sfml variable
 namespace {
+	// main theme song
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 
@@ -58,6 +59,7 @@ namespace {
 	sf::Sprite gameTitle;
 
 	sf::Texture jukkyjungTexture;
+	sf::Texture gameTitleTexture;
 }
 
 // game variable
@@ -76,6 +78,7 @@ void render(sf::RenderWindow* window) {
 		window->clear(sf::Color::Yellow);
 
 		window->draw(jukkyjung);
+		window->draw(gameTitle);
 
 		window->display();
 	}
@@ -104,10 +107,16 @@ int main() {
 	// init sprite and texture
 	if (!jukkyjungTexture.loadFromFile("picture/JukkyJung.png"))
 		return -1;
+	if (!gameTitleTexture.loadFromFile("picture/title.png"))
+		return -1;
 
+	// game titie
+	gameTitle.setTexture(gameTitleTexture);
+	gameTitle.setScale({ 1, 1 });
 	// jukkyjung
 	jukkyjung.setTexture(jukkyjungTexture);
 	jukkyjung.setScale({ .6f, .6f });
+	jukkyjung.setPosition({ 800, 0 });
 
 	gameThreads.at(0)->join();
 	gameThreads.at(1)->join();
