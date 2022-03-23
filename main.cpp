@@ -1,5 +1,7 @@
 #include "Pasitha.h"
 
+#define BUTTONSIZE { 259.f, 154.f }
+
 // discord
 namespace {
 	struct DiscordState {
@@ -54,12 +56,21 @@ namespace {
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 
-	// main menu
+	// main menu scene
+	// Sprite
 	sf::Sprite jukkyjung;
 	sf::Sprite gameTitle;
 
+	// RectangleShape
+	sf::RectangleShape bStart(BUTTONSIZE);
+	sf::RectangleShape bSetting(BUTTONSIZE);
+	sf::RectangleShape bExit(BUTTONSIZE);
+
+	// Texture
 	sf::Texture jukkyjungTexture;
 	sf::Texture gameTitleTexture;
+	sf::Texture buttonTexture;
+
 }
 
 // game variable
@@ -67,6 +78,9 @@ namespace {
 	enum scene {
 		menu, setting, game, character
 	};
+
+	unsigned short int scene = menu;
+	bool Pause = false;
 }
 
 // render function
@@ -79,6 +93,10 @@ void render(sf::RenderWindow* window) {
 
 		window->draw(jukkyjung);
 		window->draw(gameTitle);
+
+		window->draw(bStart);
+		window->draw(bSetting);
+		window->draw(bExit);
 
 		window->display();
 	}
@@ -99,6 +117,7 @@ int main() {
 		new std::thread(render, &window)
 	};
 
+	// initializer vairable
 	// init sound
 	if (!buffer.loadFromFile("sound/Main-Theme.wav"))
 		return -1;
@@ -113,6 +132,8 @@ int main() {
 		return -1;
 	if (!gameTitleTexture.loadFromFile("picture/title.png"))
 		return -1;
+	if (!buttonTexture.loadFromFile("picture/button.png"))
+		return -1;
 
 	// game titie
 	gameTitle.setTexture(gameTitleTexture);
@@ -121,7 +142,16 @@ int main() {
 	jukkyjung.setTexture(jukkyjungTexture);
 	jukkyjung.setScale({ .6f, .6f });
 	jukkyjung.setPosition({ 800, 0 });
+	// button
+	bStart.setTexture(&buttonTexture);
+	bSetting.setTexture(&buttonTexture);
+	bExit.setTexture(&buttonTexture);
 
+	bStart.setPosition({ 80, 250 });
+	bSetting.setPosition({ 80, 550 });
+	bExit.setPosition({ 80, 850 });
+
+	// game loop
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
