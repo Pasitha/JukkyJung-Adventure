@@ -1,7 +1,5 @@
 #include "Pasitha.h"
 
-#define BUTTONSIZE { 259.f, 154.f }
-
 // discord
 namespace {
 	struct DiscordState {
@@ -43,15 +41,19 @@ void discordRPC() {
 		interrupted = true;
 	});
 
-	// void Update
+	// void Uodate
 	do {
 		state.core->RunCallbacks();
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 	} while (!interrupted);
 }
 
-// sfml variable
+// sfml
 namespace {
+	
+
+	// font
+	sf::Font ReadexPro;
 	// main theme song
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
@@ -62,15 +64,21 @@ namespace {
 	sf::Sprite gameTitle;
 
 	// RectangleShape
-	sf::RectangleShape bStart(BUTTONSIZE);
+	sf::RectangleShape bNewGame(BUTTONSIZE);
+	sf::RectangleShape bContinue(BUTTONSIZE);
 	sf::RectangleShape bSetting(BUTTONSIZE);
 	sf::RectangleShape bExit(BUTTONSIZE);
+
+	// text
+	sf::Text tNewGame("New Game", ReadexPro);
+	sf::Text tContinue("Continue", ReadexPro);
+	sf::Text tSetting("Setting", ReadexPro);
+	sf::Text tExit("Exit", ReadexPro);
 
 	// Texture
 	sf::Texture jukkyjungTexture;
 	sf::Texture gameTitleTexture;
 	sf::Texture buttonTexture;
-
 }
 
 // game variable
@@ -89,22 +97,33 @@ void render(sf::RenderWindow* window) {
 
 	// the rendering loop
 	while (window->isOpen()) {
-		window->clear(sf::Color::Yellow);
+		switch (scene) {
+		case menu:
+			window->clear(sf::Color::Yellow);
 
-		window->draw(jukkyjung);
-		window->draw(gameTitle);
+			window->draw(jukkyjung);
+			window->draw(gameTitle);
 
-		window->draw(bStart);
-		window->draw(bSetting);
-		window->draw(bExit);
+			window->draw(bNewGame);
+			window->draw(bContinue);
+			window->draw(bSetting);
+			window->draw(bExit);
 
-		window->display();
+			window->draw(tNewGame);
+			window->draw(tContinue);
+			window->draw(tSetting);
+			window->draw(tExit);
+
+			window->display();
+			break;
+		}
 	}
 }
 
 int main() {
 	sf::Image icon;
 	icon.loadFromFile("picture/JukkyJung.png");
+	ReadexPro.loadFromFile("font/ReadexPro.ttf");
 
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
 
@@ -141,15 +160,58 @@ int main() {
 	// jukkyjung
 	jukkyjung.setTexture(jukkyjungTexture);
 	jukkyjung.setScale({ .6f, .6f });
-	jukkyjung.setPosition({ 800, 0 });
+	jukkyjung.setPosition({ 890, 0 });
 	// button
-	bStart.setTexture(&buttonTexture);
+	bNewGame.setTexture(&buttonTexture);
+	bContinue.setTexture(&buttonTexture);
 	bSetting.setTexture(&buttonTexture);
 	bExit.setTexture(&buttonTexture);
 
-	bStart.setPosition({ 80, 250 });
-	bSetting.setPosition({ 80, 550 });
+	bNewGame.setPosition({ 80, 250 });
+	bContinue.setPosition({ 80, 450 });
+	bSetting.setPosition({ 80, 650 });
 	bExit.setPosition({ 80, 850 });
+
+	// init text
+	// Button Text
+	tNewGame.setStyle(sf::Text::Bold);
+	tNewGame.setFillColor(sf::Color::Black);
+	tNewGame.setPosition({
+		bNewGame.getPosition().x + bNewGame.getGlobalBounds().width / 2.f - tNewGame.getGlobalBounds().width / 2.f,
+		bNewGame.getPosition().y + bNewGame.getGlobalBounds().height / 2.2f - tNewGame.getGlobalBounds().height / 2.2f
+	});
+	tContinue.setStyle(sf::Text::Bold);
+	tContinue.setFillColor(sf::Color::Black);
+	tContinue.setPosition({
+		bContinue.getPosition().x + bContinue.getGlobalBounds().width / 2.f - tContinue.getGlobalBounds().width / 2.f,
+		bContinue.getPosition().y + bContinue.getGlobalBounds().height / 2.2f - tContinue.getGlobalBounds().height / 2.2f
+	});
+	tSetting.setStyle(sf::Text::Bold);
+	tSetting.setFillColor(sf::Color::Black);
+	tSetting.setPosition({
+		bSetting.getPosition().x + bSetting.getGlobalBounds().width / 2.f - tSetting.getGlobalBounds().width / 2.f,
+		bSetting.getPosition().y + bSetting.getGlobalBounds().height / 2.2f - tSetting.getGlobalBounds().height / 2.2f
+	});
+	tExit.setStyle(sf::Text::Bold);
+	tExit.setFillColor(sf::Color::Black);
+	tExit.setPosition({
+		bExit.getPosition().x + bExit.getGlobalBounds().width / 2.f - tExit.getGlobalBounds().width / 2.f,
+		bExit.getPosition().y + bExit.getGlobalBounds().height / 2.2f - tExit.getGlobalBounds().height / 2.2f
+	});
+
+	// function
+	auto isHover = [&window](sf::RectangleShape& button) -> bool {
+		float mouseX = sf::Mouse::getPosition(window).x;
+		float mouseY = sf::Mouse::getPosition(window).y;
+
+		float btnPosX = button.getPosition().x;
+		float btnPosY = button.getPosition().y;
+
+		float btnxPosWidth = btnPosX + button.getLocalBounds().width;
+		float btnyPosHeight = btnPosY + button.getLocalBounds().height;
+
+		return mouseX < btnxPosWidth&& mouseX > btnPosX && mouseY < btnyPosHeight&& mouseY > btnPosY;
+	};
 
 	// game loop
 	while (window.isOpen()) {
@@ -160,6 +222,19 @@ int main() {
 				window.close();
 				break;
 			case sf::Event::MouseMoved:
+				switch (scene) {
+				case menu:
+					bNewGame.setFillColor((isHover(bNewGame) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255)));
+					bContinue.setFillColor((isHover(bContinue) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255)));
+					bSetting.setFillColor((isHover(bSetting) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255)));
+					bExit.setFillColor((isHover(bExit) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255)));
+					break;
+				}
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (isHover(bExit)) {
+					window.close();
+				}
 				break;
 			}
 		}
