@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -94,7 +94,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\source-code\cpp\JukkyJungAdventure\SFML-2.5.1\lib;D:\source-code\cpp\JukkyJungAdventure\discord_game_sdk\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-window-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-window-d.lib;discord_game_sdk.dll.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,7 +113,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\source-code\cpp\JukkyJungAdventure\SFML-2.5.1\lib;D:\source-code\cpp\JukkyJungAdventure\discord_game_sdk\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib;discord_game_sdk.dll.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,7 +128,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\source-code\cpp\JukkyJungAdventure\SFML-2.5.1\lib;D:\source-code\cpp\JukkyJungAdventure\discord_game_sdk\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-window-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-window-d.lib;discord_game_sdk.dll.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,10 +147,24 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\source-code\cpp\JukkyJungAdventure\SFML-2.5.1\lib;D:\source-code\cpp\JukkyJungAdventure\discord_game_sdk\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib;discord_game_sdk.dll.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\discord_game_sdk\cpp\achievement_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\activity_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\application_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\core.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\image_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\lobby_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\network_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\overlay_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\relationship_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\storage_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\store_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\types.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\user_manager.cpp" />
+    <ClCompile Include="..\..\discord_game_sdk\cpp\voice_manager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
