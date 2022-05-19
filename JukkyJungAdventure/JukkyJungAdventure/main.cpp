@@ -53,7 +53,7 @@ namespace {
 
 		std::signal(SIGINT, [](int) {
 			interrupted = true;
-			});
+		});
 
 		// void Uodate
 		do {
@@ -79,18 +79,15 @@ namespace {
 }
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML Works!");
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "JukkyJung Adventure", sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 
 	window.setActive(false);
 
 	std::vector<std::thread*> gameThreads{
-			new std::thread(discordRPC),
-			new std::thread(render, &window)
+		new std::thread(discordRPC),
+		new std::thread(render, &window)
 	};
-
-	gameThreads.at(0)->join();
-	gameThreads.at(1)->join();
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -98,11 +95,10 @@ int main() {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
-
-			window.clear();
-			
-			window.display();
 		}
 	}
+
+	gameThreads.at(0)->join();
+	gameThreads.at(1)->join();
 	return 0;
 }
