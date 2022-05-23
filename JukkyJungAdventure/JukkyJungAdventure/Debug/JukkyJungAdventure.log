@@ -1,1 +1,12 @@
-﻿  JukkyJungAdventure.vcxproj -> D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\Debug\JukkyJungAdventure.exe
+﻿  main.cpp
+D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(101,16): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(102,16): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+  JukkyJungAdventure.vcxproj -> D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\Debug\JukkyJungAdventure.exe
