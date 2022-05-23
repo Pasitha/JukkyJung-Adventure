@@ -65,6 +65,14 @@ namespace {
 
 // sfml
 namespace {
+	enum eScene {
+		menu, setting, gameplay
+	};
+	int scene = menu;
+
+	sf::RectangleShape button({ 259.f, 154.f });
+	sf::Texture buttonTexture;
+
 	// render function
 	void render(sf::RenderWindow* window) {
 		window->setActive(true);
@@ -72,6 +80,10 @@ namespace {
 		// the rendering loop
 		while (window->isOpen()) {
 			window->clear(sf::Color::Yellow);
+
+			if (scene == menu) {
+				window->draw(button);
+			}
 
 			window->display();
 		}
@@ -84,6 +96,32 @@ int main() {
 
 	window.setActive(false);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	auto isHover = [&window](sf::RectangleShape button) ->  bool {
+		float mouseX = sf::Mouse::getPosition(window).x;
+		float mouseY = sf::Mouse::getPosition(window).y;
+
+		float btnPosX = button.getPosition().x;
+		float btnPosY = button.getPosition().y;
+
+		float btnxPosWidth = btnPosX + button.getLocalBounds().width;
+		float btnyPosHeight = btnPosY + button.getLocalBounds().height;
+
+		return mouseX < btnxPosWidth && mouseX > btnPosX && mouseY < btnyPosHeight && mouseY > btnPosY;
+	};
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	if (!buttonTexture.loadFromFile("picture/button.png")) return -1;
+	button.setTexture(&buttonTexture);
+
+	button.setPosition({ 500, 500 });
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	std::vector<std::thread*> gameThreads{
 		new std::thread(discordRPC),
 		new std::thread(render, &window)
@@ -94,6 +132,14 @@ int main() {
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
+			}
+			if (event.type == sf::Event::MouseMoved) {
+				if (isHover(button)) {
+					button.setFillColor(sf::Color(155, 155, 155, 255));
+				}
+				else {
+					button.setFillColor(sf::Color(255, 255, 255, 255));
+				}
 			}
 		}
 	}
