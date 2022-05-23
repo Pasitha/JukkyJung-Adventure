@@ -70,8 +70,10 @@ namespace {
 	};
 	int scene = menu;
 
-	sf::RectangleShape button({ 259.f, 154.f });
 	sf::Texture buttonTexture;
+	sf::RectangleShape button({ 259.f, 154.f });
+	sf::RectangleShape volume({ 550.f, 25.f });
+	sf::CircleShape volumeSlider(30);
 
 	// render function
 	void render(sf::RenderWindow* window) {
@@ -83,6 +85,8 @@ namespace {
 
 			if (scene == menu) {
 				window->draw(button);
+				window->draw(volume);
+				window->draw(volumeSlider);
 			}
 
 			window->display();
@@ -97,7 +101,7 @@ int main() {
 	window.setActive(false);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	auto isHover = [&window](sf::RectangleShape button) ->  bool {
+	auto isHover = [&window]<class T>(T button) ->  bool {
 		float mouseX = sf::Mouse::getPosition(window).x;
 		float mouseY = sf::Mouse::getPosition(window).y;
 
@@ -118,6 +122,8 @@ int main() {
 	button.setTexture(&buttonTexture);
 
 	button.setPosition({ 500, 500 });
+	volume.setPosition({ 500, 300 });
+	volumeSlider.setPosition({ 500, 280 });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -134,12 +140,8 @@ int main() {
 				window.close();
 			}
 			if (event.type == sf::Event::MouseMoved) {
-				if (isHover(button)) {
-					button.setFillColor(sf::Color(155, 155, 155, 255));
-				}
-				else {
-					button.setFillColor(sf::Color(255, 255, 255, 255));
-				}
+				button.setFillColor(isHover(button) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+				volumeSlider.setFillColor(isHover(volumeSlider) ? sf::Color(255, 155, 155, 255) : sf::Color(215, 215, 215, 255));
 			}
 		}
 	}
