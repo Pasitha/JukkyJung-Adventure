@@ -123,7 +123,7 @@ int main() {
 
 	button.setPosition({ 500, 500 });
 	volume.setPosition({ 500, 300 });
-	volumeSlider.setPosition({ 500, 280 });
+	volumeSlider.setPosition({ 500, 283 });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -146,7 +146,10 @@ int main() {
 					volumeSlider.setFillColor(isHover(volumeSlider) ? sf::Color(255, 155, 155, 255) : sf::Color(215, 215, 215, 255));
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
-
+					if (isHover(volume)) {
+						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
+						volumeSlider.setPosition({ (float)sf::Mouse::getPosition(window).x - 35.f, 283.f});
+					}
 				}
 			}
 
