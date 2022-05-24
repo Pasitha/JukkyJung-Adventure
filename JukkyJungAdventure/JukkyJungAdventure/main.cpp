@@ -88,6 +88,9 @@ namespace {
 				window->draw(volume);
 				window->draw(volumeSlider);
 			}
+			else if (scene == gameplay) {
+				window->draw(button);
+			}
 
 			window->display();
 		}
@@ -146,9 +149,12 @@ int main() {
 					volumeSlider.setFillColor(isHover(volumeSlider) ? sf::Color(255, 155, 155, 255) : sf::Color(215, 215, 215, 255));
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
+					if (isHover(button)) {
+						scene = gameplay;
+					}
 					if (isHover(volume)) {
 						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
-						volumeSlider.setPosition({ (float)sf::Mouse::getPosition(window).x - 35.f, 283.f});
+						volumeSlider.setPosition({ std::max((float)sf::Mouse::getPosition(window).x - 35.f, 500.f), 283.f});
 					}
 				}
 			}
