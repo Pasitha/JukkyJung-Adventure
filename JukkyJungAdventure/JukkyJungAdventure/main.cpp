@@ -69,11 +69,13 @@ namespace {
 		menu, setting, gameplay
 	};
 	int scene = menu;
+	bool isPause = false;
 
 	sf::Texture buttonTexture;
 	sf::RectangleShape button({ 259.f, 154.f });
-	sf::RectangleShape volume({ 550.f, 25.f });
 	sf::CircleShape volumeSlider(30);
+	sf::RectangleShape volume({ 550.f, 25.f });
+	sf::RectangleShape pausemenu({ 1920.f, 1080.f });
 
 	// render function
 	void render(sf::RenderWindow* window) {
@@ -81,7 +83,7 @@ namespace {
 
 		// the rendering loop
 		while (window->isOpen()) {
-			window->clear(sf::Color::Yellow);
+			window->clear(sf::Color(255, 185, 0, 255));
 
 			if (scene == menu) {
 				window->draw(button);
@@ -90,6 +92,10 @@ namespace {
 			}
 			else if (scene == gameplay) {
 				window->draw(button);
+
+				if (isPause) {
+					window->draw(pausemenu);
+				}
 			}
 
 			window->display();
@@ -127,6 +133,7 @@ int main() {
 	button.setPosition({ 500, 500 });
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
+	pausemenu.setFillColor(sf::Color(0, 0, 0, 155));
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -155,6 +162,16 @@ int main() {
 					if (isHover(volume)) {
 						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
 						volumeSlider.setPosition({ std::max((float)sf::Mouse::getPosition(window).x - 35.f, 500.f), 283.f});
+					}
+				}
+			}
+			else if (scene == gameplay) {
+				if (event.type == sf::Event::KeyPressed) {
+					if (event.key.code == sf::Keyboard::Escape && !isPause) {
+						isPause = true;
+					}
+					else if (event.key.code == sf::Keyboard::Escape && isPause) {
+						isPause = false;
 					}
 				}
 			}
