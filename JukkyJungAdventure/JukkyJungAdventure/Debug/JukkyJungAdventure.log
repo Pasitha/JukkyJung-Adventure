@@ -1,15 +1,15 @@
 ﻿  main.cpp
-D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(114,16): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(116,16): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(155): message : see reference to function template instantiation 'bool main::<lambda_1>::operator ()<sf::RectangleShape>(T) const' being compiled
+D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(163): message : see reference to function template instantiation 'bool main::<lambda_1>::operator ()<sf::RectangleShape>(T) const' being compiled
           with
           [
               T=sf::RectangleShape
           ]
-D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(115,16): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(117,16): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int

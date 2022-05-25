@@ -71,6 +71,8 @@ namespace {
 	int scene = menu;
 	bool isPause = false;
 
+	sf::Music mainThemeSong;
+
 	sf::Texture buttonTexture;
 	sf::RectangleShape button({ 259.f, 154.f });
 	sf::CircleShape volumeSlider(30);
@@ -127,7 +129,13 @@ int main() {
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	if (!buttonTexture.loadFromFile("picture/button.png")) return -1;
+	if (!mainThemeSong.openFromFile("sound/Main-Theme.wav"))
+		return -1;
+	mainThemeSong.setLoop(true);
+	mainThemeSong.play();
+
+	if (!buttonTexture.loadFromFile("picture/button.png"))
+		return -1;
 	button.setTexture(&buttonTexture);
 
 	button.setPosition({ 500, 500 });
@@ -162,6 +170,8 @@ int main() {
 					if (isHover(volume)) {
 						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
 						volumeSlider.setPosition({ std::max((float)sf::Mouse::getPosition(window).x - 35.f, 500.f), 283.f});
+
+						mainThemeSong.setVolume(((float)sf::Mouse::getPosition(window).x - 550.f) * 100.f / 550.f);
 					}
 				}
 			}
