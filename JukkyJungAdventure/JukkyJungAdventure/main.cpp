@@ -69,6 +69,7 @@ namespace {
 		menu, setting, gameplay
 	};
 	int scene = menu;
+	bool isHold = false;
 	bool isPause = false;
 
 	sf::Music mainThemeSong;
@@ -163,16 +164,30 @@ int main() {
 					button.setFillColor(isHover(button) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					volumeSlider.setFillColor(isHover(volumeSlider) ? sf::Color(255, 155, 155, 255) : sf::Color(215, 215, 215, 255));
 				}
+
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(button)) {
 						scene = gameplay;
 					}
 					if (isHover(volume)) {
+						isHold = true;
 						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
 						volumeSlider.setPosition({ std::max((float)sf::Mouse::getPosition(window).x - 35.f, 500.f), 283.f});
 
 						mainThemeSong.setVolume(((float)sf::Mouse::getPosition(window).x - 550.f) * 100.f / 550.f);
 					}
+				}
+				if (event.type == sf::Event::MouseButtonReleased) {
+					isHold = false;
+				}
+				if (isHold) {
+					volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
+					volumeSlider.setPosition({
+						std::max(500.f, std::min((float)sf::Mouse::getPosition(window).x - 35.f, 1020.f)), 
+						283.f
+					});
+
+					mainThemeSong.setVolume(std::max(0.f, std::min(((float)sf::Mouse::getPosition(window).x - 550.f) * 100.f / 550.f, 100.f)));
 				}
 			}
 			else if (scene == gameplay) {
