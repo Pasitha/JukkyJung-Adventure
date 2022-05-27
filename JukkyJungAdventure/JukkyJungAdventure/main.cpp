@@ -72,6 +72,8 @@ namespace {
 	bool isHold = false;
 	bool isPause = false;
 
+	bool JukkyJungTurn = true;
+
 	sf::Font ReadexPro;
 	sf::Music mainThemeSong;
 	sf::Texture buttonTexture;
@@ -91,6 +93,10 @@ namespace {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	sf::RectangleShape JukkyJung({ 1800.f, 1800.f });
 	sf::Texture JukkyJungTexture;
+
+	sf::RectangleShape enemy({ 1800.f, 1800.f });
+
+	sf::RectangleShape attackButton({ 259.f, 154.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +107,7 @@ namespace {
 	sf::RectangleShape pauseMenu({ 1920.f, 1080.f });
 	sf::RectangleShape resumeButton({ 259.f, 154.f });
 	sf::RectangleShape exitButton({ 259.f, 154.f });
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -120,6 +127,9 @@ namespace {
 			}
 			else if (scene == gameplay) {
 				window->draw(JukkyJung);
+				window->draw(enemy);
+				
+				window->draw(attackButton);
 				if (isPause) {
 					window->draw(pauseMenu);
 					window->draw(resumeButton);
@@ -173,31 +183,39 @@ int main() {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//                                        initialize	                                       //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                       loading asset										   //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	if (!ReadexPro.loadFromFile("font/ReadexPro.ttf"))
 		return -1;
 
 	if (!mainThemeSong.openFromFile("sound/Main-Theme.wav"))
 		return -1;
-	mainThemeSong.setLoop(true);
-	mainThemeSong.play();
 
 	if (!buttonTexture.loadFromFile("picture/button.png"))
 		return -1;
-	button.setTexture(&buttonTexture);
 
+	if (!JukkyJungTexture.loadFromFile("picture/JukkyJung.png"))
+		return -1;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                     initialize variable							           //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	mainThemeSong.setLoop(true);
+	mainThemeSong.play();
 	// main menu
+	button.setTexture(&buttonTexture);
 	button.setPosition({ 500, 500 });
 	buttonLable(button, tStart);
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
 
 	// gameplay
-	if (!JukkyJungTexture.loadFromFile("picture/JukkyJung.png"))
-		return -1;
-
 	JukkyJung.setTexture(&JukkyJungTexture);
 	JukkyJung.setScale({ .35f, .35f });
 	JukkyJung.setPosition({ 50.f, 20.f });
+	enemy.setFillColor(sf::Color(255, 168, 155));
+	enemy.setScale({ .35f, .35f });
+	enemy.setPosition({ 1000.f, 20.f });
 
 	// pause menu
 	pauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
