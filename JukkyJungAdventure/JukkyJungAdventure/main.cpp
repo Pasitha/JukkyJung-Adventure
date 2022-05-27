@@ -200,8 +200,6 @@ int main() {
 						isHold = true;
 						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
 						volumeSlider.setPosition({ std::max((float)sf::Mouse::getPosition(window).x - 35.f, 500.f), 283.f});
-
-						mainThemeSong.setVolume(((float)sf::Mouse::getPosition(window).x - 550.f) * 100.f / 550.f);
 					}
 				}
 				if (event.type == sf::Event::MouseButtonReleased) {
