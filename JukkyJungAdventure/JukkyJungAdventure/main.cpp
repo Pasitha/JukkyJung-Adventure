@@ -97,6 +97,7 @@ namespace {
 
 			if (scene == menu) {
 				window->draw(button);
+				window->draw(tStart);
 				window->draw(volume);
 				window->draw(volumeSlider);
 			}
@@ -135,8 +136,14 @@ int main() {
 		return mouseX < btnxPosWidth && mouseX > btnPosX && mouseY < btnyPosHeight && mouseY > btnPosY;
 	};
 
-	auto buttonLable = [](sf::Text& buttonLable) -> void {
-		
+	auto buttonLable = [](sf::RectangleShape button, sf::Text& buttonLable) -> void {
+		buttonLable.setCharacterSize(36);
+		buttonLable.setStyle(sf::Text::Bold);
+		buttonLable.setFillColor(sf::Color::Black);
+		buttonLable.setPosition({
+			button.getPosition().x + button.getGlobalBounds().width / 2.f - buttonLable.getGlobalBounds().width / 2.f, 
+			button.getPosition().y + button.getGlobalBounds().height / 2.2f - buttonLable.getGlobalBounds().height / 2.2f
+		});
 	};
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +152,7 @@ int main() {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//                                        initialize	                                       //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	if (ReadexPro.loadFromFile("font/ReadexPro.ttf"))
+	if (!ReadexPro.loadFromFile("font/ReadexPro.ttf"))
 		return -1;
 
 	if (!mainThemeSong.openFromFile("sound/Main-Theme.wav"))
@@ -158,6 +165,7 @@ int main() {
 	button.setTexture(&buttonTexture);
 
 	button.setPosition({ 500, 500 });
+	buttonLable(button, tStart);
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
 	pausemenu.setFillColor(sf::Color(0, 0, 0, 155));
