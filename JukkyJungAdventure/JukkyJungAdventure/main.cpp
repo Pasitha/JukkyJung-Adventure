@@ -84,8 +84,25 @@ namespace {
 
 	sf::CircleShape volumeSlider(30);
 	sf::RectangleShape volume({ 550.f, 25.f });
-	sf::RectangleShape pausemenu({ 1920.f, 1080.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                         game play                                           //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	sf::RectangleShape JukkyJung({ 1800.f, 1800.f });
+	sf::Texture JukkyJungTexture;
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                         pause menu                                          //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	sf::Text tResume("RESUME", ReadexPro);
+	sf::Text tExit("EXIT", ReadexPro);
+	sf::RectangleShape pauseMenu({ 1920.f, 1080.f });
+	sf::RectangleShape resumeButton({ 259.f, 154.f });
+	sf::RectangleShape exitButton({ 259.f, 154.f });
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	// render function
 	auto render = [](sf::RenderWindow* window) -> void {
@@ -102,10 +119,14 @@ namespace {
 				window->draw(volumeSlider);
 			}
 			else if (scene == gameplay) {
-				window->draw(button);
-
+				window->draw(JukkyJung);
 				if (isPause) {
-					window->draw(pausemenu);
+					window->draw(pauseMenu);
+					window->draw(resumeButton);
+					window->draw(exitButton);
+
+					window->draw(tResume);
+					window->draw(tExit);
 				}
 			}
 
@@ -164,11 +185,29 @@ int main() {
 		return -1;
 	button.setTexture(&buttonTexture);
 
+	// main menu
 	button.setPosition({ 500, 500 });
 	buttonLable(button, tStart);
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
-	pausemenu.setFillColor(sf::Color(0, 0, 0, 155));
+
+	// gameplay
+	if (!JukkyJungTexture.loadFromFile("picture/JukkyJung.png"))
+		return -1;
+
+	JukkyJung.setTexture(&JukkyJungTexture);
+	JukkyJung.setScale({ .35f, .35f });
+	JukkyJung.setPosition({ 50.f, 20.f });
+
+	// pause menu
+	pauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
+	resumeButton.setPosition({ 830.f, 300.f });
+	exitButton.setPosition({ 830.f, 500.f });
+	resumeButton.setTexture(&buttonTexture);
+	exitButton.setTexture(&buttonTexture);
+	buttonLable(resumeButton, tResume);
+	buttonLable(exitButton, tExit);
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -193,6 +232,7 @@ int main() {
 
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(button)) {
+						button.setFillColor(sf::Color(255, 255, 255, 255));
 						scene = gameplay;
 					}
 					// volume slider
@@ -216,6 +256,26 @@ int main() {
 				}
 			}
 			else if (scene == gameplay) {
+				if (event.type == sf::Event::MouseMoved) {
+					if (isPause) {
+						resumeButton.setFillColor((isHover(resumeButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						exitButton.setFillColor((isHover(exitButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					}
+				}
+				if (event.type == sf::Event::MouseButtonPressed) {
+					if (isPause) {
+						if (isHover(resumeButton)) {
+							resumeButton.setFillColor(sf::Color(255, 255, 255, 255));
+							isPause = false;
+						}
+						if (isHover(exitButton)) {
+							exitButton.setFillColor(sf::Color(255, 255, 255, 255));
+							isPause = false;
+							scene = menu;
+						}
+					}
+				}
+				// pause
 				if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Escape && !isPause) {
 						isPause = true;
