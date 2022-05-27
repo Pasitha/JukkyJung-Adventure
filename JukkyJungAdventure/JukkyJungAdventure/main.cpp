@@ -24,7 +24,7 @@ namespace {
 	volatile bool interrupted{ false };
 
 	// discord Thread set Activities to user
-	void discordRPC() {
+	auto discordRPC = []() -> void {
 		DiscordState state{};
 
 		discord::Core* core{};
@@ -47,11 +47,11 @@ namespace {
 		activity.GetTimestamps().SetStart(time(0));
 		activity.SetType(discord::ActivityType::Playing);
 
-		state.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+		state.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) -> void {
 			std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed") << " updating activity!\n";
-			});
+		});
 
-		std::signal(SIGINT, [](int) {
+		std::signal(SIGINT, [](int) -> void {
 			interrupted = true;
 		});
 
@@ -60,7 +60,7 @@ namespace {
 			state.core->RunCallbacks();
 			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		} while (!interrupted);
-	}
+	};
 }
 
 // sfml
@@ -72,16 +72,23 @@ namespace {
 	bool isHold = false;
 	bool isPause = false;
 
+	sf::Font ReadexPro;
 	sf::Music mainThemeSong;
-
 	sf::Texture buttonTexture;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                         main menu                                           //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	sf::Text tStart("START", ReadexPro);
 	sf::RectangleShape button({ 259.f, 154.f });
+
 	sf::CircleShape volumeSlider(30);
 	sf::RectangleShape volume({ 550.f, 25.f });
 	sf::RectangleShape pausemenu({ 1920.f, 1080.f });
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// render function
-	void render(sf::RenderWindow* window) {
+	auto render = [](sf::RenderWindow* window) -> void {
 		window->setActive(true);
 
 		// the rendering loop
@@ -103,7 +110,7 @@ namespace {
 
 			window->display();
 		}
-	}
+	};
 }
 
 int main() {
@@ -112,6 +119,8 @@ int main() {
 
 	window.setActive(false);
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                         function                                            //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	auto isHover = [&window]<class T>(T button) ->  bool {
 		float mouseX = sf::Mouse::getPosition(window).x;
@@ -125,11 +134,20 @@ int main() {
 
 		return mouseX < btnxPosWidth && mouseX > btnPosX && mouseY < btnyPosHeight && mouseY > btnPosY;
 	};
+
+	auto buttonLable = [](sf::Text& buttonLable) -> void {
+		
+	};
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                        initialize	                                       //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	if (ReadexPro.loadFromFile("font/ReadexPro.ttf"))
+		return -1;
+
 	if (!mainThemeSong.openFromFile("sound/Main-Theme.wav"))
 		return -1;
 	mainThemeSong.setLoop(true);
@@ -169,6 +187,7 @@ int main() {
 					if (isHover(button)) {
 						scene = gameplay;
 					}
+					// volume slider
 					if (isHover(volume)) {
 						isHold = true;
 						volumeSlider.setFillColor(sf::Color(255, 75, 68, 255));
