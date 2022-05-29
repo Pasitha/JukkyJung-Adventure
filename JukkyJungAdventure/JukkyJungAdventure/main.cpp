@@ -107,7 +107,6 @@ namespace {
 	sf::RectangleShape pauseMenu({ 1920.f, 1080.f });
 	sf::RectangleShape resumeButton({ 259.f, 154.f });
 	sf::RectangleShape exitButton({ 259.f, 154.f });
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -210,6 +209,9 @@ int main() {
 	volumeSlider.setPosition({ 500, 283 });
 
 	// gameplay
+	attackButton.setTexture(&buttonTexture);
+	attackButton.setPosition({ 250.f, 800.f });
+
 	JukkyJung.setTexture(&JukkyJungTexture);
 	JukkyJung.setScale({ .35f, .35f });
 	JukkyJung.setPosition({ 50.f, 20.f });
@@ -275,6 +277,7 @@ int main() {
 			}
 			else if (scene == gameplay) {
 				if (event.type == sf::Event::MouseMoved) {
+					attackButton.setFillColor((isHover(attackButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					if (isPause) {
 						resumeButton.setFillColor((isHover(resumeButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 						exitButton.setFillColor((isHover(exitButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
