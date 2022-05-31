@@ -207,6 +207,7 @@ int main() {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//                                     initialize variable							           //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	mainThemeSong.setVolume(6.f);
 	mainThemeSong.setLoop(true);
 	mainThemeSong.play();
 	// main menu
@@ -297,10 +298,15 @@ int main() {
 					if (isHover(attackButton)) {
 						JukkyJungTurn = false;
 						
-						enemyHp -= rand();
+						enemyHp -= (rand() % 10) + 1;
 						std::cout << "enemyHp = " << enemyHp << std::endl;
 
-						
+						for (float i = 0.f; i < 50.f; i++) {
+
+						}
+						JukkyJung.move({ 50.f, 0 });
+						std::this_thread::sleep_for(std::chrono::milliseconds(250));
+						JukkyJung.move({ -50.f, 0 });
 					}
 					if (isPause) {
 						if (isHover(resumeButton)) {

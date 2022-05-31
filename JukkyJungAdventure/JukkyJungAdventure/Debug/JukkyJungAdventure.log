@@ -4,7 +4,7 @@ D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main
           [
               T=int
           ]
-D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(259): message : see reference to function template instantiation 'bool main::<lambda_1>::operator ()<sf::RectangleShape>(T) const' being compiled
+D:\source-code\cpp\JukkyJungAdventure\JukkyJungAdventure\JukkyJungAdventure\main.cpp(260): message : see reference to function template instantiation 'bool main::<lambda_1>::operator ()<sf::RectangleShape>(T) const' being compiled
           with
           [
               T=sf::RectangleShape
