@@ -301,12 +301,15 @@ int main() {
 						enemyHp -= (rand() % 10) + 1;
 						std::cout << "enemyHp = " << enemyHp << std::endl;
 
-						for (float i = 0.f; i < 50.f; i++) {
-
+						for (int i = 0; i < 50; i++) {
+							JukkyJung.move({ 1, 0 });
+							std::this_thread::sleep_for(std::chrono::milliseconds(3));
 						}
-						JukkyJung.move({ 50.f, 0 });
-						std::this_thread::sleep_for(std::chrono::milliseconds(250));
-						JukkyJung.move({ -50.f, 0 });
+						std::this_thread::sleep_for(std::chrono::milliseconds(30));
+						for (int i = 0; i < 50; i++) {
+							JukkyJung.move({ -1, 0 });
+							std::this_thread::sleep_for(std::chrono::milliseconds(2));
+						}
 					}
 					if (isPause) {
 						if (isHover(resumeButton)) {
