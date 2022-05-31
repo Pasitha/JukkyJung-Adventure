@@ -91,6 +91,11 @@ namespace {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//                                         game play                                           //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	short int JukkyJungHp = 100;
+	short int enemyHp = 100;
+	sf::Text tJukkyJungHp("HP: ", ReadexPro);
+	sf::Text tEnemyHp("HP: ", ReadexPro);
+
 	sf::RectangleShape JukkyJung({ 1800.f, 1800.f });
 	sf::Texture JukkyJungTexture;
 
@@ -129,6 +134,9 @@ namespace {
 				window->draw(enemy);
 				
 				window->draw(attackButton);
+
+				window->draw(tJukkyJungHp);
+				window->draw(tEnemyHp);
 				if (isPause) {
 					window->draw(pauseMenu);
 					window->draw(resumeButton);
@@ -209,6 +217,9 @@ int main() {
 	volumeSlider.setPosition({ 500, 283 });
 
 	// gameplay
+	tJukkyJungHp.setPosition({ 50.f, 600.f });
+	tEnemyHp.setPosition({ 750.f, 600.f });
+
 	attackButton.setTexture(&buttonTexture);
 	attackButton.setPosition({ 250.f, 800.f });
 
@@ -227,7 +238,6 @@ int main() {
 	exitButton.setTexture(&buttonTexture);
 	buttonLable(resumeButton, tResume);
 	buttonLable(exitButton, tExit);
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -284,6 +294,14 @@ int main() {
 					}
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
+					if (isHover(attackButton)) {
+						JukkyJungTurn = false;
+						
+						enemyHp -= rand();
+						std::cout << "enemyHp = " << enemyHp << std::endl;
+
+						
+					}
 					if (isPause) {
 						if (isHover(resumeButton)) {
 							resumeButton.setFillColor(sf::Color(255, 255, 255, 255));
