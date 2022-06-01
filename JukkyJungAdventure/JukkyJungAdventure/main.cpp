@@ -136,6 +136,7 @@ namespace {
 				window->draw(enemy);
 				
 				window->draw(attackButton);
+				window->draw(tAttack);
 
 				window->draw(tJukkyJungHp);
 				window->draw(tEnemyHp);
@@ -225,6 +226,7 @@ int main() {
 
 	attackButton.setTexture(&buttonTexture);
 	attackButton.setPosition({ 250.f, 800.f });
+	buttonLable(attackButton, tAttack);
 
 	JukkyJung.setTexture(&JukkyJungTexture);
 	JukkyJung.setScale({ .35f, .35f });
@@ -306,13 +308,13 @@ int main() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(attackButton)) {
 						JukkyJungTurn = false;
+						tAttack.setString("ATTACK...");
+						buttonLable(attackButton, tAttack);
 						
 						int damage = (rand() % 10) + 1;
 						enemyHp -= damage;
-						// enemyHp -= (rand() % 10) + 1;
 
 						tEnemyHp.setString("HP: " + std::to_string(enemyHp));
-						// std::cout << "enemyHp = " << enemyHp << std::endl;
 
 						for (int i = 0; i < 50; i++) {
 							JukkyJung.move({ 1, 0 });
@@ -325,6 +327,9 @@ int main() {
 							JukkyJung.move({ -1, 0 });
 							std::this_thread::sleep_for(std::chrono::milliseconds(2));
 						}
+
+						tAttack.setString("ATTACK");
+						buttonLable(attackButton, tAttack);
 					}
 					if (isPause) {
 						if (isHover(resumeButton)) {
