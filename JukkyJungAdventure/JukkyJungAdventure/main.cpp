@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <functional>
 #include <thread>
+#include <cmath>
 #include <csignal>
 #include <ctime>
 
@@ -93,14 +94,15 @@ namespace {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	short int JukkyJungHp = 100;
 	short int enemyHp = 100;
-	sf::Text tJukkyJungHp("HP: ", ReadexPro);
-	sf::Text tEnemyHp("HP: ", ReadexPro);
+	sf::Text tJukkyJungHp("HP: " + std::to_string(JukkyJungHp), ReadexPro);
+	sf::Text tEnemyHp("HP: " + std::to_string(enemyHp), ReadexPro);
 
 	sf::RectangleShape JukkyJung({ 1800.f, 1800.f });
 	sf::Texture JukkyJungTexture;
 
 	sf::RectangleShape enemy({ 1800.f, 1800.f });
 
+	sf::Text tAttack("ATTACK", ReadexPro);
 	sf::RectangleShape attackButton({ 259.f, 154.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,6 +257,10 @@ int main() {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
+
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			//											menu logic							               //
+			/////////////////////////////////////////////////////////////////////////////////////////////////
 			if (scene == menu) {
 				if (event.type == sf::Event::MouseMoved) {
 					button.setFillColor(isHover(button) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
@@ -286,6 +292,9 @@ int main() {
 					mainThemeSong.setVolume(std::max(0.f, std::min(((float)sf::Mouse::getPosition(window).x - 550.f) * 100.f / 550.f, 100.f)));
 				}
 			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			//										game play logic							               //
+			/////////////////////////////////////////////////////////////////////////////////////////////////
 			else if (scene == gameplay) {
 				if (event.type == sf::Event::MouseMoved) {
 					attackButton.setFillColor((isHover(attackButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
@@ -298,13 +307,19 @@ int main() {
 					if (isHover(attackButton)) {
 						JukkyJungTurn = false;
 						
-						enemyHp -= (rand() % 10) + 1;
-						std::cout << "enemyHp = " << enemyHp << std::endl;
+						int damage = (rand() % 10) + 1;
+						enemyHp -= damage;
+						// enemyHp -= (rand() % 10) + 1;
+
+						tEnemyHp.setString("HP: " + std::to_string(enemyHp));
+						// std::cout << "enemyHp = " << enemyHp << std::endl;
 
 						for (int i = 0; i < 50; i++) {
 							JukkyJung.move({ 1, 0 });
+							enemy.move({ 10 * (float)std::pow(-1, i), 0.f });
 							std::this_thread::sleep_for(std::chrono::milliseconds(3));
 						}
+						enemy.setPosition({ 1000.f, 20.f });
 						std::this_thread::sleep_for(std::chrono::milliseconds(30));
 						for (int i = 0; i < 50; i++) {
 							JukkyJung.move({ -1, 0 });
