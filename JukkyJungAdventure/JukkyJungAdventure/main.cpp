@@ -240,7 +240,7 @@ int main() {
 
 	sampleTown.setTexture(&buttonTexture);
 	sampleTown.setPosition({ 550.f, 550.f });
-
+	buttonLable(sampleTown, tsampleTownName);
 
 
 	// battle scene
@@ -322,7 +322,12 @@ int main() {
 			/////////////////////////////////////////////////////////////////////////////////////////////////
 			else if (scene == walking) {
 				if (event.type == sf::Event::MouseMoved) {
-					
+					sampleTown.setFillColor((isHover(sampleTown)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+				}
+				if (event.type == sf::Event::MouseButtonPressed) {
+					if (isHover(sampleMap)) {
+						scene = battle;
+					}
 				}
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////////////
