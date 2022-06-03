@@ -67,7 +67,7 @@ namespace {
 // sfml
 namespace {
 	enum eScene {
-		menu, setting, gameplay
+		menu, setting, battle
 	};
 	int scene = menu;
 	bool isHold = false;
@@ -90,7 +90,7 @@ namespace {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	//                                         game play                                           //
+	//                                        battle scene                                         //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	short int JukkyJungHp = 100;
 	short int enemyHp = 100;
@@ -131,7 +131,7 @@ namespace {
 				window->draw(volume);
 				window->draw(volumeSlider);
 			}
-			else if (scene == gameplay) {
+			else if (scene == battle) {
 				window->draw(JukkyJung);
 				window->draw(enemy);
 				
@@ -220,7 +220,7 @@ int main() {
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
 
-	// gameplay
+	// battle scene
 	tJukkyJungHp.setPosition({ 50.f, 600.f });
 	tEnemyHp.setPosition({ 750.f, 600.f });
 
@@ -272,7 +272,7 @@ int main() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(button)) {
 						button.setFillColor(sf::Color(255, 255, 255, 255));
-						scene = gameplay;
+						scene = battle;
 					}
 					// volume slider
 					if (isHover(volume)) {
@@ -295,9 +295,9 @@ int main() {
 				}
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////////////
-			//										game play logic							               //
+			//										    battle logic							           //
 			/////////////////////////////////////////////////////////////////////////////////////////////////
-			else if (scene == gameplay) {
+			else if (scene == battle) {
 				if (event.type == sf::Event::MouseMoved) {
 					attackButton.setFillColor((isHover(attackButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					if (isPause) {
