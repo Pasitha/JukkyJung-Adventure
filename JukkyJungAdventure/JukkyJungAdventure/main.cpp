@@ -231,7 +231,7 @@ int main() {
 	JukkyJung.setTexture(&JukkyJungTexture);
 	JukkyJung.setScale({ .35f, .35f });
 	JukkyJung.setPosition({ 50.f, 20.f });
-	enemy.setFillColor(sf::Color(255, 168, 155));
+	enemy.setFillColor(sf::Color(0, 168, 155));
 	enemy.setScale({ .35f, .35f });
 	enemy.setPosition({ 1000.f, 20.f });
 
@@ -308,23 +308,47 @@ int main() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(attackButton)) {
 						JukkyJungTurn = false;
+
 						tAttack.setString("ATTACK...");
 						buttonLable(attackButton, tAttack);
 						
+						// update enemy Hp
 						int damage = (rand() % 10) + 1;
 						enemyHp -= damage;
 
 						tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
+						// JukkyJung Attack animation
 						for (int i = 0; i < 50; i++) {
 							JukkyJung.move({ 1, 0 });
-							enemy.move({ 10 * (float)std::pow(-1, i), 0.f });
+							enemy.move({ 15 * (float)std::pow(-1, i), 0.f });
 							std::this_thread::sleep_for(std::chrono::milliseconds(3));
 						}
 						enemy.setPosition({ 1000.f, 20.f });
 						std::this_thread::sleep_for(std::chrono::milliseconds(30));
 						for (int i = 0; i < 50; i++) {
 							JukkyJung.move({ -1, 0 });
+							std::this_thread::sleep_for(std::chrono::milliseconds(2));
+						}
+
+						std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+						// update JukkyJung Hp
+						int enemyDamage = (rand() % 10) + 1;
+						JukkyJungHp -= enemyDamage;
+
+						tJukkyJungHp.setString("HP: " + std::to_string(JukkyJungHp));
+
+						// enemy Attack animation
+						for (int i = 0; i < 50; i++) {
+							enemy.move({ -1, 0 });
+							JukkyJung.move({ 15 * (float)std::pow(-1, i), 0.f });
+							std::this_thread::sleep_for(std::chrono::milliseconds(3));
+						}
+						JukkyJung.setPosition({ 50.f, 20.f });
+						std::this_thread::sleep_for(std::chrono::milliseconds(30));
+						for (int i = 0; i < 50; i++) {
+							enemy.move({ 1, 0 });
 							std::this_thread::sleep_for(std::chrono::milliseconds(2));
 						}
 
