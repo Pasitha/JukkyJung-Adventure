@@ -67,7 +67,7 @@ namespace {
 // sfml
 namespace {
 	enum eScene {
-		menu, setting, battle
+		menu, setting, walking, battle
 	};
 	int scene = menu;
 	bool isHold = false;
@@ -87,6 +87,15 @@ namespace {
 
 	sf::CircleShape volumeSlider(30);
 	sf::RectangleShape volume({ 550.f, 25.f });
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                       walking scene                                         //
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	sf::RectangleShape sampleMap({ 1920.f, 1080.f });
+	
+	sf::RectangleShape sampleTown({ 259.f, 154.f });
+	sf::Text tsampleTownName("SAMPLE", ReadexPro);
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +139,12 @@ namespace {
 				window->draw(tStart);
 				window->draw(volume);
 				window->draw(volumeSlider);
+			}
+			else if (scene == walking) {
+				window->draw(sampleMap);
+
+				window->draw(sampleTown);
+				window->draw(tsampleTownName);
 			}
 			else if (scene == battle) {
 				window->draw(JukkyJung);
@@ -220,6 +235,14 @@ int main() {
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
 
+	// walking scene
+	sampleMap.setFillColor(sf::Color(155, 255, 68, 155));
+
+	sampleTown.setTexture(&buttonTexture);
+	sampleTown.setPosition({ 550.f, 550.f });
+
+
+
 	// battle scene
 	tJukkyJungHp.setPosition({ 50.f, 600.f });
 	tEnemyHp.setPosition({ 750.f, 600.f });
@@ -272,7 +295,7 @@ int main() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(button)) {
 						button.setFillColor(sf::Color(255, 255, 255, 255));
-						scene = battle;
+						scene = walking;
 					}
 					// volume slider
 					if (isHover(volume)) {
@@ -292,6 +315,14 @@ int main() {
 					});
 
 					mainThemeSong.setVolume(std::max(0.f, std::min(((float)sf::Mouse::getPosition(window).x - 550.f) * 100.f / 550.f, 100.f)));
+				}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			//										    walking logic							           //
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			else if (scene == walking) {
+				if (event.type == sf::Event::MouseMoved) {
+					
 				}
 			}
 			/////////////////////////////////////////////////////////////////////////////////////////////////
