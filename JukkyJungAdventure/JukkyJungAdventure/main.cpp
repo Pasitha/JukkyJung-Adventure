@@ -349,43 +349,68 @@ int main() {
 						buttonLable(attackButton, tAttack);
 						
 						// update enemy Hp
-						int damage = (rand() % 10) + 1;
-						enemyHp -= damage;
+						int damage = 50; // (rand() % 10) + 1;
 
-						tEnemyHp.setString("HP: " + std::to_string(enemyHp));
+						if (enemyHp - damage <= 0) {
+							tEnemyHp.setString("HP: 0");
 
-						// JukkyJung Attack animation
-						for (int i = 0; i < 50; i++) {
-							JukkyJung.move({ 1, 0 });
-							enemy.move({ 15 * (float)std::pow(-1, i), 0.f });
-							std::this_thread::sleep_for(std::chrono::milliseconds(3));
+							// JukkyJung Attack animation
+							for (int i = 0; i < 50; i++) {
+								JukkyJung.move({ 1, 0 });
+								enemy.move({ 15 * (float)std::pow(-1, i), 0.f });
+								enemy.setFillColor(sf::Color(255, 255, 255, 255 - (255 * (i * 2) / 100)));
+								std::this_thread::sleep_for(std::chrono::milliseconds(3));
+							}
+							enemy.setPosition({ 1000.f, 20.f });
+							std::this_thread::sleep_for(std::chrono::milliseconds(30));
+							for (int i = 0; i < 50; i++) {
+								JukkyJung.move({ -1, 0 });
+								std::this_thread::sleep_for(std::chrono::milliseconds(2));
+							}
+
+							std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+
 						}
-						enemy.setPosition({ 1000.f, 20.f });
-						std::this_thread::sleep_for(std::chrono::milliseconds(30));
-						for (int i = 0; i < 50; i++) {
-							JukkyJung.move({ -1, 0 });
-							std::this_thread::sleep_for(std::chrono::milliseconds(2));
-						}
+						else if (enemyHp - damage > 0) {
+							enemyHp -= damage;
+							tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
-						std::this_thread::sleep_for(std::chrono::milliseconds(300));
+							// JukkyJung Attack animation
+							for (int i = 0; i < 50; i++) {
+								JukkyJung.move({ 1, 0 });
+								enemy.move({ 15 * (float)std::pow(-1, i), 0.f });
+								std::this_thread::sleep_for(std::chrono::milliseconds(3));
+							}
+							enemy.setPosition({ 1000.f, 20.f });
+							std::this_thread::sleep_for(std::chrono::milliseconds(30));
+							for (int i = 0; i < 50; i++) {
+								JukkyJung.move({ -1, 0 });
+								std::this_thread::sleep_for(std::chrono::milliseconds(2));
+							}
 
-						// update JukkyJung Hp
-						int enemyDamage = (rand() % 10) + 1;
-						JukkyJungHp -= enemyDamage;
+							std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
-						tJukkyJungHp.setString("HP: " + std::to_string(JukkyJungHp));
+							// update JukkyJung Hp
+							int enemyDamage = (rand() % 10) + 1;
 
-						// enemy Attack animation
-						for (int i = 0; i < 50; i++) {
-							enemy.move({ -1, 0 });
-							JukkyJung.move({ 15 * (float)std::pow(-1, i), 0.f });
-							std::this_thread::sleep_for(std::chrono::milliseconds(3));
-						}
-						JukkyJung.setPosition({ 50.f, 20.f });
-						std::this_thread::sleep_for(std::chrono::milliseconds(30));
-						for (int i = 0; i < 50; i++) {
-							enemy.move({ 1, 0 });
-							std::this_thread::sleep_for(std::chrono::milliseconds(2));
+							if (JukkyJungHp - enemyDamage) {
+								JukkyJungHp -= enemyDamage;
+								tJukkyJungHp.setString("HP: " + std::to_string(JukkyJungHp));
+
+								// enemy Attack animation
+								for (int i = 0; i < 50; i++) {
+									enemy.move({ -1, 0 });
+									JukkyJung.move({ 15 * (float)std::pow(-1, i), 0.f });
+									std::this_thread::sleep_for(std::chrono::milliseconds(3));
+								}
+								JukkyJung.setPosition({ 50.f, 20.f });
+								std::this_thread::sleep_for(std::chrono::milliseconds(30));
+								for (int i = 0; i < 50; i++) {
+									enemy.move({ 1, 0 });
+									std::this_thread::sleep_for(std::chrono::milliseconds(2));
+								}
+							}
 						}
 
 						tAttack.setString("ATTACK");
