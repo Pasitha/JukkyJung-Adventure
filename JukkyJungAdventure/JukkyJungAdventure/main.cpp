@@ -404,6 +404,8 @@ int main() {
 
 							enemy.setFillColor(sf::Color(255, 255, 255, 255));
 							enemyHp = 100;
+							enemy.setFillColor(sf::Color(0, 168, 155));
+							tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
 							scene = walking;
 						}
