@@ -145,6 +145,14 @@ namespace {
 
 				window->draw(sampleTown);
 				window->draw(tsampleTownName);
+				if (isPause) {
+					window->draw(pauseMenu);
+					window->draw(resumeButton);
+					window->draw(exitButton);
+
+					window->draw(tResume);
+					window->draw(tExit);
+				}
 			}
 			else if (scene == battle) {
 				window->draw(JukkyJung);
@@ -323,10 +331,34 @@ int main() {
 			else if (scene == walking) {
 				if (event.type == sf::Event::MouseMoved) {
 					sampleTown.setFillColor((isHover(sampleTown)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					if (isPause) {
+						resumeButton.setFillColor((isHover(resumeButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+						exitButton.setFillColor((isHover(exitButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					}
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(sampleMap)) {
 						scene = battle;
+					}
+					if (isPause) {
+						if (isHover(resumeButton)) {
+							resumeButton.setFillColor(sf::Color(255, 255, 255, 255));
+							isPause = false;
+						}
+						if (isHover(exitButton)) {
+							exitButton.setFillColor(sf::Color(255, 255, 255, 255));
+							isPause = false;
+							scene = menu;
+						}
+					}
+				}
+				// pause
+				if (event.type == sf::Event::KeyPressed) {
+					if (event.key.code == sf::Keyboard::Escape && !isPause) {
+						isPause = true;
+					}
+					else if (event.key.code == sf::Keyboard::Escape && isPause) {
+						isPause = false;
 					}
 				}
 			}
@@ -368,9 +400,12 @@ int main() {
 								std::this_thread::sleep_for(std::chrono::milliseconds(2));
 							}
 
-							std::this_thread::sleep_for(std::chrono::milliseconds(300));
+							std::this_thread::sleep_for(std::chrono::milliseconds(800));
 
+							enemy.setFillColor(sf::Color(255, 255, 255, 255));
+							enemyHp = 100;
 
+							scene = walking;
 						}
 						else if (enemyHp - damage > 0) {
 							enemyHp -= damage;
