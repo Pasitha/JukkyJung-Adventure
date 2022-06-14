@@ -402,9 +402,8 @@ int main() {
 
 							std::this_thread::sleep_for(std::chrono::milliseconds(800));
 
-							enemy.setFillColor(sf::Color(255, 255, 255, 255));
-							enemyHp = 100;
 							enemy.setFillColor(sf::Color(0, 168, 155));
+							enemyHp = 100;
 							tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
 							scene = walking;
