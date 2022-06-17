@@ -75,6 +75,8 @@ namespace {
 
 	bool JukkyJungTurn = true;
 
+	bool isGameEnd = false;
+
 	sf::Font ReadexPro;
 	sf::Music mainThemeSong;
 	sf::Texture buttonTexture;
@@ -113,6 +115,9 @@ namespace {
 
 	sf::Text tAttack("ATTACK", ReadexPro);
 	sf::RectangleShape attackButton({ 259.f, 154.f });
+
+	sf::RectangleShape endScene({ 1920.f, 1080.f });
+	sf::RectangleShape continueButton({ 259.f, 154.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +175,9 @@ namespace {
 
 					window->draw(tResume);
 					window->draw(tExit);
+				}
+
+				if (isGameEnd) {
 				}
 			}
 
