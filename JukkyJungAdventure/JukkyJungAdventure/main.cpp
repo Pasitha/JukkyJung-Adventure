@@ -118,6 +118,8 @@ namespace {
 
 	sf::RectangleShape endScene({ 1920.f, 1080.f });
 	sf::RectangleShape continueButton({ 259.f, 154.f });
+	sf::Text tContinue("CONTINUE", ReadexPro);
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +180,9 @@ namespace {
 				}
 
 				if (isGameEnd) {
+					window->draw(endScene);
+					window->draw(continueButton);
+
 				}
 			}
 
@@ -273,6 +278,12 @@ int main() {
 	enemy.setFillColor(sf::Color(0, 168, 155));
 	enemy.setScale({ .35f, .35f });
 	enemy.setPosition({ 1000.f, 20.f });
+
+	endScene.setFillColor(sf::Color(0, 0, 0, 155));
+	continueButton.setTexture(&buttonTexture);
+	continueButton.setPosition({ 830.f, 300.f });
+	buttonLable(continueButton, tContinue);
+
 
 	// pause menu
 	pauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
@@ -380,6 +391,9 @@ int main() {
 						resumeButton.setFillColor((isHover(resumeButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 						exitButton.setFillColor((isHover(exitButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					}
+					if (isGameEnd) {
+						continueButton.setFillColor((isHover(continueButton)) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					}
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (isHover(attackButton)) {
@@ -417,7 +431,7 @@ int main() {
 							tJukkyJungHp.setString("HP: " + std::to_string(JukkyJungHp));
 							tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
-							scene = walking;
+							isGameEnd = true;
 						}
 						else if (enemyHp - damage > 0) {
 							enemyHp -= damage;
@@ -473,6 +487,14 @@ int main() {
 							isPause = false;
 							scene = menu;
 						}
+					}
+					if (isGameEnd) {
+						if (isHover(continueButton)) {
+							continueButton.setFillColor(sf::Color(255, 255, 255, 255));
+							isGameEnd = false;
+							scene = walking;
+						}
+
 					}
 				}
 				// pause
