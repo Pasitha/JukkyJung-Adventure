@@ -79,7 +79,7 @@ namespace {
 
 	int playerLvlProgress = 0;
 	auto calculateLvlProgress = [](int level) -> int {
-		return 3 * level;
+		return 30 * level;
 	};
 
 	sf::Font ReadexPro;
@@ -125,7 +125,7 @@ namespace {
 	sf::RectangleShape continueButton({ 259.f, 154.f });
 	sf::Text tContinue("CONTINUE", ReadexPro);
 
-	sf::Text lvlProgress(std::to_string(playerLvlProgress), ReadexPro);
+	sf::Text lvlProgress(std::to_string(playerLvlProgress) + "/" + std::to_string(calculateLvlProgress(1)), ReadexPro);
 	sf::RectangleShape xpBar({ 960.f, 50.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -452,7 +452,8 @@ int main() {
 							// exp animation progress
 							for (int i = 0; i < 10; i++) {
 								playerLvlProgress += 1;
-								lvlProgress.setString(std::to_string(playerLvlProgress));
+								lvlProgress.setString(std::to_string(playerLvlProgress) + "/" + std::to_string(calculateLvlProgress(1)));
+								buttonLable(xpBar, lvlProgress);
 								std::this_thread::sleep_for(std::chrono::milliseconds(100));
 							}
 						}
