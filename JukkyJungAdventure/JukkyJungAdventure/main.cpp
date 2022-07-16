@@ -64,7 +64,7 @@ namespace {
 	};
 }
 
-// sfml
+// sfml and game variable
 namespace {
 	enum eScene {
 		menu, setting, walking, battle
@@ -76,6 +76,11 @@ namespace {
 	bool JukkyJungTurn = true;
 
 	bool isGameEnd = false;
+
+	int playerLvlProgress = 0;
+	auto calculateLvlProgress = [](int level) -> int {
+		return 3 * level;
+	};
 
 	sf::Font ReadexPro;
 	sf::Music mainThemeSong;
@@ -120,6 +125,8 @@ namespace {
 	sf::RectangleShape continueButton({ 259.f, 154.f });
 	sf::Text tContinue("CONTINUE", ReadexPro);
 
+	sf::Text lvlProgress(std::to_string(playerLvlProgress), ReadexPro);
+	sf::RectangleShape xpBar({ 960.f, 50.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,6 +189,9 @@ namespace {
 				if (isGameEnd) {
 					window->draw(endScene);
 					window->draw(continueButton);
+
+					window->draw(xpBar);
+					window->draw(lvlProgress);
 
 					window->draw(tContinue);
 				}
@@ -285,6 +295,8 @@ int main() {
 	continueButton.setPosition({ 830.f, 300.f });
 	buttonLable(continueButton, tContinue);
 
+	xpBar.setPosition({ 530.f, 100.f });
+	buttonLable(xpBar, lvlProgress);
 
 	// pause menu
 	pauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
@@ -437,6 +449,12 @@ int main() {
 							tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
 							isGameEnd = true;
+							// exp animation progress
+							for (int i = 0; i < 10; i++) {
+								playerLvlProgress += 1;
+								lvlProgress.setString(std::to_string(playerLvlProgress));
+								std::this_thread::sleep_for(std::chrono::milliseconds(100));
+							}
 						}
 						else if (enemyHp - damage > 0) {
 							enemyHp -= damage;
