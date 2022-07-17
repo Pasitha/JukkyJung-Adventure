@@ -77,11 +77,9 @@ namespace {
 
 	bool isGameEnd = false;
 
+	int playerLvl = 1;
 	int playerLvlProgress = 0;
-	auto calculateLvlProgress = [](int level) -> int {
-		return 30 * level;
-	};
-
+	
 	sf::Font ReadexPro;
 	sf::Music mainThemeSong;
 	sf::Texture buttonTexture;
@@ -125,7 +123,11 @@ namespace {
 	sf::RectangleShape continueButton({ 259.f, 154.f });
 	sf::Text tContinue("CONTINUE", ReadexPro);
 
-	sf::Text lvlProgress(std::to_string(playerLvlProgress) + "/" + std::to_string(calculateLvlProgress(1)), ReadexPro);
+	sf::Text tPlayerLvl("Level " + std::to_string(playerLvl), ReadexPro);
+	sf::Text tLvlProgress(
+		std::to_string(playerLvlProgress) + "/30", 
+		ReadexPro
+	);
 	sf::RectangleShape xpBar({ 960.f, 50.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -190,8 +192,10 @@ namespace {
 					window->draw(endScene);
 					window->draw(continueButton);
 
+					window->draw(tPlayerLvl);
+
 					window->draw(xpBar);
-					window->draw(lvlProgress);
+					window->draw(tLvlProgress);
 
 					window->draw(tContinue);
 				}
@@ -211,7 +215,7 @@ int main() {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//                                         function                                            //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	auto isHover = [&window]<class T>(T button) ->  bool {
+	auto isHover = [&window]<class T>(T button) -> bool {
 		float mouseX = sf::Mouse::getPosition(window).x;
 		float mouseY = sf::Mouse::getPosition(window).y;
 
@@ -232,6 +236,10 @@ int main() {
 			button.getPosition().x + button.getGlobalBounds().width / 2.f - buttonLable.getGlobalBounds().width / 2.f, 
 			button.getPosition().y + button.getGlobalBounds().height / 2.2f - buttonLable.getGlobalBounds().height / 2.2f
 		});
+	};
+
+	auto calculateLvlProgress = [](int level) -> int {
+		return 30 * level;
 	};
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -295,8 +303,13 @@ int main() {
 	continueButton.setPosition({ 830.f, 300.f });
 	buttonLable(continueButton, tContinue);
 
-	xpBar.setPosition({ 530.f, 100.f });
-	buttonLable(xpBar, lvlProgress);
+	
+	xpBar.setPosition({ 530.f, 150.f });
+	tPlayerLvl.setPosition(
+		xpBar.getPosition().x + xpBar.getGlobalBounds().width / 2.f - tPlayerLvl.getGlobalBounds().width / 2.f,
+		(xpBar.getPosition().y + xpBar.getGlobalBounds().height / 2.f - tPlayerLvl.getGlobalBounds().height / 2.f) - 55
+	);
+	buttonLable(xpBar, tLvlProgress);
 
 	// pause menu
 	pauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
@@ -449,11 +462,21 @@ int main() {
 							tEnemyHp.setString("HP: " + std::to_string(enemyHp));
 
 							isGameEnd = true;
+
 							// exp animation progress
 							for (int i = 0; i < 10; i++) {
 								playerLvlProgress += 1;
-								lvlProgress.setString(std::to_string(playerLvlProgress) + "/" + std::to_string(calculateLvlProgress(1)));
-								buttonLable(xpBar, lvlProgress);
+								tLvlProgress.setString(std::to_string(playerLvlProgress) + "/" + std::to_string(calculateLvlProgress(playerLvl)));
+
+								if (playerLvlProgress == calculateLvlProgress(playerLvl)) {
+									playerLvl += 1;
+									playerLvlProgress = 0;
+
+									tPlayerLvl.setString("Level " + std::to_string(playerLvl));
+									tLvlProgress.setString("0/" + std::to_string(calculateLvlProgress(playerLvl)));
+								}
+
+								buttonLable(xpBar, tLvlProgress);
 								std::this_thread::sleep_for(std::chrono::milliseconds(100));
 							}
 						}
