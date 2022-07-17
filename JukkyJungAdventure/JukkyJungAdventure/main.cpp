@@ -371,7 +371,7 @@ int main() {
 					}
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
-					if (isHover(sampleMap)) {
+					if (isHover(sampleTown)) {
 						scene = battle;
 					}
 					if (isPause) {
