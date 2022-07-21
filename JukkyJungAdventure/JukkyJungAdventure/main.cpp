@@ -88,7 +88,11 @@ namespace {
 	//                                         main menu                                           //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	sf::Text tStart("START", ReadexPro);
-	sf::RectangleShape button({ 259.f, 154.f });
+	sf::RectangleShape startButton({ 259.f, 154.f });
+	sf::Text tSetting("SETTING", ReadexPro);
+	sf::RectangleShape settingButton({ 259.f, 154.f });
+	sf::Text tExit("EXIT", ReadexPro);
+	sf::RectangleShape exitButton({ 259.f, 154.f });
 
 	sf::CircleShape volumeSlider(30);
 	sf::RectangleShape volume({ 550.f, 25.f });
@@ -135,10 +139,10 @@ namespace {
 	//                                         pause menu                                          //
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	sf::Text tResume("RESUME", ReadexPro);
-	sf::Text tExit("EXIT", ReadexPro);
+	sf::Text tGameExit("EXIT", ReadexPro);
 	sf::RectangleShape pauseMenu({ 1920.f, 1080.f });
 	sf::RectangleShape resumeButton({ 259.f, 154.f });
-	sf::RectangleShape exitButton({ 259.f, 154.f });
+	sf::RectangleShape exitGameButton({ 259.f, 154.f });
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -151,8 +155,13 @@ namespace {
 			window->clear(sf::Color(255, 185, 0, 255));
 
 			if (scene == menu) {
-				window->draw(button);
+				window->draw(startButton);
 				window->draw(tStart);
+				window->draw(settingButton);
+				window->draw(tSetting);
+				window->draw(exitGameButton);
+				window->draw(tGameExit);
+
 				window->draw(volume);
 				window->draw(volumeSlider);
 			}
@@ -239,7 +248,7 @@ int main() {
 	};
 
 	auto calculateLvlProgress = [](int level) -> int {
-		return 30 * level;
+		return 60 * level - 30;
 	};
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -269,9 +278,18 @@ int main() {
 	mainThemeSong.setLoop(true);
 	mainThemeSong.play();
 	// main menu
-	button.setTexture(&buttonTexture);
-	button.setPosition({ 500, 500 });
-	buttonLable(button, tStart);
+	startButton.setTexture(&buttonTexture);
+	startButton.setPosition({ 500, 500 });
+	buttonLable(startButton, tStart);
+	
+	settingButton.setTexture(&buttonTexture);
+	settingButton.setPosition({ 500, 650 });
+	buttonLable(settingButton, tSetting);
+
+	exitGameButton.setTexture(&buttonTexture);
+	exitGameButton.setPosition({ 500, 800 });
+	buttonLable(exitGameButton, tGameExit);
+
 	volume.setPosition({ 500, 300 });
 	volumeSlider.setPosition({ 500, 283 });
 
@@ -341,14 +359,25 @@ int main() {
 			/////////////////////////////////////////////////////////////////////////////////////////////////
 			if (scene == menu) {
 				if (event.type == sf::Event::MouseMoved) {
-					button.setFillColor(isHover(button) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					startButton.setFillColor(isHover(startButton) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					settingButton.setFillColor(isHover(settingButton) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
+					exitGameButton.setFillColor(isHover(exitGameButton) ? sf::Color(155, 155, 155, 255) : sf::Color(255, 255, 255, 255));
 					volumeSlider.setFillColor(isHover(volumeSlider) ? sf::Color(255, 155, 155, 255) : sf::Color(215, 215, 215, 255));
 				}
 
 				if (event.type == sf::Event::MouseButtonPressed) {
-					if (isHover(button)) {
-						button.setFillColor(sf::Color(255, 255, 255, 255));
+					if (isHover(startButton)) {
+						startButton.setFillColor(sf::Color(255, 255, 255, 255));
 						scene = walking;
+					}
+					if (isHover(settingButton)) {
+						settingButton.setFillColor(sf::Color(255, 255, 255, 255));
+						scene = setting;
+					}
+					if (isHover(exitGameButton)) {
+						mainThemeSong.stop();
+						window.close();
+						break;
 					}
 					// volume slider
 					if (isHover(volume)) {
@@ -465,7 +494,7 @@ int main() {
 
 							// exp animation progress
 							for (int i = 0; i < 10; i++) {
-								playerLvlProgress += 1;
+								playerLvlProgress += 5;
 								tLvlProgress.setString(std::to_string(playerLvlProgress) + "/" + std::to_string(calculateLvlProgress(playerLvl)));
 
 								if (playerLvlProgress == calculateLvlProgress(playerLvl)) {
@@ -560,5 +589,8 @@ int main() {
 
 	gameThreads.at(0)->join();
 	gameThreads.at(1)->join();
+
+	delete gameThreads.at(0);
+	delete gameThreads.at(1);
 	return 0;
 }
