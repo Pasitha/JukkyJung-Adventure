@@ -1,7 +1,11 @@
 #include "common.h"
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(600, 200), "SFML works!");
+	sf::RenderWindow window(
+		sf::VideoMode(1920, 1080),
+		"SFML works!",
+		sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close
+	);
 	window.setActive(false);
 
 	std::vector<std::thread*> gameThreads {
@@ -13,7 +17,7 @@ int main() {
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
-				interrupted = false;
+				std::raise(SIGINT);
 				window.close();
 			}
 		}
@@ -21,6 +25,9 @@ int main() {
 
 	gameThreads.at(0)->join();
 	gameThreads.at(1)->join();
-
+	
+	for (auto gameThread : gameThreads)
+		delete gameThread;
+	gameThreads.clear();
 	return 0;
 }
