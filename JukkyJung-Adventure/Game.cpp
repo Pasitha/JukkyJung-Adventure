@@ -1,7 +1,9 @@
 #include "common.h"
 
 Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Default) {
-	
+	this->m_window.setFramerateLimit(60);
+
+	this->m_JukkyJung = new JukkyJung(&this->m_window);
 }
 
 void Game::Update() {
@@ -14,7 +16,7 @@ void Game::Update() {
 		}
 
 		this->m_window.clear();
-
+		this->m_JukkyJung->Update();
 		this->m_window.display();
 	}
 }
