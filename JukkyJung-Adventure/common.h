@@ -17,5 +17,7 @@
 // Discord SDK
 #include <discord.h>
 
-#include "Game.h"
 #include "Discord.h"
+#include "JukkyJung.h"
+#include "FileManager.h"
+#include "Game.h"
