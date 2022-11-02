@@ -18,6 +18,7 @@
 #include <discord.h>
 
 #include "Discord.h"
-#include "JukkyJung.h"
 #include "FileManager.h"
+#include "Button.h"
+#include "JukkyJung.h"
 #include "Game.h"
