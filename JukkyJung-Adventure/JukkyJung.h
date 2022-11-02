@@ -13,4 +13,3 @@ private:
 	sf::Texture m_JukkyJungTexture;
 	sf::Sprite m_JukkyJungSprite;
 };
-
