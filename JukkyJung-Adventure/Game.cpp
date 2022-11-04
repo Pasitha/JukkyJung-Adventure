@@ -6,8 +6,8 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 	this->m_Button = new Button(&this->m_window);
 	this->m_JukkyJung = new JukkyJung(&this->m_window);
 
-	m_Button->addButton();
-	m_Button->addButton();
+	m_Button->addButton("Test Button 1");
+	m_Button->addButton("Test Button 2");
 	m_Button->setPosition(0, { 50, 50 });
 	m_Button->setPosition(1, { 500, 500 });
 }
@@ -18,6 +18,9 @@ void Game::Update() {
 		while (this->m_window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				this->m_window.close();
+			}
+			if (event.type == sf::Event::MouseMoved) {
+				m_Button->isHover();
 			}
 		}
 
