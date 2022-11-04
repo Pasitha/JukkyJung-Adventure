@@ -7,6 +7,7 @@ public:
 
 	void addButton();
 	void setPosition(unsigned short index, sf::Vector2f position);
+	void isHover();
 	void Update();
 private:
 	sf::RenderWindow* m_windowInstance;
