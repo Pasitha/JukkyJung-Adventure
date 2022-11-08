@@ -6,10 +6,10 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 	this->m_Button = new Button(&this->m_window);
 	this->m_JukkyJung = new JukkyJung(&this->m_window);
 
-	m_Button->addButton("Test Button 1");
-	m_Button->addButton("Test Button 2");
-	m_Button->setPosition(0, { 50, 50 });
-	m_Button->setPosition(1, { 500, 500 });
+	this->m_Button->addButton("Test Button 1");
+	this->m_Button->addButton("Test Button 2");
+	this->m_Button->setPosition(0, { 50, 800 });
+	this->m_Button->setPosition(1, { 400, 800 });
 }
 
 void Game::Update() {
@@ -20,7 +20,7 @@ void Game::Update() {
 				this->m_window.close();
 			}
 			if (event.type == sf::Event::MouseMoved) {
-				m_Button->isHover();
+				this->m_Button->isHover();
 			}
 		}
 

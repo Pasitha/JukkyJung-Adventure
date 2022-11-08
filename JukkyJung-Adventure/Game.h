@@ -1,8 +1,8 @@
 #pragma once
 #include "common.h"
 
-class JukkyJung;
 class Button;
+class JukkyJung;
 
 class Game {
 public:
@@ -14,4 +14,3 @@ private:
 	Button* m_Button;
 	JukkyJung* m_JukkyJung;
 };
-
