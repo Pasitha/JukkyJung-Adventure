@@ -27,7 +27,8 @@ void Button::setPosition(unsigned short index, sf::Vector2f position) {
 void Button::isHover() {
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(*this->m_windowInstance);
 
-	for (int i = 0; i < this->m_Button.size(); i++) {
+	size_t numberOfButtons = m_Button.size();
+	for (int i = 0; i < numberOfButtons; i++) {
 		sf::Vector2f btnPosition = this->m_Button[i].getPosition();
 		sf::FloatRect btnLocalBounds = this->m_Button[i].getLocalBounds();
 
@@ -41,6 +42,24 @@ void Button::isHover() {
 			this->m_Button[i].setColor(sf::Color(255, 255, 255, 255));
 		}
 	}
+}
+
+int Button::whichButtonHover() {
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(*this->m_windowInstance);
+
+	size_t numberOfButtons = m_Button.size();
+	for (int i = 0; i < numberOfButtons; i++) {
+		sf::Vector2f btnPosition = this->m_Button[i].getPosition();
+		sf::FloatRect btnLocalBounds = this->m_Button[i].getLocalBounds();
+
+		float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
+		float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+
+		if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 void Button::Update() {
