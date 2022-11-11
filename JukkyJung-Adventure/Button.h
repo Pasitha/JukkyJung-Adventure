@@ -8,6 +8,8 @@ public:
 	void addButton(const std::string buttonLable);
 	void setPosition(unsigned short index, sf::Vector2f position);
 	void isHover();
+	int whichButtonHover();
+
 	void Update();
 private:
 	sf::RenderWindow* m_windowInstance;
