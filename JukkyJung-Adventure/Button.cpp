@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(sf::RenderWindow* window) : m_windowInstance(window) {
+Button::Button(sf::RenderWindow* window, enum class Game::m_Scene scene) : m_windowInstance(window) {
 	FileManager::LoadFormFile(this->m_ButtonFont, "asset/font/ReadexPro.ttf");
 	FileManager::LoadFormFile(this->m_ButtonTexture, "asset/picture/Button.png");
 
