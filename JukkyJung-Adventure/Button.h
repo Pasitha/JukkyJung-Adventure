@@ -3,7 +3,7 @@
 
 class Button {
 public:
-	Button(sf::RenderWindow* window);
+	Button(sf::RenderWindow* window, enum class Game::m_Scene scene);
 
 	void addButton(const std::string buttonLable);
 	void setPosition(unsigned short index, sf::Vector2f position);
