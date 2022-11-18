@@ -10,7 +10,7 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 
 	this->m_Button->addButton("Test Button 1");
 	this->m_Button->addButton("Test Button 2");
-	this->m_Button->addButton("Test Button 2");
+	this->m_Button->addButton("Test Button 3");
 	this->m_Button->setPosition(0, { 50, 800 });
 	this->m_Button->setPosition(1, { 400, 800 });
 	this->m_Button->setPosition(2, { 750, 800 });
