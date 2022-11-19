@@ -27,7 +27,12 @@ void Game::Update() {
 				this->m_Button->isHover();
 			}
 			if (event.type == sf::Event::MouseButtonPressed) {
-				std::cout << this->m_Button->whichButtonHover() << std::endl;
+				switch (this->m_Button->whichButtonHover()) {
+				case 0:
+					break;
+				case 1:
+					break;
+				}
 			}
 		}
 
