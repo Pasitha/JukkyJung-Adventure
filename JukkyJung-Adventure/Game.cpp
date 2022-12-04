@@ -3,7 +3,7 @@
 Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Default) {
 	this->m_window.setFramerateLimit(60);
 
-	m_Scene Scene = m_Scene::mainMenu;
+	this->m_Scene = m_Scene::mainMenu;
 
 	this->m_Button = new Button(&this->m_window);
 	this->m_JukkyJung = new JukkyJung(&this->m_window);
@@ -28,9 +28,11 @@ void Game::Update() {
 			}
 			if (event.type == sf::Event::MouseButtonPressed) {
 				switch (this->m_Button->whichButtonHover()) {
-				case 0:
+				case (int)m_Scene::mainMenu:
+					this->m_Scene = m_Scene::gamePlay;
 					break;
-				case 1:
+				case (int)m_Scene::gamePlay:
+					this->m_Scene = m_Scene::setting;
 					break;
 				}
 			}

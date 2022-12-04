@@ -16,7 +16,7 @@ private:
 		mainMenu,
 		setting,
 		gamePlay
-	};
+	} m_Scene;
 
 	Button* m_Button;
 	JukkyJung* m_JukkyJung;
