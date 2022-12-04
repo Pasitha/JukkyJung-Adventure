@@ -16,11 +16,11 @@ void Button::addButton(const std::string buttonLable) {
 	this->m_Button.push_back(this->m_ButtonSprite);
 }
 
-void Button::setPosition(unsigned short index, sf::Vector2f position) {
-	this->m_Button[index].setPosition(position);
-	this->m_ButtonLable[index].setPosition({
-		this->m_Button[index].getPosition().x + this->m_ButtonSprite.getGlobalBounds().width / 2.f - this->m_ButtonText.getGlobalBounds().width / 2.f,
-		this->m_Button[index].getPosition().y + this->m_ButtonSprite.getGlobalBounds().height / 2.2f - this->m_ButtonText.getGlobalBounds().height / 2.2f
+void Button::setPosition(unsigned short buttonID, sf::Vector2f position) {
+	this->m_Button[buttonID].setPosition(position);
+	this->m_ButtonLable[buttonID].setPosition({
+		this->m_Button[buttonID].getPosition().x + this->m_ButtonSprite.getGlobalBounds().width / 2.f - this->m_ButtonText.getGlobalBounds().width / 2.f,
+		this->m_Button[buttonID].getPosition().y + this->m_ButtonSprite.getGlobalBounds().height / 2.2f - this->m_ButtonText.getGlobalBounds().height / 2.2f
 	});
 }
 

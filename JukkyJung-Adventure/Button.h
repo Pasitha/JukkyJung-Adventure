@@ -6,7 +6,7 @@ public:
 	Button(sf::RenderWindow* window);
 
 	void addButton(const std::string buttonLable);
-	void setPosition(unsigned short index, sf::Vector2f position);
+	void setPosition(unsigned short buttonID, sf::Vector2f position);
 	void isHover();
 	int whichButtonHover();
 
