@@ -8,12 +8,23 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 		new JukkyJung(&this->m_window)
 	};
 
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Test Button 1");
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Test Button 2");
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Test Button 3");
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(0, { 50, 800 });
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(1, { 400, 800 });
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(2, { 750, 800 });
+	this->m_SceneComponent[m_Scene::gamePlay] = {
+		new Button(&this->m_window)
+	};
+
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Play");
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Setting");
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Exit");
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(0, { 50, 300 });
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(1, { 50, 500 });
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(2, { 50, 700 });
+
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("Test Button 1");
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("Test Button 2");
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("Test Button 3");
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->setPosition(0, { 50, 800 });
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->setPosition(1, { 400, 800 });
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->setPosition(2, { 750, 800 });
 }
 
 void Game::Update() {
@@ -28,10 +39,10 @@ void Game::Update() {
 			}
 			if (event.type == sf::Event::MouseButtonPressed) {
 				switch (this->m_SceneComponent[m_Scene::mainMenu].m_Button->whichButtonHover()) {
-				case (int)m_Scene::mainMenu:
+				case (short)m_Scene::mainMenu:
 					this->m_gameScene = m_Scene::gamePlay;
 					break;
-				case (int)m_Scene::gamePlay:
+				case (short)m_Scene::gamePlay:
 					this->m_gameScene = m_Scene::setting;
 					break;
 				}
@@ -39,8 +50,18 @@ void Game::Update() {
 		}
 
 		this->m_window.clear();
-		this->m_SceneComponent[m_Scene::mainMenu].m_Button->Update();
-		this->m_SceneComponent[m_Scene::mainMenu].m_JukkyJung->Update();
+		switch (m_gameScene) {
+			case m_Scene::mainMenu:
+				this->m_SceneComponent[m_Scene::mainMenu].m_Button->Update();
+				break;
+			case m_Scene::setting:
+
+				break;
+			case m_Scene::gamePlay:
+				this->m_SceneComponent[m_Scene::gamePlay].m_Button->Update();
+				this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->Update();
+				break;
+		}
 		this->m_window.display();
 	}
 }
