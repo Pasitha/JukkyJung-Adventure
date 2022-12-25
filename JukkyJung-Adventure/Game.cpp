@@ -9,7 +9,8 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 
 	this->m_SceneComponent[m_Scene::gamePlay] = {
 		new Button(&this->m_window),
-		new JukkyJung(&this->m_window)
+		new JukkyJung(&this->m_window),
+		new Enemy(&this->m_window)
 	};
 	
 	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Play");
@@ -63,6 +64,7 @@ void Game::Update() {
 			case m_Scene::gamePlay:
 				this->m_SceneComponent[m_Scene::gamePlay].m_Button->Update();
 				this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->Update();
+				this->m_SceneComponent[m_Scene::gamePlay].m_Enemy->Update();
 				break;
 		}
 		this->m_window.display();
