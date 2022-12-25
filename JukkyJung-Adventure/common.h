@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <functional>
 #include <thread>
+#include <unordered_map>
 #include <cmath>
 #include <csignal>
 #include <ctime>
