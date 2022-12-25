@@ -22,4 +22,5 @@
 #include "FileManager.h"
 #include "Button.h"
 #include "JukkyJung.h"
+#include "Enemy.h"
 #include "Game.h"
