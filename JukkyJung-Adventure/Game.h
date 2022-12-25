@@ -3,6 +3,7 @@
 
 class Button;
 class JukkyJung;
+class Enemy;
 
 class Game {
 public:
@@ -21,6 +22,7 @@ private:
 	struct m_gameComponent {
 		Button* m_Button;
 		JukkyJung* m_JukkyJung;
+		Enemy* m_Enemy;
 	};
 
 	m_Scene m_gameScene;
