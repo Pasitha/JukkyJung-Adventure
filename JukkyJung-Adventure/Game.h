@@ -16,8 +16,13 @@ private:
 		mainMenu,
 		setting,
 		gamePlay
-	} m_Scene;
+	};
 
-	Button* m_Button;
-	JukkyJung* m_JukkyJung;
+	struct m_gameComponent {
+		Button* m_Button;
+		JukkyJung* m_JukkyJung;
+	};
+
+	m_Scene m_gameScene;
+	std::unordered_map<m_Scene, m_gameComponent> m_SceneComponent;
 };
