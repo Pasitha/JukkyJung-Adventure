@@ -167,6 +167,7 @@
     <ClCompile Include="..\lib\discord_game_sdk\cpp\voice_manager.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Discord.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="JukkyJung.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="Discord.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="JukkyJung.h" />
