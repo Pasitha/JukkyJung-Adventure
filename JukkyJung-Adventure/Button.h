@@ -5,13 +5,14 @@ class Button {
 public:
 	Button(sf::RenderWindow* window);
 
-	void addButton(const std::string buttonLable);
+	void addButton(const std::string buttonLable, sf::Vector2f buttonPosition);
 	void setPosition(unsigned short buttonID, sf::Vector2f position);
 	void isHover();
 	int whichButtonHover();
 
 	void Update();
 private:
+	unsigned int m_numberOfButtons;
 	sf::RenderWindow* m_windowInstance;
 
 	sf::Font m_ButtonFont;
