@@ -53,7 +53,7 @@ void Game::Update() {
 			}
 		}
 
-		this->m_window.clear();
+		this->m_window.clear(sf::Color(199, 119, 19, 255));
 		switch (m_gameScene) {
 			case m_Scene::mainMenu:
 				this->m_SceneComponent[m_Scene::mainMenu].m_Button->Update();
