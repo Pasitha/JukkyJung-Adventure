@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(sf::RenderWindow* window) : m_windowInstance(window) {
+Button::Button(sf::RenderWindow* window) : m_windowInstance(window), m_numberOfButtons(0) {
 	FileManager::LoadFormFile(this->m_ButtonFont, "asset/font/ReadexPro.ttf");
 	FileManager::LoadFormFile(this->m_ButtonTexture, "asset/picture/Button.png");
 
@@ -9,11 +9,19 @@ Button::Button(sf::RenderWindow* window) : m_windowInstance(window) {
 	m_ButtonSprite.setTexture(this->m_ButtonTexture);
 }
 
-void Button::addButton(const std::string buttonLable) {
+void Button::addButton(const std::string buttonLable, sf::Vector2f buttonPosition) {
 	this->m_ButtonText.setString(buttonLable);
 	this->m_ButtonLable.push_back(this->m_ButtonText);
 
 	this->m_Button.push_back(this->m_ButtonSprite);
+
+	this->m_Button[m_numberOfButtons].setPosition(buttonPosition);
+	this->m_ButtonLable[m_numberOfButtons].setPosition({
+		this->m_Button[m_numberOfButtons].getPosition().x + this->m_ButtonSprite.getGlobalBounds().width / 2.f - this->m_ButtonText.getGlobalBounds().width / 2.f,
+		this->m_Button[m_numberOfButtons].getPosition().y + this->m_ButtonSprite.getGlobalBounds().height / 2.2f - this->m_ButtonText.getGlobalBounds().height / 2.2f
+	});
+
+	m_numberOfButtons++;
 }
 
 void Button::setPosition(unsigned short buttonID, sf::Vector2f position) {
