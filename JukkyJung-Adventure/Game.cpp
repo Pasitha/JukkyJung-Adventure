@@ -13,19 +13,13 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 		new Enemy(&this->m_window)
 	};
 	
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Play");
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Setting");
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Exit");
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(0, { 50, 300 });
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(1, { 50, 500 });
-	this->m_SceneComponent[m_Scene::mainMenu].m_Button->setPosition(2, { 50, 700 });
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Play", { 50, 300 });
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Setting", { 50, 500 });
+	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Exit", { 50, 700 });
 
-	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("ATTACK");
-	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("ITEM");
-	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("SKIP ROUND");
-	this->m_SceneComponent[m_Scene::gamePlay].m_Button->setPosition(0, { 50, 800 });
-	this->m_SceneComponent[m_Scene::gamePlay].m_Button->setPosition(1, { 400, 800 });
-	this->m_SceneComponent[m_Scene::gamePlay].m_Button->setPosition(2, { 750, 800 });
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("ATTACK", { 50, 800 });
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("ITEM", { 400, 800 });
+	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("SKIP ROUND", { 750, 800 });
 }
 
 void Game::Update() {
