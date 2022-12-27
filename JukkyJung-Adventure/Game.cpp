@@ -29,21 +29,41 @@ void Game::Update() {
 			if (event.type == sf::Event::Closed) {
 				this->m_window.close();
 			}
-			if (event.type == sf::Event::MouseMoved) {
-				this->m_SceneComponent[m_Scene::mainMenu].m_Button->isHover();
-			}
-			if (event.type == sf::Event::MouseButtonPressed) {
-				switch (this->m_SceneComponent[m_Scene::mainMenu].m_Button->whichButtonHover()) {
-				case 0:
-					this->m_gameScene = m_Scene::gamePlay;
-					break;
-				case 1:
-					this->m_gameScene = m_Scene::setting;
-					break;
-				case 2:
-					this->m_window.close();
-					break;
+
+			switch (m_gameScene) {
+			case m_Scene::mainMenu:
+				if (event.type == sf::Event::MouseMoved) {
+					this->m_SceneComponent[m_Scene::mainMenu].m_Button->isHover();
 				}
+				if (event.type == sf::Event::MouseButtonPressed) {
+					switch (this->m_SceneComponent[m_Scene::mainMenu].m_Button->whichButtonHover()) {
+					case 0:
+						this->m_gameScene = m_Scene::gamePlay;
+						break;
+					case 1:
+						this->m_gameScene = m_Scene::setting;
+						break;
+					case 2:
+						this->m_window.close();
+						break;
+					}
+				}
+				break;
+			case m_Scene::gamePlay:
+				if (event.type == sf::Event::MouseMoved) {
+					this->m_SceneComponent[m_Scene::gamePlay].m_Button->isHover();
+				}
+				if (event.type == sf::Event::MouseButtonPressed) {
+					switch (this->m_SceneComponent[m_Scene::gamePlay].m_Button->whichButtonHover()) {
+					case 0:
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					}
+				}
+				break;
 			}
 		}
 
