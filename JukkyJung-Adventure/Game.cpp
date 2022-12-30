@@ -1,7 +1,16 @@
 #include "common.h"
 
-Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Default), m_gameScene(m_Scene::mainMenu) {
+Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Fullscreen), m_gameScene(m_Scene::mainMenu) {
 	this->m_window.setFramerateLimit(60);
+
+	FileManager::LoadFormFile(this->m_gameFont, "asset/font/ReadexPro.ttf");
+
+	this->m_isGamePause = false;
+	this->m_backgroundPauseMenuText.setString("Pasue");
+	this->m_backgroundPauseMenuText.setFont(this->m_gameFont);
+	this->m_backgroundPauseMenuText.setPosition({ 960, 100 });
+	this->m_backgroundPauseMenu.setSize({ 1920.f, 1080.f });
+	this->m_backgroundPauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
 
 	this->m_SceneComponent[m_Scene::mainMenu] = {
 		new Button(&this->m_window)
@@ -63,6 +72,14 @@ void Game::Update() {
 						break;
 					}
 				}
+				if (event.type == sf::Event::KeyPressed) {
+					if (event.key.code == sf::Keyboard::Escape && !this->m_isGamePause) {
+						this->m_isGamePause = true;
+					}
+					else if (event.key.code == sf::Keyboard::Escape && this->m_isGamePause) {
+						this->m_isGamePause = false;
+					}
+				}
 				break;
 			}
 		}
@@ -79,6 +96,11 @@ void Game::Update() {
 				this->m_SceneComponent[m_Scene::gamePlay].m_Button->Update();
 				this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->Update();
 				this->m_SceneComponent[m_Scene::gamePlay].m_Enemy->Update();
+
+				if (this->m_isGamePause) {
+					this->m_window.draw(m_backgroundPauseMenu);
+					this->m_window.draw(m_backgroundPauseMenuText);
+				}
 				break;
 		}
 		this->m_window.display();
