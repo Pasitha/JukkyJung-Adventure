@@ -28,6 +28,9 @@ private:
 	m_Scene m_gameScene;
 	std::unordered_map<m_Scene, m_gameComponent> m_SceneComponent;
 
+	sf::Font m_gameFont;
+
+	bool m_isGamePause;
 	sf::Text m_backgroundPauseMenuText;
 	sf::RectangleShape m_backgroundPauseMenu;
 };
