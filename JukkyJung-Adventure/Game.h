@@ -16,7 +16,8 @@ private:
 	enum class m_Scene {
 		mainMenu,
 		setting,
-		gamePlay
+		gamePlay,
+		pauseMenu
 	};
 
 	struct m_gameComponent {
