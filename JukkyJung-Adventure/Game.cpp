@@ -21,6 +21,10 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 		new JukkyJung(&this->m_window),
 		new Enemy(&this->m_window)
 	};
+
+	this->m_SceneComponent[m_Scene::pauseMenu] = {
+		new Button(&this->m_window)
+	};
 	
 	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Play", { 50, 300 });
 	this->m_SceneComponent[m_Scene::mainMenu].m_Button->addButton("Setting", { 50, 500 });
@@ -29,6 +33,9 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("ATTACK", { 50, 800 });
 	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("ITEM", { 400, 800 });
 	this->m_SceneComponent[m_Scene::gamePlay].m_Button->addButton("SKIP ROUND", { 750, 800 });
+
+	this->m_SceneComponent[m_Scene::pauseMenu].m_Button->addButton("RESUME", { 850, 300 });
+	this->m_SceneComponent[m_Scene::pauseMenu].m_Button->addButton("EXIT", { 850, 500 });
 }
 
 void Game::Update() {
@@ -100,6 +107,8 @@ void Game::Update() {
 				if (this->m_isGamePause) {
 					this->m_window.draw(m_backgroundPauseMenu);
 					this->m_window.draw(m_backgroundPauseMenuText);
+
+					this->m_SceneComponent[m_Scene::pauseMenu].m_Button->Update();
 				}
 				break;
 		}
