@@ -68,6 +68,9 @@ void Game::Update() {
 			case m_Scene::gamePlay:
 				if (event.type == sf::Event::MouseMoved) {
 					this->m_SceneComponent[m_Scene::gamePlay].m_Button->isHover();
+					if (m_isGamePause) {
+						this->m_SceneComponent[m_Scene::pauseMenu].m_Button->isHover();
+					}
 				}
 				if (event.type == sf::Event::MouseButtonPressed) {
 					switch (this->m_SceneComponent[m_Scene::gamePlay].m_Button->whichButtonHover()) {
