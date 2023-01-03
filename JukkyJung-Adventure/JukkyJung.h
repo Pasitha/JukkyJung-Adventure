@@ -5,6 +5,7 @@ class JukkyJung {
 public:
 	JukkyJung(sf::RenderWindow* window);
 
+	void ShakeAnimation();
 	void Update();
 private:
 	sf::RenderWindow* m_windowInstance;
