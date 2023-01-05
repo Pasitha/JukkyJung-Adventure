@@ -38,7 +38,40 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 	this->m_SceneComponent[m_Scene::pauseMenu].m_Button->addButton("EXIT", { 850, 500 });
 }
 
-void Game::Update() {
+void Game::run() {
+	std::thread inputThread(&Game::inputHandler, this);
+	std::thread updateThread(&Game::update, this);
+
+	while (this->m_window.isOpen()) {
+		this->m_window.clear(sf::Color(199, 119, 19, 255));
+		switch (m_gameScene) {
+		case m_Scene::mainMenu:
+			this->m_SceneComponent[m_Scene::mainMenu].m_Button->Update();
+			break;
+		case m_Scene::setting:
+
+			break;
+		case m_Scene::gamePlay:
+			this->m_SceneComponent[m_Scene::gamePlay].m_Button->Update();
+			this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->Update();
+			this->m_SceneComponent[m_Scene::gamePlay].m_Enemy->Update();
+
+			if (this->m_isGamePause) {
+				this->m_window.draw(m_backgroundPauseMenu);
+				this->m_window.draw(m_backgroundPauseMenuText);
+
+				this->m_SceneComponent[m_Scene::pauseMenu].m_Button->Update();
+			}
+			break;
+		}
+		this->m_window.display();
+	}
+
+	inputThread.join();
+	updateThread.join();
+}
+
+void Game::inputHandler() {
 	while (this->m_window.isOpen()) {
 		sf::Event event;
 		while (this->m_window.pollEvent(event)) {
@@ -75,6 +108,7 @@ void Game::Update() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					switch (this->m_SceneComponent[m_Scene::gamePlay].m_Button->whichButtonHover()) {
 					case 0:
+						this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->ShakeAnimation();
 						break;
 					case 1:
 						break;
@@ -104,28 +138,11 @@ void Game::Update() {
 				break;
 			}
 		}
+	}
+}
 
-		this->m_window.clear(sf::Color(199, 119, 19, 255));
-		switch (m_gameScene) {
-			case m_Scene::mainMenu:
-				this->m_SceneComponent[m_Scene::mainMenu].m_Button->Update();
-				break;
-			case m_Scene::setting:
+void Game::update() {
+	while (this->m_window.isOpen()) {
 
-				break;
-			case m_Scene::gamePlay:
-				this->m_SceneComponent[m_Scene::gamePlay].m_Button->Update();
-				this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->Update();
-				this->m_SceneComponent[m_Scene::gamePlay].m_Enemy->Update();
-
-				if (this->m_isGamePause) {
-					this->m_window.draw(m_backgroundPauseMenu);
-					this->m_window.draw(m_backgroundPauseMenuText);
-
-					this->m_SceneComponent[m_Scene::pauseMenu].m_Button->Update();
-				}
-				break;
-		}
-		this->m_window.display();
 	}
 }
