@@ -2,6 +2,6 @@
 
 int main() {
 	Game game;
-	game.Update();
+	game.run();
 	return 0;
 }
