@@ -9,7 +9,7 @@ class Game {
 public:
 	Game();
 
-	void run();
+	void Update();
 private:
 	sf::RenderWindow m_window;
 
@@ -34,7 +34,4 @@ private:
 	bool m_isGamePause;
 	sf::Text m_backgroundPauseMenuText;
 	sf::RectangleShape m_backgroundPauseMenu;
-private:
-	void inputHandler();
-	void update();
 };

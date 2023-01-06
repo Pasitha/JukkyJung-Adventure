@@ -14,9 +14,11 @@ JukkyJung::JukkyJung(sf::RenderWindow* window) : m_windowInstance(window), m_Juk
 }
 
 void JukkyJung::ShakeAnimation() {
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 25; i++) {
+		this->m_JukkyJungSprite.setPosition({ 10 - (float)std::pow(-1, i) * 10, this->m_JukkyJungSprite.getPosition().y });
 		std::this_thread::sleep_for(std::chrono::milliseconds(15));
-		this->m_JukkyJungSprite.move({ (float)std::pow(-1, i) * 500, 0.f });
+		this->m_windowInstance->draw(this->m_JukkyJungSprite);
+		this->m_windowInstance->display();
 	}
 }
 
