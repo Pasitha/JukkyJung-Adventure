@@ -9,6 +9,8 @@ public:
 	void setPosition(unsigned short buttonID, sf::Vector2f position);
 	void isHover();
 	int whichButtonHover();
+	void enableButton();
+	void disableButton();
 
 	void Update();
 private:
