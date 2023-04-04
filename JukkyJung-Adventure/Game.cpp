@@ -75,7 +75,13 @@ void Game::Update() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					switch (this->m_SceneComponent[m_Scene::gamePlay].m_Button->whichButtonHover()) {
 					case 0:
+						this->m_SceneComponent[m_Scene::gamePlay].m_Button->disableButton();
+						std::this_thread::sleep_for(std::chrono::milliseconds(15));
+
 						this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->ShakeAnimation();
+
+						std::this_thread::sleep_for(std::chrono::milliseconds(15));
+						this->m_SceneComponent[m_Scene::gamePlay].m_Button->enableButton();
 						break;
 					case 1:
 						break;
