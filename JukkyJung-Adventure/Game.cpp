@@ -11,7 +11,6 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 	this->m_backgroundPauseMenuText.setPosition({ 960, 100 });
 	this->m_backgroundPauseMenu.setSize({ 1920.f, 1080.f });
 	this->m_backgroundPauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
-	this->m_isMainCharacterPlayShakeAnimation = false;
 
 	this->m_SceneComponent[m_Scene::mainMenu] = {
 		new Button(&this->m_window)
