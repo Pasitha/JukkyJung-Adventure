@@ -13,13 +13,21 @@ JukkyJung::JukkyJung(sf::RenderWindow* window) : m_windowInstance(window), m_Juk
 	this->m_JukkyJungSprite.setPosition({ 30, 30 });
 }
 
+// Shake animation method has a thread problem
+// try to animate without sleep main thread
 void JukkyJung::ShakeAnimation() {
-	for (int i = 0; i < 25; i++) {
-		this->m_JukkyJungSprite.setPosition({ 10 - (float)std::pow(-1, i) * 10, this->m_JukkyJungSprite.getPosition().y });
-		std::this_thread::sleep_for(std::chrono::milliseconds(15));
-		this->m_windowInstance->draw(this->m_JukkyJungSprite);
+	sf::Vector2f beforeShakeAnimationPosition = this->m_JukkyJungSprite.getPosition();
+	for (int i = 0; i < 10; i++) {
+		this->m_JukkyJungSprite.move({ 2 - (float)std::pow(-1, i) * 4, 0 });
+		std::this_thread::sleep_for(std::chrono::milliseconds(45));
+
+		this->m_windowInstance->draw(this->m_JukkyJungSprite);	
 		this->m_windowInstance->display();
 	}
+
+	this->m_JukkyJungSprite.setPosition(beforeShakeAnimationPosition);
+	this->m_windowInstance->draw(this->m_JukkyJungSprite);
+	this->m_windowInstance->display();
 }
 
 void JukkyJung::Update() {
