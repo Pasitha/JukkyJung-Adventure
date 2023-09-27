@@ -34,4 +34,5 @@ private:
 	bool m_isGamePause;
 	sf::Text m_backgroundPauseMenuText;
 	sf::RectangleShape m_backgroundPauseMenu;
+	bool m_isMainCharacterPlayShakeAnimation;
 };

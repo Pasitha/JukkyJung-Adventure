@@ -71,23 +71,26 @@ int Button::whichButtonHover() {
 }
 
 void Button::enableButton() {
-	size_t numberOfButtons = m_Button.size();
+	size_t numberOfButtons = this->m_Button.size();
 	for (int i = 0; i < numberOfButtons; i++) {
 		this->m_Button[i].setColor(sf::Color(255, 255, 255, 255));
 	}
-	return ;
+
+	this->m_windowInstance->display();
 }
 
 void Button::disableButton() {
-	size_t numberOfButtons = m_Button.size();
+	size_t numberOfButtons = this->m_Button.size();
 	for (int i = 0; i < numberOfButtons; i++) {
 		this->m_Button[i].setColor(sf::Color(155, 155, 155, 155));
 	}
-	return ;
+
+	this->m_windowInstance->display();
 }
 
 void Button::Update() {
-	for (int i = 0; i < this->m_Button.size(); i++) {
+	size_t numberOfButtons = this->m_Button.size();
+	for (int i = 0; i < numberOfButtons; i++) {
 		this->m_windowInstance->draw(this->m_Button[i]);
 		this->m_windowInstance->draw(this->m_ButtonLable[i]);
 	}

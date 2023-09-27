@@ -11,6 +11,7 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
 	this->m_backgroundPauseMenuText.setPosition({ 960, 100 });
 	this->m_backgroundPauseMenu.setSize({ 1920.f, 1080.f });
 	this->m_backgroundPauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
+	this->m_isMainCharacterPlayShakeAnimation = false;
 
 	this->m_SceneComponent[m_Scene::mainMenu] = {
 		new Button(&this->m_window)
@@ -75,13 +76,8 @@ void Game::Update() {
 				if (event.type == sf::Event::MouseButtonPressed) {
 					switch (this->m_SceneComponent[m_Scene::gamePlay].m_Button->whichButtonHover()) {
 					case 0:
-						this->m_SceneComponent[m_Scene::gamePlay].m_Button->disableButton();
-						std::this_thread::sleep_for(std::chrono::milliseconds(15));
-
-						this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->ShakeAnimation();
-
-						std::this_thread::sleep_for(std::chrono::milliseconds(15));
-						this->m_SceneComponent[m_Scene::gamePlay].m_Button->enableButton();
+						// this->m_SceneComponent[m_Scene::gamePlay].m_JukkyJung->ShakeAnimation();
+						
 						break;
 					case 1:
 						break;
