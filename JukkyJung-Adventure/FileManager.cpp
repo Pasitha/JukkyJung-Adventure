@@ -9,8 +9,7 @@ std::unordered_map<std::string, sf::SoundBuffer> FileManager::soundBufferCache;
 std::unordered_map<std::string, sf::Music> FileManager::musicCache;
 
 // Template function to get the cache based on resource type
-template <typename T>
-std::unordered_map<std::string, T>& FileManager::GetCache() {
+template <typename T> std::unordered_map<std::string, T>& FileManager::GetCache() {
     if constexpr (std::is_same_v<T, sf::Image>) {
         return imageCache;
     }
