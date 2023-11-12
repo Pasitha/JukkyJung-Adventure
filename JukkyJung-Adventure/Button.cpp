@@ -1,13 +1,31 @@
 #include "Button.h"
 
-Button::Button(sf::RenderWindow* window) : m_windowInstance(window), m_numberOfButtons(0) {
-	FileManager::LoadFormFile(this->m_ButtonFont, "asset/font/ReadexPro.ttf");
-	FileManager::LoadFormFile(this->m_ButtonTexture, "asset/picture/Button.png");
+const sf::Color Button::NORMAL_COLOR = sf::Color(255, 255, 255, COLOR_ALPHA_NORMAL);
+const sf::Color Button::HOVER_COLOR = sf::Color(155, 155, 155, COLOR_ALPHA_HOVER);
+
+Button::Button(sf::RenderWindow* window) : 
+	m_windowInstance(window),
+	m_numberOfButtons(0),
+	m_ButtonTexture(),  // Initialize texture before using it
+	m_ButtonSprite(),
+	m_ButtonText(),
+	m_Button(),
+	m_ButtonLable()
+{
+	FileManager::LoadFromFile(this->m_ButtonFont, "asset/font/ReadexPro.ttf");
+	FileManager::LoadFromFile(this->m_ButtonTexture, "asset/picture/Button.png");
 
 	m_ButtonText.setFillColor(sf::Color(0, 0, 0));
 	m_ButtonText.setFont(this->m_ButtonFont);
 	m_ButtonSprite.setTexture(this->m_ButtonTexture);
 }
+
+// Destructor implementation only in debug mode
+#ifdef _DEBUG
+Button::~Button() {
+	std::cout << "Button was destroy!" << std::endl;
+}
+#endif
 
 void Button::addButton(const std::string buttonLable, sf::Vector2f buttonPosition) {
 	this->m_ButtonText.setString(buttonLable);
@@ -44,10 +62,10 @@ void Button::isHover() {
 		float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
 
 		if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
-			this->m_Button[i].setColor(sf::Color(155, 155, 155, 155));
+			this->m_Button[i].setColor(sf::Color(HOVER_COLOR));
 		}
 		else {
-			this->m_Button[i].setColor(sf::Color(255, 255, 255, 255));
+			this->m_Button[i].setColor(NORMAL_COLOR);
 		}
 	}
 }

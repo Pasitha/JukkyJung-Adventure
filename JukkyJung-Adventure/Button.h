@@ -4,6 +4,10 @@
 class Button {
 public:
 	Button(sf::RenderWindow* window);
+	// Add a destructor only in debug mode
+#ifdef _DEBUG
+	~Button();
+#endif
 
 	void addButton(const std::string buttonLable, sf::Vector2f buttonPosition);
 	void setPosition(unsigned short buttonID, sf::Vector2f position);
@@ -14,6 +18,12 @@ public:
 
 	void Update();
 private:
+	static const sf::Color NORMAL_COLOR;
+	static const sf::Color HOVER_COLOR;
+
+	static const int COLOR_ALPHA_NORMAL = 255;
+	static const int COLOR_ALPHA_HOVER = 155;
+
 	unsigned int m_numberOfButtons;
 	sf::RenderWindow* m_windowInstance;
 
