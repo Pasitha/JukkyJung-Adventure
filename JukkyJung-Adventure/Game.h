@@ -6,14 +6,8 @@ class JukkyJung;
 class Enemy;
 
 class Game {
-public:
-	Game();
-
-	void Update();
 private:
-	sf::RenderWindow m_window;
-
-	enum class m_Scene {
+	enum class Scene {
 		mainMenu,
 		setting,
 		gamePlay,
@@ -21,17 +15,29 @@ private:
 	};
 
 	struct m_gameComponent {
-		Button* m_Button;
-		JukkyJung* m_JukkyJung;
-		Enemy* m_Enemy;
+		std::unique_ptr<Button> m_Button;
+		std::unique_ptr<JukkyJung> m_JukkyJung;
+		std::unique_ptr<Enemy> m_Enemy;
 	};
 
-	m_Scene m_gameScene;
-	std::unordered_map<m_Scene, m_gameComponent> m_SceneComponent;
+public:
+	Game();
+
+	void HandleEvents();
+	void Render();
+	void GameLoop();
+
+private:
+	sf::RenderWindow m_window;
+
+	Scene m_gameScene;
+	std::unordered_map<Scene, std::unique_ptr<m_gameComponent>> m_SceneComponent;
 
 	sf::Font m_gameFont;
 
 	bool m_isGamePause;
 	sf::Text m_backgroundPauseMenuText;
 	sf::RectangleShape m_backgroundPauseMenu;
+
+	void initializeSceneComponent(Scene scene, const std::vector<std::pair<std::string, sf::Vector2f>>& buttons);
 };
