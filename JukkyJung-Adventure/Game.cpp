@@ -1,15 +1,18 @@
 #include "common.h"
 
 // Constructor to initialize the game
-Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Fullscreen), m_gameScene(Scene::mainMenu) {
+Game::Game() :
+    m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Fullscreen), 
+    m_gameScene(Scene::mainMenu),
+    m_isGamePause(false)
+{
     // Set a frame rate limit to the window
     this->m_window.setFramerateLimit(60);
 
     // Load the game font from a file
-    FileManager::LoadFormFile(this->m_gameFont, "asset/font/ReadexPro.ttf");
+    FileManager::LoadFromFile(this->m_gameFont, "asset/font/ReadexPro.ttf");
 
     // Initialize variables related to the game pause menu
-    this->m_isGamePause = false;
     this->m_backgroundPauseMenuText.setString("Pause");
     this->m_backgroundPauseMenuText.setFont(this->m_gameFont);
     this->m_backgroundPauseMenuText.setPosition({ 960, 100 });
@@ -33,6 +36,13 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::S
     initializeSceneComponent(Scene::gamePlay, { {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} });
     initializeSceneComponent(Scene::pauseMenu, { {"RESUME", {850, 300}}, {"EXIT", {850, 500}} });
 }
+
+// Destructor implementation only in debug mode
+#ifdef _DEBUG
+Game::~Game() {
+    std::cout << "Game was destory!" << std::endl;
+}
+#endif
 
 // Initialize scene components with buttons and their positions
 void Game::initializeSceneComponent(Scene scene, const std::vector<std::pair<std::string, sf::Vector2f>>& buttons) {
