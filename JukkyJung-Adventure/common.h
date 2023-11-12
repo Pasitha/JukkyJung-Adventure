@@ -5,7 +5,10 @@
 #include <sstream>
 #include <cstdlib>
 #include <functional>
+#include <future>
 #include <thread>
+#include <mutex>
+#include <chrono>
 #include <unordered_map>
 #include <cmath>
 #include <csignal>
