@@ -4,7 +4,7 @@
 class Enemy {
 public:
 	Enemy(sf::RenderWindow* window);
-
+	~Enemy();
 	void Update();
 private:
 	sf::RenderWindow* m_windowInstance;
