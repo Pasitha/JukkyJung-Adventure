@@ -26,6 +26,10 @@ private:
 
 public:
 	Game();
+	// Add a destructor only in debug mode
+#ifdef _DEBUG
+	~Game();
+#endif
 
 	// Function to handle user input events
 	void HandleEvents();
