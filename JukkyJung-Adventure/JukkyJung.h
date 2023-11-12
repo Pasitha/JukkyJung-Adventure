@@ -3,11 +3,15 @@
 
 class JukkyJung {
 public:
-	JukkyJung(sf::RenderWindow* window);
+	explicit JukkyJung(sf::RenderWindow* window);
+	~JukkyJung();
 
 	void ShakeAnimation();
 	void Update();
 private:
+	static const float JUKKYJUNG_SCALE;
+	static const sf::Vector2f JUKKYJUNG_POSITION;
+
 	sf::RenderWindow* m_windowInstance;
 
 	int m_JukkyJungHealth;
