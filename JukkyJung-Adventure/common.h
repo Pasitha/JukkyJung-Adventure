@@ -28,3 +28,4 @@
 #include "Enemy.h"
 #include "Game.h"
 #include "Character.h"
+#include "Combat.h"
