@@ -22,13 +22,16 @@ class Character {
 private:
     std::string name;
     int health;
-    ElementalPower elementalPower; // New member for elemental power
+    int baseAttack;
+    ElementalPower elementalPower;
 
 public:
-    // Constructor with elemental power parameter
-    Character(const std::string& name, int health, ElementalPower elementalPower);
+    // Constructor with elemental power and base attack parameters
+    Character(const std::string& name, int health, int baseAttack, ElementalPower elementalPower);
 
     // Getter for elemental power
     ElementalPower getElementalPower() const;
 
+    // Getter for base attack
+    int getBaseAttack() const;
 };
