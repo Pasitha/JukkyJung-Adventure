@@ -2,8 +2,6 @@
 Jukkyjung's Dignity has begun Because this is a JukkyJung Adventure game
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/JukkyJung-Adventure)](https://github.com/yourusername/JukkyJung-Adventure/issues)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/JukkyJung-Adventure)](https://github.com/yourusername/JukkyJung-Adventure/stargazers)
 
 JukkyJung Adventure is an exciting turn-based RPG game set in a magical world. Join JukkyJung on an epic journey filled with battles, puzzles, and enchanting characters.
 
