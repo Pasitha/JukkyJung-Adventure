@@ -17,7 +17,7 @@ JukkyJung Adventure is an exciting turn-based RPG game set in a magical world. J
 ### Prerequisites
 
 - C++ compiler
-- SFML library (version X.X.X)
+- SFML library (version 2.5.1)
 
 ### Build and Run
 
