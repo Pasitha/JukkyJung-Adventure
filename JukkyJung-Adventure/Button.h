@@ -13,9 +13,6 @@ public:
 	void setPosition(unsigned short buttonID, sf::Vector2f position);
 	void isHover();
 	int whichButtonHover();
-	void enableButton();
-	void disableButton();
-
 	void Update();
 private:
 	static const sf::Color NORMAL_COLOR;
@@ -24,8 +21,9 @@ private:
 	static const int COLOR_ALPHA_NORMAL = 255;
 	static const int COLOR_ALPHA_HOVER = 155;
 
-	unsigned int m_numberOfButtons;
+	size_t m_numberOfButtons;
 	sf::RenderWindow* m_windowInstance;
+
 
 	sf::Font m_ButtonFont;
 	sf::Texture m_ButtonTexture;
