@@ -5,6 +5,7 @@
 class Button;
 class JukkyJung;
 class Enemy;
+class Character;
 
 // Game class is responsible for managing the game loop, handling events, and rendering scenes.
 class Game {
@@ -22,6 +23,7 @@ private:
 		std::unique_ptr<Button> m_Button;
 		std::unique_ptr<JukkyJung> m_JukkyJung;
 		std::unique_ptr<Enemy> m_Enemy;
+		std::unique_ptr<Character> m_Character;
 	};
 
 public:
