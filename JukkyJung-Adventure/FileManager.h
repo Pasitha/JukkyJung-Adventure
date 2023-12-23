@@ -23,6 +23,10 @@ private:
     static std::unordered_map<std::string, sf::SoundBuffer> soundBufferCache;
     static std::unordered_map<std::string, sf::Music> musicCache;
 
+    // Helper function to clear cache for a specific resource type
+    template<typename T>
+    static void ClearCacheForType(std::unordered_map<std::string, T>& cache);
+
     // Helper function for asynchronous loading
     template<typename T>
     static void LoadAsync(T& resource, const std::string& fileName, std::promise<bool>& promise);
@@ -43,20 +47,9 @@ public:
     // Function to clear the entire cache
     static void ClearCache();
 
-    // Function to clear image cache
-    static void ClearImageCache();
-
-    // Function to clear texture cache
-    static void ClearTextureCache();
-
-    // Function to clear font cache
-    static void ClearFontCache();
-
-    // Function to clear sound buffer cache
-    static void ClearSoundBufferCache();
-
-    // Function to clear music cache
-    static void ClearMusicCache();
+    // Template function to clear the cache for a specific resource type
+    template<typename T>
+    static void ClearCache();
 
     // Function to get a list of missing files
     static bool getMissingFileList(std::string& fileList);
