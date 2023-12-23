@@ -26,6 +26,6 @@
 #include "Button.h"
 #include "JukkyJung.h"
 #include "Enemy.h"
-#include "Game.h"
 #include "Character.h"
 #include "Combat.h"
+#include "Game.h"
