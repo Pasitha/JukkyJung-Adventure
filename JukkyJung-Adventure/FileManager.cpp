@@ -75,6 +75,56 @@ template<> bool FileManager::LoadFromFile<sf::Music>(sf::Music& resource, const 
     return true;
 }
 
+// Template function to load a resource from a file asynchronously
+template<typename T>
+std::future<bool> FileManager::LoadAsync(const std::string& fileName) {
+    std::promise<bool> promise;
+    auto future = promise.get_future();
+    std::thread(&FileManager::LoadAsync<T>, std::ref(GetCache<T>()[fileName]), fileName, std::move(promise)).detach();
+    return future;
+}
+
+// Helper function for asynchronous loading
+template<typename T>
+void FileManager::LoadAsync(T& resource, const std::string& fileName, std::promise<bool>& promise) {
+    bool success = LoadFromFile(resource, fileName);
+    promise.set_value(success);
+}
+
+// Function to clear the entire cache
+void FileManager::ClearCache() {
+    imageCache.clear();
+    textureCache.clear();
+    fontCache.clear();
+    soundBufferCache.clear();
+    musicCache.clear();
+}
+
+// Function to clear image cache
+void FileManager::ClearImageCache() {
+    imageCache.clear();
+}
+
+// Function to clear texture cache
+void FileManager::ClearTextureCache() {
+    textureCache.clear();
+}
+
+// Function to clear font cache
+void FileManager::ClearFontCache() {
+    fontCache.clear();
+}
+
+// Function to clear sound buffer cache
+void FileManager::ClearSoundBufferCache() {
+    soundBufferCache.clear();
+}
+
+// Function to clear music cache
+void FileManager::ClearMusicCache() {
+    musicCache.clear();
+}
+
 // Function to get a list of missing files
 bool FileManager::getMissingFileList(std::string& fileList) {
     if (missingFiles.empty()) {
