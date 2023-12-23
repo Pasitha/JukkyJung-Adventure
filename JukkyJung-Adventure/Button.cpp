@@ -1,97 +1,116 @@
+// Button.cpp
 #include "common.h"
 
-const sf::Color Button::NORMAL_COLOR = sf::Color(255, 255, 255, COLOR_ALPHA_NORMAL);
-const sf::Color Button::HOVER_COLOR = sf::Color(155, 155, 155, COLOR_ALPHA_HOVER);
+// Constants for button colors
+const sf::Color Button::NORMAL_COLOR = sf::Color(255, 255, 255, Button::COLOR_ALPHA_NORMAL);
+const sf::Color Button::HOVER_COLOR = sf::Color(155, 155, 155, Button::COLOR_ALPHA_HOVER);
 
-Button::Button(sf::RenderWindow* window) : 
-	m_windowInstance(window),
-	m_numberOfButtons(0),
-	m_ButtonTexture(),  // Initialize texture before using it
-	m_ButtonSprite(),
-	m_ButtonText(),
-	m_Button(),
-	m_ButtonLable()
+// Constructor to initialize the button
+Button::Button(sf::RenderWindow* window) :
+    windowInstance(window),
+    numberOfButtons(0),
+    buttonTexture(),
+    buttonSprite(),
+    buttonText(),
+    buttonComponents()
 {
-	FileManager::LoadFromFile(this->m_ButtonFont, "asset/font/ReadexPro.ttf");
-	FileManager::LoadFromFile(this->m_ButtonTexture, "asset/picture/Button.png");
+    // Load font and texture from files
+    FileManager::LoadFromFile(buttonFont, "asset/font/ReadexPro.ttf");
+    FileManager::LoadFromFile(buttonTexture, "asset/picture/Button.png");
 
-	m_ButtonText.setFillColor(sf::Color(0, 0, 0));
-	m_ButtonText.setFont(this->m_ButtonFont);
-	m_ButtonSprite.setTexture(this->m_ButtonTexture);
+    // Set text properties
+    buttonText.setFillColor(sf::Color(0, 0, 0));
+    buttonText.setFont(buttonFont);
+    
+    // Set sprite texture
+    buttonSprite.setTexture(buttonTexture);
 }
 
 // Destructor implementation only in debug mode
 #ifdef _DEBUG
 Button::~Button() {
-	std::cout << "Button was destroy!" << std::endl;
+    std::cout << "Button was destroyed!" << std::endl;
 }
 #endif
 
-void Button::addButton(const std::string buttonLable, sf::Vector2f buttonPosition) {
-	this->m_ButtonText.setString(buttonLable);
-	this->m_ButtonLable.push_back(this->m_ButtonText);
+// Add a new button with a given label and position
+void Button::addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition) {
+    // Set button text and position
+    buttonText.setString(buttonLabel);
+    buttonSprite.setPosition(buttonPosition);
+    buttonText.setPosition({
+        buttonSprite.getPosition().x + buttonSprite.getGlobalBounds().width / 2.f - buttonText.getGlobalBounds().width / 2.f,
+        buttonSprite.getPosition().y + buttonSprite.getGlobalBounds().height / 2.2f - buttonText.getGlobalBounds().height / 2.2f
+    });
 
-	this->m_Button.push_back(this->m_ButtonSprite);
-
-	this->m_Button[m_numberOfButtons].setPosition(buttonPosition);
-	this->m_ButtonLable[m_numberOfButtons].setPosition({
-		this->m_Button[m_numberOfButtons].getPosition().x + this->m_ButtonSprite.getGlobalBounds().width / 2.f - this->m_ButtonText.getGlobalBounds().width / 2.f,
-		this->m_Button[m_numberOfButtons].getPosition().y + this->m_ButtonSprite.getGlobalBounds().height / 2.2f - this->m_ButtonText.getGlobalBounds().height / 2.2f
-	});
-
-	m_numberOfButtons++;
+    // Add button components to the map
+    buttonComponents[numberOfButtons++] = std::make_pair(buttonSprite, buttonText);
 }
 
-void Button::setPosition(unsigned short buttonID, sf::Vector2f position) {
-	this->m_Button[buttonID].setPosition(position);
-	this->m_ButtonLable[buttonID].setPosition({
-		this->m_Button[buttonID].getPosition().x + this->m_ButtonSprite.getGlobalBounds().width / 2.f - this->m_ButtonText.getGlobalBounds().width / 2.f,
-		this->m_Button[buttonID].getPosition().y + this->m_ButtonSprite.getGlobalBounds().height / 2.2f - this->m_ButtonText.getGlobalBounds().height / 2.2f
-	});
+// Set the position of a button by its ID
+void Button::setPosition(unsigned short buttonId, const sf::Vector2f& position) {
+    auto& buttonComponent = buttonComponents[buttonId];
+    buttonComponent.first.setPosition(position);
+    buttonComponent.second.setPosition({
+        buttonComponent.first.getPosition().x + buttonComponent.first.getGlobalBounds().width / 2.f - buttonComponent.second.getGlobalBounds().width / 2.f,
+        buttonComponent.first.getPosition().y + buttonComponent.first.getGlobalBounds().height / 2.2f - buttonComponent.second.getGlobalBounds().height / 2.2f
+    });
 }
 
+// Check if any button is being hovered and apply hover effect
 void Button::isHover() {
-	sf::Vector2i mousePosition = sf::Mouse::getPosition(*this->m_windowInstance);
+    // Get mouse position
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
 
-	size_t numberOfButtons = m_Button.size();
-	for (int i = 0; i < numberOfButtons; i++) {
-		sf::Vector2f btnPosition = this->m_Button[i].getPosition();
-		sf::FloatRect btnLocalBounds = this->m_Button[i].getLocalBounds();
+    // Iterate through button components and apply hover effect
+    for (auto& [id, components] : buttonComponents) {
+        auto& [sprite, text] = components;
 
-		float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
-		float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+        sf::Vector2f btnPosition = sprite.getPosition();
+        sf::FloatRect btnLocalBounds = sprite.getLocalBounds();
 
-		if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
-			this->m_Button[i].setColor(sf::Color(HOVER_COLOR));
-		}
-		else {
-			this->m_Button[i].setColor(NORMAL_COLOR);
-		}
-	}
+        float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
+        float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+
+        // Check if the mouse is over the button
+        if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
+            sprite.setColor(HOVER_COLOR);
+        }
+        else {
+            sprite.setColor(NORMAL_COLOR);
+        }
+    }
 }
 
+// Get the ID of the button being hovered (-1 if none)
 int Button::whichButtonHover() {
-	sf::Vector2i mousePosition = sf::Mouse::getPosition(*this->m_windowInstance);
+    // Get mouse position
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
 
-	size_t numberOfButtons = m_Button.size();
-	for (int i = 0; i < numberOfButtons; i++) {
-		sf::Vector2f btnPosition = this->m_Button[i].getPosition();
-		sf::FloatRect btnLocalBounds = this->m_Button[i].getLocalBounds();
+    // Iterate through button components and return the ID of the hovered button
+    for (auto& [id, components] : buttonComponents) {
+        auto& [sprite, text] = components;
 
-		float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
-		float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+        sf::Vector2f btnPosition = sprite.getPosition();
+        sf::FloatRect btnLocalBounds = sprite.getLocalBounds();
 
-		if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
-			return i;
-		}
-	}
-	return -1;
+        float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
+        float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+
+        // Check if the mouse is over the button
+        if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
+            return static_cast<int>(id);
+        }
+    }
+    return -1;
 }
 
-void Button::Update() {
-	size_t numberOfButtons = this->m_Button.size();
-	for (int i = 0; i < numberOfButtons; i++) {
-		this->m_windowInstance->draw(this->m_Button[i]);
-		this->m_windowInstance->draw(this->m_ButtonLable[i]);
-	}
+// Update and render the buttons
+void Button::update() {
+    // Iterate through button components and render them
+    for (auto& [id, components] : buttonComponents) {
+        auto& [sprite, text] = components;
+        windowInstance->draw(sprite);
+        windowInstance->draw(text);
+    }
 }
