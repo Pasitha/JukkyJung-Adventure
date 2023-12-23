@@ -1,4 +1,4 @@
-#include "Button.h"
+#include "common.h"
 
 const sf::Color Button::NORMAL_COLOR = sf::Color(255, 255, 255, COLOR_ALPHA_NORMAL);
 const sf::Color Button::HOVER_COLOR = sf::Color(155, 155, 155, COLOR_ALPHA_HOVER);
@@ -86,24 +86,6 @@ int Button::whichButtonHover() {
 		}
 	}
 	return -1;
-}
-
-void Button::enableButton() {
-	size_t numberOfButtons = this->m_Button.size();
-	for (int i = 0; i < numberOfButtons; i++) {
-		this->m_Button[i].setColor(sf::Color(255, 255, 255, 255));
-	}
-
-	this->m_windowInstance->display();
-}
-
-void Button::disableButton() {
-	size_t numberOfButtons = this->m_Button.size();
-	for (int i = 0; i < numberOfButtons; i++) {
-		this->m_Button[i].setColor(sf::Color(155, 155, 155, 155));
-	}
-
-	this->m_windowInstance->display();
 }
 
 void Button::Update() {
