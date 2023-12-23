@@ -1,57 +1,78 @@
 #include "common.h"
-#include "Character.h"
 
-const float Character::JUKKYJUNG_SCALE = 1.0f; // Adjust the scale as needed
-const sf::Vector2f Character::JUKKYJUNG_POSITION = { 0.0f, 0.0f }; // Adjust the position as needed
+const float Character::Scale = .3f;
 
-Character::Character(const std::string& name, int health, int baseAttack, ElementalPower elementalPower)
-    : name(name), health(health), baseAttack(baseAttack), elementalPower(elementalPower) {
-    FileManager::LoadFromFile(this->m_TextFont, "asset/font/ReadexPro.ttf");
-    FileManager::LoadFromFile(this->m_JukkyJungTexture, "asset/picture/JukkyJung.png");
-
-    this->m_JukkyJungHp.setFillColor(sf::Color::Black);
-    this->m_JukkyJungHp.setFont(this->m_TextFont);
-    this->m_JukkyJungHp.setString("HP: 100");
-
-    this->m_JukkyJungSprite.setTexture(this->m_JukkyJungTexture);
-    this->m_JukkyJungSprite.setScale({ this->JUKKYJUNG_SCALE, this->JUKKYJUNG_SCALE });
-    this->m_JukkyJungSprite.setPosition(this->JUKKYJUNG_POSITION);
+Character::Character() {
+	FileManager::LoadFromFile(this->textFont, "asset/font/ReadexPro.ttf");
 }
 
 // Getter for elemental power
-ElementalPower Character::getElementalPower() const {
-    return elementalPower;
+ElementalPower Character::getElementalPower(std::string name) const {
+    return charactersAttributes.at(name).elementalPower;
 }
 
-// Getter for character name
-const std::string& Character::getName() const {
-    return name;
+// Implementation of getName method
+std::string Character::getName(std::string characterName) const {
+    return getCharacterAttributes(characterName).name;
 }
 
-// Getter for current health
-int Character::getHealth() const {
-    return health;
+// Implementation of getHealth method
+int Character::getHealth(std::string characterName) const {
+    return getCharacterAttributes(characterName).health;
 }
 
-// Getter for base attack
-int Character::getBaseAttack() const {
-    return baseAttack;
+// Implementation of getAttack method
+int Character::getAttack(std::string characterName) const {
+    return getCharacterAttributes(characterName).attack;
 }
 
-// Check if the character is defeated
-bool Character::isDefeated() const {
-    return health <= 0;
+// Implementation of getElementalPower method
+ElementalPower Character::getElementalPower(std::string characterName) const {
+    return getCharacterAttributes(characterName).elementalPower;
 }
 
-// Function to reduce health by a specified amount
-void Character::takeDamage(int damage) {
-    health -= damage;
-    if (health < 0) {
-        health = 0;
-    }
+// Setter methods for individual attributes
+void Character::setName(std::string characterName, const std::string& newName) {
+    getCharacterAttributes(characterName).name = newName;
+}
+
+void Character::setHealth(std::string characterName, int newHealth) {
+    getCharacterAttributes(characterName).health = newHealth;
+}
+
+void Character::setAttack(std::string characterName, int newAttack) {
+    getCharacterAttributes(characterName).attack = newAttack;
+}
+
+void Character::setElementalPower(std::string characterName, ElementalPower newElementalPower) {
+    getCharacterAttributes(characterName).elementalPower = newElementalPower;
 }
 
 // Function to draw the character on the game window
-void Character::draw(sf::RenderWindow* window) {
-    window->draw(this->m_JukkyJungSprite);
+void Character::draw(sf::RenderWindow* window, std::string name) {
+    window->draw(this->charactersAttributes[name].sprite);
+}
+
+// Implementation of getCharacterAttributes method
+const Character::CharacterAttributes& Character::getCharacterAttributes(std::string name) const {
+    // Use find to check if the character with the given name exists
+    auto it = charactersAttributes.find(name);
+
+    // If found, return the attributes, otherwise throw an exception or handle the case appropriately
+    if (it != charactersAttributes.end()) {
+        return it->second;
+    }
+    else {
+        // You may want to throw an exception or handle the case differently
+        throw std::out_of_range("Character with name " + name + " not found.");
+    }
+}
+
+void Character::addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath) {
+	this->charactersAttributes[name].name = name;
+    this->charactersAttributes[name].health = 120;
+    this->charactersAttributes[name].attack = 20;
+    this->charactersAttributes[name].elementalPower = ElementalPower::Time;
+
+    FileManager::LoadFromFile(this->charactersAttributes[name].texture, characterTexturePath);
 }
