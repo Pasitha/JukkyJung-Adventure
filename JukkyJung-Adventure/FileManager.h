@@ -30,7 +30,7 @@ public:
 
     // Template function to load a resource from a file
     template<typename T> 
-    static void LoadFromFile(T& resource, const std::string& fileName);
+    static bool LoadFromFile(T& resource, const std::string& fileName);
 
     // Function to get a list of missing files
     static bool getMissingFileList(std::string& fileList);
