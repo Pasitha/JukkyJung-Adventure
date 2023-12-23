@@ -1,35 +1,54 @@
 #pragma once
 #include "common.h"
 
+// Forward declarations for classes used in Button
+class Button;
+
+// Button class is responsible for managing buttons, handling hover effects, and rendering them.
 class Button {
 public:
-	Button(sf::RenderWindow* window);
-	// Add a destructor only in debug mode
+    // Constructor and destructor
+    Button(sf::RenderWindow* window);
 #ifdef _DEBUG
-	~Button();
+    ~Button();
 #endif
 
-	void addButton(const std::string buttonLable, sf::Vector2f buttonPosition);
-	void setPosition(unsigned short buttonID, sf::Vector2f position);
-	void isHover();
-	int whichButtonHover();
-	void Update();
+    // Add a new button with a given label and position
+    void addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition);
+    
+    // Set the position of a button by its ID
+    void setPosition(unsigned short buttonId, const sf::Vector2f& position);
+    
+    // Check if any button is being hovered and apply hover effect
+    void isHover();
+    
+    // Get the ID of the button being hovered (-1 if none)
+    int whichButtonHover();
+    
+    // Update and render the buttons
+    void update();
+
 private:
-	static const sf::Color NORMAL_COLOR;
-	static const sf::Color HOVER_COLOR;
+    // Constants for button colors
+    static const sf::Color NORMAL_COLOR;
+    static const sf::Color HOVER_COLOR;
+    
+    // Alpha values for color transparency
+    static const int COLOR_ALPHA_NORMAL = 255;
+    static const int COLOR_ALPHA_HOVER = 155;
 
-	static const int COLOR_ALPHA_NORMAL = 255;
-	static const int COLOR_ALPHA_HOVER = 155;
+    // Number of buttons
+    size_t numberOfButtons;
 
-	size_t m_numberOfButtons;
-	sf::RenderWindow* m_windowInstance;
+    // Pointer to the SFML render window
+    sf::RenderWindow* windowInstance;
 
+    // SFML font, texture, sprite, and text for buttons
+    sf::Font buttonFont;
+    sf::Texture buttonTexture;
+    sf::Sprite buttonSprite;
+    sf::Text buttonText;
 
-	sf::Font m_ButtonFont;
-	sf::Texture m_ButtonTexture;
-	sf::Sprite m_ButtonSprite;
-	sf::Text m_ButtonText;
-
-	std::vector<sf::Sprite> m_Button;
-	std::vector<sf::Text> m_ButtonLable;
+    // Map to associate button IDs with their components (Sprite and Text)
+    std::map<unsigned short, std::pair<sf::Sprite, sf::Text>> buttonComponents;
 };
