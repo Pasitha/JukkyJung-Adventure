@@ -86,6 +86,8 @@ bool FileManager::IsAnyFileMissing() {
 
 // Function to log a loading failure with the filename
 void FileManager::LogLoadingFailure(const std::string& fileName) {
+#ifdef _DEBUG
     std::cerr << "Failed to load file: " << fileName << std::endl;
+#endif
     missingFiles.push_back(fileName);
 }
