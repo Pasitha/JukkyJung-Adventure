@@ -100,29 +100,23 @@ void FileManager::ClearCache() {
     musicCache.clear();
 }
 
-// Function to clear image cache
-void FileManager::ClearImageCache() {
-    imageCache.clear();
+// Explicit template instantiations for clearing cache of different resource types
+template void FileManager::ClearCache<sf::Image>();
+template void FileManager::ClearCache<sf::Texture>();
+template void FileManager::ClearCache<sf::Font>();
+template void FileManager::ClearCache<sf::SoundBuffer>();
+template void FileManager::ClearCache<sf::Music>();
+
+// Template function to clear the cache for a specific resource type
+template<typename T>
+void FileManager::ClearCache() {
+    ClearCacheForType(GetCache<T>());
 }
 
-// Function to clear texture cache
-void FileManager::ClearTextureCache() {
-    textureCache.clear();
-}
-
-// Function to clear font cache
-void FileManager::ClearFontCache() {
-    fontCache.clear();
-}
-
-// Function to clear sound buffer cache
-void FileManager::ClearSoundBufferCache() {
-    soundBufferCache.clear();
-}
-
-// Function to clear music cache
-void FileManager::ClearMusicCache() {
-    musicCache.clear();
+// Helper function to clear cache for a specific resource type
+template<typename T>
+void FileManager::ClearCacheForType(std::unordered_map<std::string, T>& cache) {
+    cache.clear();
 }
 
 // Function to get a list of missing files
