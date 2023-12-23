@@ -6,11 +6,6 @@ Character::Character() {
 	FileManager::LoadFromFile(this->textFont, "asset/font/ReadexPro.ttf");
 }
 
-// Getter for elemental power
-ElementalPower Character::getElementalPower(std::string name) const {
-    return charactersAttributes.at(name).elementalPower;
-}
-
 // Implementation of getName method
 std::string Character::getName(std::string characterName) const {
     return getCharacterAttributes(characterName).name;
@@ -33,19 +28,19 @@ ElementalPower Character::getElementalPower(std::string characterName) const {
 
 // Setter methods for individual attributes
 void Character::setName(std::string characterName, const std::string& newName) {
-    getCharacterAttributes(characterName).name = newName;
+    charactersAttributes[characterName].name = newName;
 }
 
 void Character::setHealth(std::string characterName, int newHealth) {
-    getCharacterAttributes(characterName).health = newHealth;
+    charactersAttributes[characterName].health = newHealth;
 }
 
 void Character::setAttack(std::string characterName, int newAttack) {
-    getCharacterAttributes(characterName).attack = newAttack;
+    charactersAttributes[characterName].attack = newAttack;
 }
 
 void Character::setElementalPower(std::string characterName, ElementalPower newElementalPower) {
-    getCharacterAttributes(characterName).elementalPower = newElementalPower;
+    charactersAttributes[characterName].elementalPower = newElementalPower;
 }
 
 // Function to draw the character on the game window
