@@ -24,9 +24,6 @@ public:
     // Default constructor
     Character();
 
-    // Getter for elemental power
-    ElementalPower getElementalPower(std::string name) const;
-
     // Getter methods for individual attributes
     std::string getName(std::string characterName) const;
     int getHealth(std::string characterName) const;
@@ -34,18 +31,10 @@ public:
     ElementalPower getElementalPower(std::string characterName) const;
 
 	// Setter methods for individual attributes
-	void Character::setName(std::string characterName, const std::string& newName) {
-		getCharacterAttributes(characterName).name = newName;
-	}
-	void Character::setHealth(std::string characterName, int newHealth) {
-		getCharacterAttributes(characterName).health = newHealth;
-	}
-	void Character::setAttack(std::string characterName, int newAttack) {
-		getCharacterAttributes(characterName).attack = newAttack;
-	}
-	void Character::setElementalPower(std::string characterName, ElementalPower newElementalPower) {
-		getCharacterAttributes(characterName).elementalPower = newElementalPower;
-	}
+    void setName(std::string characterName, const std::string& newName);
+    void setHealth(std::string characterName, int newHealth);
+    void setAttack(std::string characterName, int newAttack);
+	void setElementalPower(std::string characterName, ElementalPower newElementalPower);
 
     // Function to draw the character on the game window
     // Parameters:
@@ -77,7 +66,7 @@ private:
     static const float Scale;
 
     // Static font for text rendering
-    static sf::Font textFont;
+    sf::Font textFont;
 
     // Unordered map to store attributes of different characters
     std::unordered_map<std::string, CharacterAttributes> charactersAttributes;
