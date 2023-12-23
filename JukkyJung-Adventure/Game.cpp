@@ -29,12 +29,14 @@ Game::Game() :
     this->m_SceneComponent[Scene::gamePlay]->m_Button = std::make_unique<Button>(&this->m_window);
     this->m_SceneComponent[Scene::gamePlay]->m_JukkyJung = std::make_unique<JukkyJung>(&this->m_window);
     this->m_SceneComponent[Scene::gamePlay]->m_Enemy = std::make_unique<Enemy>(&this->m_window);
+    this->m_SceneComponent[Scene::gamePlay]->m_Character = std::make_unique<Character>();
     this->m_SceneComponent[Scene::pauseMenu]->m_Button = std::make_unique<Button>(&this->m_window);
     
     // Initialize scene components with buttons and their positions
     initializeSceneComponent(Scene::mainMenu, { {"Play", {50, 300}}, {"Setting", {50, 500}}, {"Exit", {50, 700}} });
     initializeSceneComponent(Scene::gamePlay, { {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} });
     initializeSceneComponent(Scene::pauseMenu, { {"RESUME", {850, 300}}, {"EXIT", {850, 500}} });
+
 }
 
 // Destructor implementation only in debug mode
