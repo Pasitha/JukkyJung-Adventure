@@ -33,7 +33,8 @@ template <typename T> std::unordered_map<std::string, T>& FileManager::GetCache(
 }
 
 // Template function to load a resource from a file
-template <typename T> bool FileManager::LoadFromFile(T& resource, const std::string& fileName) {
+template <typename T>
+bool FileManager::LoadFromFile(T& resource, const std::string& fileName) {
     // Check if the resource is already in the cache
     auto& cache = GetCache<T>();
 
@@ -65,7 +66,8 @@ template bool FileManager::LoadFromFile<sf::Font>(sf::Font& resource, const std:
 template bool FileManager::LoadFromFile<sf::SoundBuffer>(sf::SoundBuffer& resource, const std::string& fileName);
 
 // Specialization for sf::Music
-template<> bool FileManager::LoadFromFile<sf::Music>(sf::Music& resource, const std::string& fileName) {
+template<>
+bool FileManager::LoadFromFile<sf::Music>(sf::Music& resource, const std::string& fileName) {
     // Use openFromFile for sf::Music
     if (!resource.openFromFile(fileName)) {
         // Log a loading failure if unsuccessful
