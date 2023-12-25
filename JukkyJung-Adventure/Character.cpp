@@ -1,73 +1,99 @@
 #include "common.h"
 
-const float Character::Scale = .3f;
+// Static constant for scaling factor of the character
+const float Character::Scale = 0.3f;
 
+// Constructor for the Character class
 Character::Character() {
-	FileManager::LoadFromFile(this->textFont, "asset/font/ReadexPro.ttf");
+    // Load font from file
+    FileManager::LoadFromFile(textFont, "asset/font/ReadexPro.ttf");
 }
 
-// Implementation of getName method
-std::string Character::getName(std::string characterName) const {
-    return getCharacterAttributes(characterName).name;
+// Getter method for character's name
+std::string Character::getName(const std::string& characterName) const {
+    return setCharacterAttributes(characterName).name;
 }
 
-// Implementation of getHealth method
-int Character::getHealth(std::string characterName) const {
-    return getCharacterAttributes(characterName).health;
+// Getter method for character's health
+int Character::getHealth(const std::string& characterName) const {
+    return setCharacterAttributes(characterName).health;
 }
 
-// Implementation of getAttack method
-int Character::getAttack(std::string characterName) const {
-    return getCharacterAttributes(characterName).attack;
+// Getter method for character's attack points
+int Character::getAttack(const std::string& characterName) const {
+    return setCharacterAttributes(characterName).attack;
 }
 
-// Implementation of getElementalPower method
-ElementalPower Character::getElementalPower(std::string characterName) const {
-    return getCharacterAttributes(characterName).elementalPower;
+// Getter method for character's elemental power
+ElementalPower Character::getElementalPower(const std::string& characterName) const {
+    return setCharacterAttributes(characterName).elementalPower;
 }
 
-// Setter methods for individual attributes
-void Character::setName(std::string characterName, const std::string& newName) {
+// Setter method to update character's name
+void Character::setName(const std::string& characterName, const std::string& newName) {
     charactersAttributes[characterName].name = newName;
 }
 
-void Character::setHealth(std::string characterName, int newHealth) {
-    charactersAttributes[characterName].health = newHealth;
+// Setter method to update character's health
+void Character::setHealth(const std::string& characterName, int newHealth) {
+    getCharacterAttributes(characterName).health = newHealth;
 }
 
-void Character::setAttack(std::string characterName, int newAttack) {
-    charactersAttributes[characterName].attack = newAttack;
+// Setter method to update character's attack points
+void Character::setAttack(const std::string& characterName, int newAttack) {
+    getCharacterAttributes(characterName).attack = newAttack;
 }
 
-void Character::setElementalPower(std::string characterName, ElementalPower newElementalPower) {
-    charactersAttributes[characterName].elementalPower = newElementalPower;
+// Setter method to update character's elemental power
+void Character::setElementalPower(const std::string& characterName, ElementalPower newElementalPower) {
+    getCharacterAttributes(characterName).elementalPower = newElementalPower;
+}
+
+// Private helper function to add a character with specified attributes
+void Character::addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath) {
+    auto& attributes = charactersAttributes[name];
+    attributes.name = name;
+    attributes.health = health;
+    attributes.attack = attack;
+    attributes.elementalPower = elementalPower;
+
+    // Load texture from file
+    FileManager::LoadFromFile(attributes.texture, characterTexturePath);
+
+    // Set sprite properties
+    attributes.sprite.setTexture(attributes.texture);
+    attributes.sprite.setScale({ Scale, Scale });
 }
 
 // Function to draw the character on the game window
 void Character::draw(sf::RenderWindow* window, std::string name) {
-    window->draw(this->charactersAttributes[name].sprite);
+    window->draw(charactersAttributes[name].sprite);
 }
 
-// Implementation of getCharacterAttributes method
-const Character::CharacterAttributes& Character::getCharacterAttributes(std::string name) const {
+// Setter method for character's attributes
+const Character::CharacterAttributes& Character::setCharacterAttributes(const std::string& characterName) const {
     // Use find to check if the character with the given name exists
-    auto it = charactersAttributes.find(name);
+    auto it = charactersAttributes.find(characterName);
 
     // If found, return the attributes, otherwise throw an exception or handle the case appropriately
     if (it != charactersAttributes.end()) {
         return it->second;
-    }
-    else {
+    } else {
         // You may want to throw an exception or handle the case differently
-        throw std::out_of_range("Character with name " + name + " not found.");
+        throw std::out_of_range("Character with name " + characterName  + " not found.");
     }
 }
 
-void Character::addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath) {
-	this->charactersAttributes[name].name = name;
-    this->charactersAttributes[name].health = 120;
-    this->charactersAttributes[name].attack = 20;
-    this->charactersAttributes[name].elementalPower = ElementalPower::Time;
+// Getter method for character's attributes
+Character::CharacterAttributes& Character::getCharacterAttributes(const std::string& characterName) {
+    // Use find to check if the character with the given name exists
+    auto it = charactersAttributes.find(characterName);
 
-    FileManager::LoadFromFile(this->charactersAttributes[name].texture, characterTexturePath);
+    // If found, return the attributes, otherwise throw an exception or handle the case appropriately
+    if (it != charactersAttributes.end()) {
+        return it->second;
+    } else {
+        // You may want to throw an exception or handle the case differently
+        throw std::out_of_range("Character with name " + characterName  + " not found.");
+    }
 }
