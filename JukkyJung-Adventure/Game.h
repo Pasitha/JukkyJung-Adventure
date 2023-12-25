@@ -22,8 +22,8 @@ private:
     // Struct representing game components for each scene such that Button, JukkyJug character, and Enemy character component
     struct SceneComponents {
         std::unique_ptr<Button> button;
-        std::unique_ptr<JukkyJung> jukkyJung;
-        std::unique_ptr<Enemy> enemy;
+        // std::unique_ptr<JukkyJung> jukkyJung;
+        // std::unique_ptr<Enemy> enemy;
         std::unique_ptr<Character> character;
     };
 

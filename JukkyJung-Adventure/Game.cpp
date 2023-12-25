@@ -28,10 +28,10 @@ Game::Game() :
     // Create and associate buttons with each scene
     sceneComponents[Scene::MainMenu]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
-    sceneComponents[Scene::GamePlay]->jukkyJung = std::make_unique<JukkyJung>(&window);
-    sceneComponents[Scene::GamePlay]->enemy = std::make_unique<Enemy>(&window);
     sceneComponents[Scene::GamePlay]->character = std::make_unique<Character>();
     sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
+
+    sceneComponents[Scene::GamePlay]->character->addCharacter("JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
 
     // Initialize scene components with buttons and their positions
     InitializeSceneComponents(Scene::MainMenu, { {"Play", {50, 300}}, {"Setting", {50, 500}}, {"Exit", {50, 700}} });
@@ -98,7 +98,7 @@ void Game::HandleEvents() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 switch (sceneComponents[Scene::GamePlay]->button->whichButtonHover()) {
                 case 0:
-                    sceneComponents[Scene::GamePlay]->jukkyJung->ShakeAnimation();
+                    // sceneComponents[Scene::GamePlay]->character->ShakeAnimation();
                     break;
                 case 1:
                     // Handle ITEM button press
@@ -139,23 +139,24 @@ void Game::Render() {
     switch (currentScene) {
     case Scene::MainMenu:
         // Render the main menu scene
-        sceneComponents[Scene::MainMenu]->button->Update();
+        sceneComponents[Scene::MainMenu]->button->update();
         break;
     case Scene::Setting:
         // Render the settings scene (not yet implemented)
         break;
     case Scene::GamePlay:
         // Render the game play scene
-        sceneComponents[Scene::GamePlay]->button->Update();
-        sceneComponents[Scene::GamePlay]->jukkyJung->Update();
-        sceneComponents[Scene::GamePlay]->enemy->Update();
+        sceneComponents[Scene::GamePlay]->button->update();
+        sceneComponents[Scene::GamePlay]->character->draw(&window, "JukkyJung");
+        // sceneComponents[Scene::GamePlay]->jukkyJung->Update();
+        // sceneComponents[Scene::GamePlay]->enemy->Update();
 
         if (isGamePaused) {
             // Render the pause menu when the game is paused
             window.draw(backgroundPauseMenu);
             window.draw(backgroundPauseMenuText);
 
-            sceneComponents[Scene::PauseMenu]->button->Update();
+            sceneComponents[Scene::PauseMenu]->button->update();
         }
         break;
     }
