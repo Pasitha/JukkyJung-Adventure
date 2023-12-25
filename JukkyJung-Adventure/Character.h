@@ -3,55 +3,39 @@
 
 // Enum to represent elemental powers
 enum class ElementalPower {
-    Fire,
-    Water,
-    Wind,
-    Earth,
-    Darkness,
-    Light,
-    Poison,
-    Nature,
-    Speed,
-    Mind,
-    Time,
-    Ice,
-    Gravity
+    Fire, Water, Wind, Earth, Darkness, Light, Poison, Nature, Speed, Mind, Time, Ice, Gravity
 };
 
 // Class to represent a character in the game
 class Character {
 public:
-    // Default constructor
-    Character();
+    // Explicit constructor to initialize the Character object
+    explicit Character();
 
     // Getter methods for individual attributes
-    std::string getName(std::string characterName) const;
-    int getHealth(std::string characterName) const;
-    int getAttack(std::string characterName) const;
-    ElementalPower getElementalPower(std::string characterName) const;
+    std::string getName(const std::string& characterName) const;
+    int getHealth(const std::string& characterName) const;
+    int getAttack(const std::string& characterName) const;
+    ElementalPower getElementalPower(const std::string& characterName) const;
 
-	// Setter methods for individual attributes
-    void setName(std::string characterName, const std::string& newName);
-    void setHealth(std::string characterName, int newHealth);
-    void setAttack(std::string characterName, int newAttack);
-	void setElementalPower(std::string characterName, ElementalPower newElementalPower);
+    // Setter methods for individual attributes
+    void setName(const std::string& characterName, const std::string& newName);
+    void setHealth(const std::string& characterName, int newHealth);
+    void setAttack(const std::string& characterName, int newAttack);
+    void setElementalPower(const std::string& characterName, ElementalPower newElementalPower);
+
+    // Private helper function to add a character with specified attributes
+    void addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath);
 
     // Function to draw the character on the game window
-    // Parameters:
-    // - window: Pointer to the game window
-    // - name: Name of the character to be drawn
     void draw(sf::RenderWindow* window, std::string name);
 
 private:
     // Struct to represent attributes of the character
     struct CharacterAttributes {
-        // Name of the character
         std::string name;
-        // Health points of the character
         int health;
-        // Base attack points of the character
         int attack;
-        // Elemental power of the character
         ElementalPower elementalPower;
 
         // Texture and sprite for character's visual representation
@@ -71,9 +55,9 @@ private:
     // Unordered map to store attributes of different characters
     std::unordered_map<std::string, CharacterAttributes> charactersAttributes;
 
-    // Private helper function to get attributes
-    const CharacterAttributes& getCharacterAttributes(std::string name) const;
+	// Private helper function to get attributes of a character by name
+    const CharacterAttributes& setCharacterAttributes(const std::string& characterName) const;
 
-    // Private helper function to add a character
-    void addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath);
+    // Private helper function to get attributes of a character by name
+    CharacterAttributes& getCharacterAttributes(const std::string& characterName);
 };
