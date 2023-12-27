@@ -4,6 +4,7 @@
 Game::Game() :
     window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Fullscreen),
     currentScene(Scene::MainMenu),
+    currentGameState(GameState::Combat),
     isGamePaused(false)
 {
     // Set a frame rate limit to the window
@@ -88,45 +89,53 @@ void Game::HandleEvents() {
             }
             break;
         case Scene::GamePlay:
-            // Handle events for the game play scene
-            if (event.type == sf::Event::MouseMoved) {
-                sceneComponents[Scene::GamePlay]->button->isHover();
-                if (isGamePaused) {
-                    sceneComponents[Scene::PauseMenu]->button->isHover();
-                }
-            }
-            if (event.type == sf::Event::MouseButtonPressed) {
-                switch (sceneComponents[Scene::GamePlay]->button->whichButtonHover()) {
-                case 0:
-                    // sceneComponents[Scene::GamePlay]->character->ShakeAnimation();
-                    break;
-                case 1:
-                    // Handle ITEM button press
-                    break;
-                case 2:
-                    // Handle SKIP ROUND button press
-                    break;
-                }
+            switch (currentGameState) {
+            case GameState::Walking:
 
-                if (isGamePaused) {
-                    switch (sceneComponents[Scene::PauseMenu]->button->whichButtonHover()) {
-                    case 0:
-                        isGamePaused = false;
-                        break;
-                    case 1:
-                        currentScene = Scene::MainMenu;
-                        break;
-                    }
-                }
+                break;
+            case GameState::Combat:
+				// Handle events for the game play scene
+				if (event.type == sf::Event::MouseMoved) {
+					sceneComponents[Scene::GamePlay]->button->isHover();
+					if (isGamePaused) {
+						sceneComponents[Scene::PauseMenu]->button->isHover();
+					}
+				}
+				if (event.type == sf::Event::MouseButtonPressed) {
+					switch (sceneComponents[Scene::GamePlay]->button->whichButtonHover()) {
+					case 0:
+						// sceneComponents[Scene::GamePlay]->character->ShakeAnimation();
+						break;
+					case 1:
+						// Handle ITEM button press
+						break;
+					case 2:
+						// Handle SKIP ROUND button press
+						break;
+					}
+
+					if (isGamePaused) {
+						switch (sceneComponents[Scene::PauseMenu]->button->whichButtonHover()) {
+						case 0:
+							isGamePaused = false;
+							break;
+						case 1:
+							currentScene = Scene::MainMenu;
+							break;
+						}
+					}
+				}
+				break;
             }
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Escape && !isGamePaused) {
-                    isGamePaused = true;
-                }
-                else if (event.key.code == sf::Keyboard::Escape && isGamePaused) {
-                    isGamePaused = false;
-                }
-            }
+
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::Escape && !isGamePaused) {
+					isGamePaused = true;
+				}
+				else if (event.key.code == sf::Keyboard::Escape && isGamePaused) {
+					isGamePaused = false;
+				}
+			}
             break;
         }
     }
@@ -145,19 +154,22 @@ void Game::Render() {
         // Render the settings scene (not yet implemented)
         break;
     case Scene::GamePlay:
-        // Render the game play scene
-        sceneComponents[Scene::GamePlay]->button->update();
-        sceneComponents[Scene::GamePlay]->character->draw(&window, "JukkyJung");
-        // sceneComponents[Scene::GamePlay]->jukkyJung->Update();
-        // sceneComponents[Scene::GamePlay]->enemy->Update();
+        switch (currentGameState) {
+		case GameState::Walking:
+			break;
+		case GameState::Combat:
+			// Render the game play scene
+			sceneComponents[Scene::GamePlay]->button->update();
+			sceneComponents[Scene::GamePlay]->character->draw(&window, "JukkyJung");
+			break;
+		}
+		if (isGamePaused) {
+			// Render the pause menu when the game is paused
+			window.draw(backgroundPauseMenu);
+			window.draw(backgroundPauseMenuText);
 
-        if (isGamePaused) {
-            // Render the pause menu when the game is paused
-            window.draw(backgroundPauseMenu);
-            window.draw(backgroundPauseMenuText);
-
-            sceneComponents[Scene::PauseMenu]->button->update();
-        }
+			sceneComponents[Scene::PauseMenu]->button->update();
+		}
         break;
     }
     window.display();

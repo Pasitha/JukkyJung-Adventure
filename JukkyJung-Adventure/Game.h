@@ -1,5 +1,4 @@
 #pragma once
-
 #include "common.h"
 
 // Forward declarations for classes used in Game
@@ -19,11 +18,16 @@ private:
         PauseMenu    // Pause menu scene
     };
 
+    // Enumeration representing different state in GamePlay Scene
+    enum class GameState {
+        Walking,
+        Combat,
+        Story
+    };
+
     // Struct representing game components for each scene such that Button, JukkyJug character, and Enemy character component
     struct SceneComponents {
         std::unique_ptr<Button> button;
-        // std::unique_ptr<JukkyJung> jukkyJung;
-        // std::unique_ptr<Enemy> enemy;
         std::unique_ptr<Character> character;
     };
 
@@ -46,6 +50,7 @@ public:
 private:
     sf::RenderWindow window;                  // SFML window for rendering
     Scene currentScene;                       // Current scene in the game
+    GameState currentGameState;               // Current GameState in the GamePlay Scene
     std::unordered_map<Scene, std::unique_ptr<SceneComponents>> sceneComponents;  // Map of scenes to their components
     sf::Font gameFont;                        // Font used in the game for text rendering
     bool isGamePaused;                        // Flag indicating whether the game is in a paused state
