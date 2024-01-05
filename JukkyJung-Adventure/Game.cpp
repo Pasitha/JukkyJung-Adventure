@@ -4,7 +4,7 @@
 Game::Game() :
     window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Fullscreen),
     currentScene(Scene::MainMenu),
-    currentGameState(GameState::Combat),
+    currentGameState(GameState::Walking),
     isGamePaused(false)
 {
     // Set a frame rate limit to the window
@@ -91,7 +91,9 @@ void Game::HandleEvents() {
         case Scene::GamePlay:
             switch (currentGameState) {
             case GameState::Walking:
-
+                if (event.type == sf::Event::MouseMoved) {
+                    
+                }
                 break;
             case GameState::Combat:
 				// Handle events for the game play scene

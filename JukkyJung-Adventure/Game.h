@@ -3,8 +3,6 @@
 
 // Forward declarations for classes used in Game
 class Button;
-class JukkyJung;
-class Enemy;
 class Character;
 
 // Game class is responsible for managing the game loop, handling events, and rendering scenes.
