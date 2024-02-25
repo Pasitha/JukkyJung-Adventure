@@ -57,6 +57,12 @@ void Button::setPosition(unsigned short buttonId, const sf::Vector2f& position) 
     });
 }
 
+// Set the color of a button by its ID
+void Button::setDefaultColor(unsigned short buttonId) {
+    auto& buttonComponent = buttonComponents[buttonId];
+    buttonComponent.first.setColor(NORMAL_COLOR);
+}
+
 // Check if any button is being hovered and apply hover effect
 void Button::isHover() {
     // Get mouse position
