@@ -18,6 +18,9 @@ public:
     
     // Set the position of a button by its ID
     void setPosition(unsigned short buttonId, const sf::Vector2f& position);
+
+    // Set the color of a button by its ID
+    void setDefaultColor(unsigned short buttonId);
     
     // Check if any button is being hovered and apply hover effect
     void isHover();
@@ -50,5 +53,5 @@ private:
     sf::Text buttonText;
 
     // Map to associate button IDs with their components (Sprite and Text)
-    std::map<unsigned short, std::pair<sf::Sprite, sf::Text>> buttonComponents;
+    std::map<size_t, std::pair<sf::Sprite, sf::Text>> buttonComponents;
 };
