@@ -23,11 +23,13 @@ Game::Game() :
     // Initialize game components for each scene
     sceneComponents[Scene::MainMenu] = std::make_unique<SceneComponents>();
     sceneComponents[Scene::GamePlay] = std::make_unique<SceneComponents>();
+    sceneComponents[Scene::Setting] = std::make_unique<SceneComponents>();
     sceneComponents[Scene::PauseMenu] = std::make_unique<SceneComponents>();
 
     // Create and associate buttons with each scene
     sceneComponents[Scene::MainMenu]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
+    sceneComponents[Scene::Setting]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::GamePlay]->character = std::make_unique<Character>();
     sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
 
@@ -35,6 +37,7 @@ Game::Game() :
 
     // Initialize scene components with buttons and their positions
     InitializeSceneComponents(Scene::MainMenu, { {"Play", {50, 300}}, {"Setting", {50, 500}}, {"Exit", {50, 700}} });
+    InitializeSceneComponents(Scene::Setting, { {"VOLUME", {50, 300}}, {"BACK", {50, 500}} });
     InitializeSceneComponents(Scene::GamePlay, { {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} });
     InitializeSceneComponents(Scene::PauseMenu, { {"RESUME", {850, 300}}, {"EXIT", {850, 500}} });
 }
@@ -73,6 +76,7 @@ void Game::HandleEvents() {
             if (event.type == sf::Event::MouseMoved) {
                 sceneComponents[Scene::MainMenu]->button->isHover();
             }
+
             if (event.type == sf::Event::MouseButtonPressed) {
                 int buttonHoverId = sceneComponents[Scene::MainMenu]->button->whichButtonHover();
                 switch (buttonHoverId) {
@@ -90,24 +94,53 @@ void Game::HandleEvents() {
                 }
             }
             break;
+
+        case Scene::Setting:
+            // Handle events for the settings scene
+            if (event.type == sf::Event::MouseMoved) {
+                sceneComponents[Scene::Setting]->button->isHover();
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                int buttonHoverId = sceneComponents[Scene::Setting]->button->whichButtonHover();
+
+                switch (buttonHoverId) {
+                case 0:
+                    sceneComponents[Scene::MainMenu]->button->setDefaultColor(buttonHoverId);
+                    break;
+                case 1:
+                    sceneComponents[Scene::Setting]->button->setDefaultColor(buttonHoverId);
+                    currentScene = Scene::MainMenu;
+                    break;
+                }
+            }
+            break;
+
         case Scene::GamePlay:
 			// Handle events for the game play scene
 			if (event.type == sf::Event::MouseMoved) {
 				sceneComponents[Scene::GamePlay]->button->isHover();
+
 				if (isGamePaused) {
 					sceneComponents[Scene::PauseMenu]->button->isHover();
 				}
 			}
+
 			if (event.type == sf::Event::MouseButtonPressed) {
-				switch (sceneComponents[Scene::GamePlay]->button->whichButtonHover()) {
+				int ButtonHoverId = sceneComponents[Scene::PauseMenu]->button->whichButtonHover();
+
+				switch (ButtonHoverId) {
 				case 0:
-					// sceneComponents[Scene::GamePlay]->character->ShakeAnimation();
+					// sceneComponents[Scene::GamePlay]->character->ShakeAnimation()
+					sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
 					break;
 				case 1:
 					// Handle ITEM button press
+					sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
 					break;
 				case 2:
 					// Handle SKIP ROUND button press
+					sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
 					break;
 				}
 
@@ -115,8 +148,8 @@ void Game::HandleEvents() {
                     int ButtonHoverId = sceneComponents[Scene::PauseMenu]->button->whichButtonHover();
 					switch (ButtonHoverId) {
 					case 0:
-                        sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
 						isGamePaused = false;
+                        sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
 						break;
 					case 1:
 						isGamePaused = false;
@@ -136,7 +169,6 @@ void Game::HandleEvents() {
 				}
 			}
 
-
             break;
         }
     }
@@ -152,7 +184,8 @@ void Game::Render() {
         sceneComponents[Scene::MainMenu]->button->update();
         break;
     case Scene::Setting:
-        // Render the settings scene (not yet implemented)
+        // Render the settings scene
+        sceneComponents[Scene::Setting]->button->update();
         break;
     case Scene::GamePlay:
 		// Render the game play scene
