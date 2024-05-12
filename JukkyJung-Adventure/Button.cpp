@@ -15,12 +15,15 @@ Button::Button(sf::RenderWindow* window) :
     buttonComponents()
 {
     // Load font and texture from files
-    FileManager::LoadFromFile(buttonFont, "asset/font/ReadexPro.ttf");
-    FileManager::LoadFromFile(buttonTexture, "asset/picture/Button.png");
+    FileManager::LoadFromFile(buttonFont, "asset/UI/Font/kenvector_future.ttf");
+    FileManager::LoadFromFile(buttonTexture, "asset/UI/PNG/grey_button15.png");
+
+    buttonSprite.setScale({ 1.75f, 2.75f });
 
     // Set text properties
     buttonText.setFillColor(sf::Color(0, 0, 0));
     buttonText.setFont(buttonFont);
+    buttonText.setScale({ 1.5f,  1.5f });
     
     // Set sprite texture
     buttonSprite.setTexture(buttonTexture);
@@ -37,10 +40,11 @@ Button::~Button() {
 void Button::addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition) {
     // Set button text and position
     buttonText.setString(buttonLabel);
+
     buttonSprite.setPosition(buttonPosition);
     buttonText.setPosition({
         buttonSprite.getPosition().x + buttonSprite.getGlobalBounds().width / 2.f - buttonText.getGlobalBounds().width / 2.f,
-        buttonSprite.getPosition().y + buttonSprite.getGlobalBounds().height / 2.2f - buttonText.getGlobalBounds().height / 2.2f
+        buttonSprite.getPosition().y + buttonSprite.getGlobalBounds().height / 3.5f - buttonText.getGlobalBounds().height / 3.5f
     });
 
     // Add button components to the map
@@ -50,10 +54,11 @@ void Button::addButton(const std::string& buttonLabel, const sf::Vector2f& butto
 // Set the position of a button by its ID
 void Button::setPosition(unsigned short buttonId, const sf::Vector2f& position) {
     auto& buttonComponent = buttonComponents[buttonId];
+
     buttonComponent.first.setPosition(position);
     buttonComponent.second.setPosition({
         buttonComponent.first.getPosition().x + buttonComponent.first.getGlobalBounds().width / 2.f - buttonComponent.second.getGlobalBounds().width / 2.f,
-        buttonComponent.first.getPosition().y + buttonComponent.first.getGlobalBounds().height / 2.2f - buttonComponent.second.getGlobalBounds().height / 2.2f
+        buttonComponent.first.getPosition().y + buttonComponent.first.getGlobalBounds().height / 3.f - buttonComponent.second.getGlobalBounds().height / 3.f
     });
 }
 
@@ -75,8 +80,8 @@ void Button::isHover() {
         sf::Vector2f btnPosition = sprite.getPosition();
         sf::FloatRect btnLocalBounds = sprite.getLocalBounds();
 
-        float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
-        float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+        float btnxPosWidth = btnPosition.x + (btnLocalBounds.width * buttonSprite.getScale().x);
+        float btnyPosHeight = btnPosition.y + (btnLocalBounds.height * buttonSprite.getScale().y);
 
         // Check if the mouse is over the button
         if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
@@ -100,14 +105,15 @@ int Button::whichButtonHover() {
         sf::Vector2f btnPosition = sprite.getPosition();
         sf::FloatRect btnLocalBounds = sprite.getLocalBounds();
 
-        float btnxPosWidth = btnPosition.x + btnLocalBounds.width;
-        float btnyPosHeight = btnPosition.y + btnLocalBounds.height;
+        float btnxPosWidth = btnPosition.x + (btnLocalBounds.width * buttonSprite.getScale().x);
+        float btnyPosHeight = btnPosition.y + (btnLocalBounds.height * buttonSprite.getScale().y);
 
         // Check if the mouse is over the button
         if (mousePosition.x < btnxPosWidth && mousePosition.x > btnPosition.x && mousePosition.y < btnyPosHeight && mousePosition.y > btnPosition.y) {
             return static_cast<int>(id);
         }
     }
+
     return -1;
 }
 
