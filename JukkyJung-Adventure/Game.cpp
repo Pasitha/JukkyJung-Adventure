@@ -10,7 +10,7 @@ Game::Game() :
     window.setFramerateLimit(60);
 
     // Load the game font from a file
-    FileManager::LoadFromFile(gameFont, "asset/font/ReadexPro.ttf");
+    FileManager::LoadFromFile(gameFont, "asset/UI/Font/kenvector_future.ttf");
 
     // Initialize variables related to the game pause menu
     backgroundPauseMenuText.setString("Pause");
@@ -28,12 +28,18 @@ Game::Game() :
 
     // Create and associate buttons with each scene
     sceneComponents[Scene::MainMenu]->button = std::make_unique<Button>(&window);
-    sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::Setting]->button = std::make_unique<Button>(&window);
-    sceneComponents[Scene::GamePlay]->character = std::make_unique<Character>();
+    sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
+    sceneComponents[Scene::GamePlay]->character = std::make_unique<Character>(&window);
     sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
+    
+    // Initialize asset manager for each scene
+    sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>();
+
+    sceneComponents[Scene::MainMenu]->spriteAnimation->Load("asset/JukkyJung-Sprite.png", { 64, 64 }, 7, .35f);
 
     sceneComponents[Scene::GamePlay]->character->addCharacter("JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
+    sceneComponents[Scene::GamePlay]->character->addCharacter("Evil JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
 
     // Initialize scene components with buttons and their positions
     InitializeSceneComponents(Scene::MainMenu, { {"Play", {50, 300}}, {"Setting", {50, 500}}, {"Exit", {50, 700}} });
@@ -69,16 +75,17 @@ void Game::HandleEvents() {
             window.close();
         }
 
-        // The event check handles each game scene separately.
-        switch (currentScene) {
-        case Scene::MainMenu:
-            // Handle events for the main menu scene
-            if (event.type == sf::Event::MouseMoved) {
-                sceneComponents[Scene::MainMenu]->button->isHover();
-            }
+		// The event check handles each game scene separately.
+		switch (currentScene) {
+		case Scene::MainMenu:
+			// Handle events for the main menu scene
+			if (event.type == sf::Event::MouseMoved) {
+				sceneComponents[Scene::MainMenu]->button->isHover();
+			}
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 int buttonHoverId = sceneComponents[Scene::MainMenu]->button->whichButtonHover();
+
                 switch (buttonHoverId) {
                 case 0:
                     sceneComponents[Scene::MainMenu]->button->setDefaultColor(buttonHoverId);
@@ -133,6 +140,7 @@ void Game::HandleEvents() {
 				case 0:
 					// sceneComponents[Scene::GamePlay]->character->ShakeAnimation()
 					sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
+                    // sceneComponents[Scene::Combat]->combat->PerformAttack(playerCharacter, enemyCharacter); // Assuming playerCharacter and enemyCharacter are available
 					break;
 				case 1:
 					// Handle ITEM button press
@@ -178,19 +186,17 @@ void Game::HandleEvents() {
 void Game::Render() {
     window.clear(sf::Color(199, 119, 19, 255));
 
-    switch (currentScene) {
-    case Scene::MainMenu:
-        // Render the main menu scene
-        sceneComponents[Scene::MainMenu]->button->update();
-        break;
-    case Scene::Setting:
-        // Render the settings scene
-        sceneComponents[Scene::Setting]->button->update();
-        break;
-    case Scene::GamePlay:
+    if (currentScene != Scene::GamePlay) {
+        // Render the button on currentScene
+        sceneComponents[currentScene]->button->update();
+        sceneComponents[currentScene]->spriteAnimation->Update(deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->Draw(window, {1000, 100});
+    }
+    else {
 		// Render the game play scene
 		sceneComponents[Scene::GamePlay]->button->update();
-		sceneComponents[Scene::GamePlay]->character->draw(&window, "JukkyJung");
+		sceneComponents[Scene::GamePlay]->character->draw("JukkyJung");
+
 
 		if (isGamePaused) {
 			// Render the pause menu when the game is paused
@@ -199,14 +205,14 @@ void Game::Render() {
 
 			sceneComponents[Scene::PauseMenu]->button->update();
 		}
-        break;
     }
-    window.display();
+	window.display();
 }
 
 // Run the game loop
 void Game::GameLoop() {
     while (window.isOpen()) {
+        deltaTime = clock.restart().asSeconds();
         HandleEvents();
         Render();
     }
