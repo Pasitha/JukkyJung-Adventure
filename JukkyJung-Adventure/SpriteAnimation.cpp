@@ -1,25 +1,35 @@
 #include "SpriteAnimation.h"
 
-SpriteAnimation::SpriteAnimation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime) : imageCount(imageCount), switchTime(switchTime), totalTime(0.0f) {
-	currentImage.x = 0;
+// Constructor
+SpriteAnimation::SpriteAnimation() : currentFrame(0), duration(0), elapsedTime(0) {}
 
-	uvRect.width = texture->getSize().x / float(imageCount.x);
-	uvRect.height = texture->getSize().y / float(imageCount.y);
+// Load animation frames from a sprite sheet
+void SpriteAnimation::Load(const std::string& filePath, sf::Vector2i frameSize, int frameCount, float duration) {
+    this->duration = duration;
+
+    // Load the texture from file
+    FileManager::LoadFromFile(texture, filePath);
+ 
+    sprite.setTexture(texture);
+
+    // Generate frames
+    for (int i = 0; i < frameCount; i++) {
+        frames.emplace_back(i * frameSize.x, 0, frameSize.x, frameSize.y);
+    }
 }
 
-void SpriteAnimation::Update(int row, float deltaTime) {
-	currentImage.y = row;
-	totalTime += deltaTime;
+// Update the animation frame based on elapsed time
+void SpriteAnimation::Update(float deltaTime) {
+    elapsedTime += deltaTime;
+    if (elapsedTime >= duration) {
+        elapsedTime = 0;
+        currentFrame = (currentFrame + 1) % frames.size();
+        sprite.setTextureRect(frames[currentFrame]);
+    }
+}
 
-	if (totalTime >= switchTime) {
-		totalTime -= switchTime;
-		currentImage.x++;
-
-		if (currentImage.x >= imageCount.x) {
-			currentImage.x = 0;
-		}
-	}
-
-	uvRect.left = currentImage.x * uvRect.width;
-	uvRect.top = currentImage.y * uvRect.height;
+// Draw the current frame
+void SpriteAnimation::Draw(sf::RenderWindow& window, sf::Vector2f position) {
+    sprite.setPosition(position);
+    window.draw(sprite);
 }

@@ -3,19 +3,23 @@
 
 class SpriteAnimation {
 public:
-    SpriteAnimation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
+    SpriteAnimation();
 
-    void Update(int row, float deltaTime);
+    // Load animation frames from a sprite sheet
+    void Load(const std::string& filePath, sf::Vector2i frameSize, int frameCount, float duration);
 
-    sf::IntRect uvRect;
+    // Update the animation frame based on elapsed time
+    void Update(float deltaTime);
+
+    // Draw the current frame
+    void Draw(sf::RenderWindow& window, sf::Vector2f position);
+
 private:
-    // Pointer to the SFML render window
-    // sf::RenderWindow* windowInstance;
-
-    sf::Vector2u imageCount;
-    sf::Vector2u currentImage;
-
-    float totalTime;
-    float switchTime;
+    std::vector<sf::IntRect> frames;
+    sf::Texture texture;
+    sf::Sprite sprite;
+    int currentFrame;
+    float duration;
+    float elapsedTime;
 };
 
