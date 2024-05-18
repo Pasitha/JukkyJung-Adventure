@@ -3,23 +3,61 @@
 
 class SpriteAnimation {
 public:
-    SpriteAnimation();
+    SpriteAnimation(sf::RenderWindow* window);
 
-    // Load animation frames from a sprite sheet
-    void Load(const std::string& filePath, sf::Vector2i frameSize, int frameCount, float duration);
+    // Load animation frames from a sprite sheet with multiple rows and columns
+    void loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount);
+
+    // Set the scale of the sprite
+    void setScale(const sf::Vector2f& scale);
+
+    // Set the current state (row) of the animation
+    void setState(const std::string& stateName, int startRow, int frameCount, float duration);
+
+    // Change to a different state
+    void changeState(const std::string& stateName);
 
     // Update the animation frame based on elapsed time
-    void Update(float deltaTime);
+    void updateAnimation(float deltaTime);
 
     // Draw the current frame
-    void Draw(sf::RenderWindow& window, sf::Vector2f position);
+    void drawAnimation(sf::Vector2f position);
 
 private:
-    std::vector<sf::IntRect> frames;
-    sf::Texture texture;
-    sf::Sprite sprite;
-    int currentFrame;
-    float duration;
-    float elapsedTime;
+    struct AnimationState {
+		std::vector<sf::IntRect> frames; // Vector of frames representing the animation
+		int currentFrame;                // Current frame index
+		float duration;                  // Duration of one frame
+		float elapsedTime;               // Elapsed time for frame change
+
+        AnimationState() : currentFrame(0), duration(0), elapsedTime(0) {}
+    };
+	
+    std::unordered_map<std::string, AnimationState> states;
+    AnimationState* currentState;
+    sf::Texture texture;             // Texture for the sprite sheet
+    sf::Sprite sprite;               // Sprite to draw
+    sf::Vector2i frameSize;
+    int rowCount;
+
+    // Structure to hold information about an animation state
+    struct AnimationState {
+        std::vector<sf::IntRect> frames;  // Frames of the animation
+        int currentFrame;                 // Current frame being displayed
+        float duration;                   // Duration of each frame
+        float elapsedTime;                // Time elapsed since the last frame change
+
+        AnimationState() : currentFrame(0), duration(0), elapsedTime(0) {}
+    };
+
+	// Pointer to the SFML render window
+    sf::RenderWindow* windowInstance;
+
+    std::unordered_map<std::string, AnimationState> states;  // Map of state names to animation states
+    AnimationState* currentState;                            // Pointer to the current animation state
+    sf::Texture texture;                                     // Texture of the sprite sheet
+    sf::Sprite sprite;                                       // Sprite to display the current frame
+    sf::Vector2i frameSize;                                  // Size of each frame
+    int rowCount;                                            // Number of rows in the sprite sheet
 };
 
