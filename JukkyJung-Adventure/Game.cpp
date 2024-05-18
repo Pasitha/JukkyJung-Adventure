@@ -34,9 +34,12 @@ Game::Game() :
     sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
     
     // Initialize asset manager for each scene
-    sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>();
+    sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
 
-    sceneComponents[Scene::MainMenu]->spriteAnimation->Load("asset/JukkyJung-Sprite.png", { 64, 64 }, 7, .35f);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->setScale({ 2.5f, 2.5f });
+    sceneComponents[Scene::MainMenu]->spriteAnimation->setState("Idel", 3, 7, .35f);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->changeState("Idel");
 
     sceneComponents[Scene::GamePlay]->character->addCharacter("JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
     sceneComponents[Scene::GamePlay]->character->addCharacter("Evil JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
@@ -189,8 +192,8 @@ void Game::Render() {
     if (currentScene != Scene::GamePlay) {
         // Render the button on currentScene
         sceneComponents[currentScene]->button->update();
-        sceneComponents[currentScene]->spriteAnimation->Update(deltaTime);
-        sceneComponents[currentScene]->spriteAnimation->Draw(window, {1000, 100});
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation(deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation({1000, 100});
     }
     else {
 		// Render the game play scene
