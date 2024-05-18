@@ -24,22 +24,6 @@ public:
     void drawAnimation(sf::Vector2f position);
 
 private:
-    struct AnimationState {
-		std::vector<sf::IntRect> frames; // Vector of frames representing the animation
-		int currentFrame;                // Current frame index
-		float duration;                  // Duration of one frame
-		float elapsedTime;               // Elapsed time for frame change
-
-        AnimationState() : currentFrame(0), duration(0), elapsedTime(0) {}
-    };
-	
-    std::unordered_map<std::string, AnimationState> states;
-    AnimationState* currentState;
-    sf::Texture texture;             // Texture for the sprite sheet
-    sf::Sprite sprite;               // Sprite to draw
-    sf::Vector2i frameSize;
-    int rowCount;
-
     // Structure to hold information about an animation state
     struct AnimationState {
         std::vector<sf::IntRect> frames;  // Frames of the animation
