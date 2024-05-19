@@ -41,17 +41,25 @@ void SpriteAnimation::changeState(const std::string& stateName) {
     auto it = states.find(stateName);
     if (it != states.end()) {
         currentState = &it->second;
+        currentState->currentFrame = 0;
+    }
+    else {
+        throw std::runtime_error("State not found: " + stateName);
     }
 }
 
 // Update the animation frame based on elapsed time
 void SpriteAnimation::updateAnimation(float deltaTime) {
     if (currentState) {
+        // Update elapsed time
         currentState->elapsedTime += deltaTime;
         if (currentState->elapsedTime >= currentState->duration) {
+            // Reset elapsed time
             currentState->elapsedTime -= currentState->duration;
+            // Move to the next frame
             currentState->currentFrame = (currentState->currentFrame + 1) % currentState->frames.size();
         }
+        // Set the current frame to the sprite
         sprite.setTextureRect(currentState->frames[currentState->currentFrame]);
     }
 }
