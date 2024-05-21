@@ -30,22 +30,24 @@ Game::Game() :
     sceneComponents[Scene::MainMenu]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::Setting]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
-    sceneComponents[Scene::GamePlay]->character = std::make_unique<Character>(&window);
     sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
     
     // Initialize asset manager for each scene
     sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
+    sceneComponents[Scene::GamePlay]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
 
-    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/Planet-Sprite.png", { 256, 256 }, 1);
     sceneComponents[Scene::MainMenu]->spriteAnimation->setScale({ 2.5f, 2.5f });
-    sceneComponents[Scene::MainMenu]->spriteAnimation->setState("Idel", 3, 7, .35f);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->setState("Idel", 0, 50, .10f);
     sceneComponents[Scene::MainMenu]->spriteAnimation->changeState("Idel");
 
-    sceneComponents[Scene::GamePlay]->character->addCharacter("JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
-    sceneComponents[Scene::GamePlay]->character->addCharacter("Evil JukkyJung", 120, 10, ElementalPower::Time, "asset/picture/JukkyJung.png");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale({ 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-left", 3, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Idel-left");
 
     // Initialize scene components with buttons and their positions
-    InitializeSceneComponents(Scene::MainMenu, { {"Play", {50, 300}}, {"Setting", {50, 500}}, {"Exit", {50, 700}} });
+    InitializeSceneComponents(Scene::MainMenu, { {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} });
     InitializeSceneComponents(Scene::Setting, { {"VOLUME", {50, 300}}, {"BACK", {50, 500}} });
     InitializeSceneComponents(Scene::GamePlay, { {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} });
     InitializeSceneComponents(Scene::PauseMenu, { {"RESUME", {850, 300}}, {"EXIT", {850, 500}} });
@@ -188,26 +190,22 @@ void Game::HandleEvents() {
 // Render the current game scene
 void Game::Render() {
     window.clear(sf::Color(199, 119, 19, 255));
+    
+    // Render the button on currentScene
+    sceneComponents[currentScene]->button->update();
 
-    if (currentScene != Scene::GamePlay) {
-        // Render the button on currentScene
-        sceneComponents[currentScene]->button->update();
+    if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay) {
+		// Render the spriteAnimation on currentScene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation(deltaTime);
-        sceneComponents[currentScene]->spriteAnimation->drawAnimation({1000, 100});
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation({1000, 220});
     }
-    else {
-		// Render the game play scene
-		sceneComponents[Scene::GamePlay]->button->update();
-		sceneComponents[Scene::GamePlay]->character->draw("JukkyJung");
+    
+    if (currentScene == Scene::GamePlay && isGamePaused) {
+		// Render the pause menu when the game is paused
+		window.draw(backgroundPauseMenu);
+		window.draw(backgroundPauseMenuText);
 
-
-		if (isGamePaused) {
-			// Render the pause menu when the game is paused
-			window.draw(backgroundPauseMenu);
-			window.draw(backgroundPauseMenuText);
-
-			sceneComponents[Scene::PauseMenu]->button->update();
-		}
+		sceneComponents[Scene::PauseMenu]->button->update();
     }
 	window.display();
 }
