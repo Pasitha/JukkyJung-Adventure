@@ -12,6 +12,19 @@ Game::Game() :
     // Load the game font from a file
     FileManager::LoadFromFile(gameFont, "asset/UI/Font/kenvector_future.ttf");
 
+    FileManager::LoadFromFile(settingPanelTexture, "asset/UI/PNG/grey_panel.png");
+    FileManager::LoadFromFile(volumeSliderTexture, "asset/UI/PNG/grey_sliderDown.png");
+    FileManager::LoadFromFile(musicCheckBoxTexture, "asset/UI/PNG/grey_box.png");
+    FileManager::LoadFromFile(effectCheckBoxTexture, "asset/UI/PNG/grey_box.png");
+
+    settingPanel.setTexture(settingPanelTexture);
+    volumeSlider.setTexture(volumeSliderTexture);
+    musicCheckBox.setTexture(musicCheckBoxTexture);
+    effectCheckBox.setTexture(effectCheckBoxTexture);
+
+    settingPanel.setPosition({ 1250, 450 });
+    settingPanel.setScale({ 5.f, 7.f });
+
     // Initialize variables related to the game pause menu
     backgroundPauseMenuText.setString("Pause");
     backgroundPauseMenuText.setFont(gameFont);
@@ -198,6 +211,13 @@ void Game::Render() {
 		// Render the spriteAnimation on currentScene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation(deltaTime);
         sceneComponents[currentScene]->spriteAnimation->drawAnimation({1000, 220});
+    }
+
+    if (currentScene == Scene::Setting) {
+        window.draw(settingPanel);
+        window.draw(volumeSlider);
+        window.draw(musicCheckBox);
+        window.draw(effectCheckBox);
     }
     
     if (currentScene == Scene::GamePlay && isGamePaused) {
