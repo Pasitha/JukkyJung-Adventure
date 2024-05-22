@@ -3,7 +3,7 @@
 
 // Forward declarations for classes used in Game
 class Button;
-class AssetManager;
+// class AssetManager;
 class SpriteAnimation;
 class Character;
 class Combat;
@@ -26,9 +26,8 @@ private:
     // Struct representing game components for each scene such that Button, JukkyJug character, and Enemy character component
     struct SceneComponents {
         std::unique_ptr<Button> button;
-        std::unique_ptr<AssetManager> assets;
+        // std::unique_ptr<AssetManager> assets;
         std::unique_ptr<SpriteAnimation> spriteAnimation;
-        std::unique_ptr<Character> character;
         std::unique_ptr<Combat> combat;
     };
 
@@ -55,6 +54,16 @@ private:
     sf::Font gameFont;                        // Font used in the game for text rendering
     bool isGamePaused;                        // Flag indicating whether the game is in a paused state
 
+    sf::Sprite settingPanel;
+    sf::Sprite volumeSlider;
+    sf::Sprite musicCheckBox;
+    sf::Sprite effectCheckBox;
+
+    sf::Texture settingPanelTexture;
+    sf::Texture volumeSliderTexture;
+    sf::Texture musicCheckBoxTexture;
+    sf::Texture effectCheckBoxTexture;
+    
     sf::Text backgroundPauseMenuText;         // Text displayed in the background during pause
     sf::RectangleShape backgroundPauseMenu;   // Background shape during pause
 
