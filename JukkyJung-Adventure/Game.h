@@ -3,7 +3,6 @@
 
 // Forward declarations for classes used in Game
 class Button;
-// class AssetManager;
 class SpriteAnimation;
 class Character;
 class Combat;
@@ -26,7 +25,6 @@ private:
     // Struct representing game components for each scene such that Button, JukkyJug character, and Enemy character component
     struct SceneComponents {
         std::unique_ptr<Button> button;
-        // std::unique_ptr<AssetManager> assets;
         std::unique_ptr<SpriteAnimation> spriteAnimation;
         std::unique_ptr<Combat> combat;
     };
@@ -56,11 +54,13 @@ private:
 
     sf::Sprite settingPanel;
     sf::Sprite volumeSlider;
+    sf::Sprite horizontalSlider;
     sf::Sprite musicCheckBox;
     sf::Sprite effectCheckBox;
 
     sf::Texture settingPanelTexture;
     sf::Texture volumeSliderTexture;
+    sf::Texture horizontalSliderTexture;
     sf::Texture musicCheckBoxTexture;
     sf::Texture effectCheckBoxTexture;
     
