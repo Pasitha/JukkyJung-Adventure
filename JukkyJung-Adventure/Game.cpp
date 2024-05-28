@@ -14,16 +14,39 @@ Game::Game() :
 
     FileManager::LoadFromFile(settingPanelTexture, "asset/UI/PNG/grey_panel.png");
     FileManager::LoadFromFile(volumeSliderTexture, "asset/UI/PNG/grey_sliderDown.png");
+    FileManager::LoadFromFile(horizontalSliderTexture, "asset/UI/PNG/grey_sliderHorizontal.png");
     FileManager::LoadFromFile(musicCheckBoxTexture, "asset/UI/PNG/grey_box.png");
     FileManager::LoadFromFile(effectCheckBoxTexture, "asset/UI/PNG/grey_box.png");
 
     settingPanel.setTexture(settingPanelTexture);
     volumeSlider.setTexture(volumeSliderTexture);
+    horizontalSlider.setTexture(horizontalSliderTexture);
     musicCheckBox.setTexture(musicCheckBoxTexture);
     effectCheckBox.setTexture(effectCheckBoxTexture);
 
-    settingPanel.setPosition({ 1250, 450 });
-    settingPanel.setScale({ 5.f, 7.f });
+    settingPanel.setPosition({ 500, 200 });  // Adjust position as needed
+    settingPanel.setScale({ 3.f, 3.f });      // Adjust scale as needed
+
+    volumeSlider.setPosition({ 600, 350 });   // Adjust position as needed
+    volumeSlider.setScale({ 1.f, 1.f });       // Adjust scale as needed
+
+    horizontalSlider.setPosition({ 600, 375 }); // Adjust position as needed
+    horizontalSlider.setScale({ 1.f, 1.f });    // Adjust scale as needed
+
+    musicCheckBox.setPosition({ 600, 650 });   // Adjust position as needed
+    musicCheckBox.setScale({ 1.f, 1.f });       // Adjust scale as needed
+
+    effectCheckBox.setPosition({ 800, 650 });  // Adjust position as needed
+    effectCheckBox.setScale({ 1.f, 1.f });       // Adjust scale as needed
+
+	// settingPanel.setPosition({ 1250, 450 });
+    settingPanel.setScale({ 5.f, 5.f });
+
+    // volumeSlider.setPosition({ 1275, 550 });
+    volumeSlider.setScale({ 1.25f , 1.25f });
+
+    // horizontalSlider.setPosition({ 1275, 550 });
+    horizontalSlider.setScale({ 1.5f, 1.5f });
 
     // Initialize variables related to the game pause menu
     backgroundPauseMenuText.setString("Pause");
@@ -41,6 +64,7 @@ Game::Game() :
 
     // Create and associate buttons with each scene
     sceneComponents[Scene::MainMenu]->button = std::make_unique<Button>(&window);
+    sceneComponents[Scene::MainMenu]->uiElement = std::make_unique<UIElementManager>(&window);
     sceneComponents[Scene::Setting]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
@@ -60,7 +84,10 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Idel-left");
 
     // Initialize scene components with buttons and their positions
-    InitializeSceneComponents(Scene::MainMenu, { {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} });
+    sceneComponents[Scene::MainMenu]->uiElement->addButton("Play", { 150, 300 }, TextAlignment::Center);
+    sceneComponents[Scene::MainMenu]->uiElement->addButton("Setting", {150, 500}, TextAlignment::Center);
+    sceneComponents[Scene::MainMenu]->uiElement->addButton("Exit", {150, 700}, TextAlignment::Center);
+    // InitializeSceneComponents(Scene::MainMenu, { {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} });
     InitializeSceneComponents(Scene::Setting, { {"VOLUME", {50, 300}}, {"BACK", {50, 500}} });
     InitializeSceneComponents(Scene::GamePlay, { {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} });
     InitializeSceneComponents(Scene::PauseMenu, { {"RESUME", {850, 300}}, {"EXIT", {850, 500}} });
@@ -205,7 +232,8 @@ void Game::Render() {
     window.clear(sf::Color(199, 119, 19, 255));
     
     // Render the button on currentScene
-    sceneComponents[currentScene]->button->update();
+    // sceneComponents[currentScene]->button->update();
+    sceneComponents[currentScene]->uiElement->update();
 
     if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay) {
 		// Render the spriteAnimation on currentScene
@@ -215,6 +243,7 @@ void Game::Render() {
 
     if (currentScene == Scene::Setting) {
         window.draw(settingPanel);
+        window.draw(horizontalSlider);
         window.draw(volumeSlider);
         window.draw(musicCheckBox);
         window.draw(effectCheckBox);
