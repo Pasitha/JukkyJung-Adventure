@@ -25,6 +25,7 @@
 #include "SpriteAnimation.h"
 #include "FileManager.h"
 #include "Button.h"
+#include "UIElementManager.h"
 #include "Character.h"
 #include "Combat.h"
 #include "Game.h"
