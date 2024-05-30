@@ -4,7 +4,8 @@
 Game::Game() :
     window(sf::VideoMode(1920, 1080), "JukkyJuung Adventure", sf::Style::Fullscreen),
     currentScene(Scene::MainMenu),
-    isGamePaused(false)
+    isGamePaused(false),
+    isEscapePressed(false)
 {
     // Set a frame rate limit to the window
     window.setFramerateLimit(60);
@@ -63,13 +64,9 @@ Game::Game() :
     sceneComponents[Scene::PauseMenu] = std::make_unique<SceneComponents>();
 
     // Create and associate buttons with each scene
-    sceneComponents[Scene::MainMenu]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::MainMenu]->uiElement = std::make_unique<UIElementManager>(&window);
-    sceneComponents[Scene::Setting]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::Setting]->uiElement = std::make_unique<UIElementManager>(&window);
-    sceneComponents[Scene::GamePlay]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::GamePlay]->uiElement = std::make_unique<UIElementManager>(&window);
-    sceneComponents[Scene::PauseMenu]->button = std::make_unique<Button>(&window);
     sceneComponents[Scene::PauseMenu]->uiElement = std::make_unique<UIElementManager>(&window);
     
     // Initialize asset manager for each scene
@@ -105,17 +102,93 @@ Game::~Game() {
 }
 #endif
 
-// Initialize scene components with buttons and their positions
-void Game::InitializeSceneComponents(Scene scene, const std::vector<std::pair<std::string, sf::Vector2f>>& buttons) {
-    auto& sceneComp = *sceneComponents[scene];
-
-    sceneComp.button = std::make_unique<Button>(&window);
-
-    // Add buttons to the scene component
-    for (const auto& button : buttons) {
-        sceneComp.button->addButton(button.first, button.second);
+void Game::handleHover(Scene currentScene, bool isGamePaused) {
+    switch (currentScene) {
+    case Scene::MainMenu: case Scene::Setting: case Scene::GamePlay:
+        sceneComponents[currentScene]->uiElement->updateHover();
+        break;
+    }
+    if (currentScene == Scene::GamePlay && isGamePaused) {
+        sceneComponents[Scene::PauseMenu]->uiElement->updateHover();
     }
 }
+
+void Game::handleButtonPress(int buttonHoverId) {
+    switch (currentScene) {
+    case Scene::MainMenu:
+        switch (buttonHoverId) {
+        case 0:
+            sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
+            currentScene = Scene::GamePlay;
+            sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+#ifdef _DEBUG
+            std::cout << "Change to Gameplay scene" << std::endl;
+#endif
+            break;
+        case 1:
+            sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
+            currentScene = Scene::Setting;
+            sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            break;
+        case 2:
+            window.close();
+            break;
+        }
+        break;
+    case Scene::Setting:
+        switch (buttonHoverId) {
+        case 0:
+            sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
+            break;
+        case 1:
+            sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
+            currentScene = Scene::MainMenu;
+            sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            break;
+        }
+        break;
+    case Scene::GamePlay:
+        switch (buttonHoverId) {
+        case 0:
+            sceneComponents[Scene::GamePlay]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            break;
+        case 1:
+            sceneComponents[Scene::GamePlay]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            break;
+        case 2:
+            sceneComponents[Scene::GamePlay]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            break;
+        }
+        break;
+    case Scene::PauseMenu:
+        switch (buttonHoverId) {
+        case 0:
+            sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
+            isGamePaused = false;
+            sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            break;
+        case 1:
+            sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
+            isGamePaused = false;
+            sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            currentScene = Scene::GamePlay;
+            break;
+        }
+        break;
+    }
+}
+
+// Initialize scene components with buttons and their positions
+// void Game::InitializeSceneComponents(Scene scene, const std::vector<std::pair<std::string, sf::Vector2f>>& buttons) {
+//     auto& sceneComp = *sceneComponents[scene];
+
+//     sceneComp.button = std::make_unique<Button>(&window);
+
+//     // Add buttons to the scene component
+//     for (const auto& button : buttons) {
+//         sceneComp.button->addButton(button.first, button.second);
+//     }
+// }
 
 // Handle events based on the current game scene
 void Game::HandleEvents() {
@@ -125,58 +198,39 @@ void Game::HandleEvents() {
             window.close();
         }
 
-		// The event check handles each game scene separately.
-		if (event.type == sf::Event::MouseMoved) {
-			// sceneComponents[currentScene]->uiElement->whichElementHover();
-		}
-
-        sceneComponents[currentScene]->uiElement->updateHover();
-        if (event.type == sf::Event::MouseButtonPressed) {
-			int buttonHoverId = sceneComponents[Scene::MainMenu]->uiElement->whichElementHover();
-
-			switch (buttonHoverId) {
-			case 0:
-				sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
-				currentScene = Scene::GamePlay;
-				sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
-				break;
-			case 1:
-				sceneComponents[Scene::MainMenu]->button->setDefaultColor(buttonHoverId);
-				currentScene = Scene::Setting;
-				break;
-			case 2:
-				window.close();
-				break;
-			}
+        // Handle hover events
+        if (event.type == sf::Event::MouseMoved) {
+            handleHover(currentScene, isGamePaused);
         }
 
-		if (isGamePaused && event.type == sf::Event::MouseButtonPressed) {
-			int ButtonHoverId = sceneComponents[Scene::PauseMenu]->uiElement->whichElementHover();
+        // Handle button press events
+        if (event.type == sf::Event::MouseButtonPressed) {
+            int buttonHoverId = sceneComponents[currentScene]->uiElement->whichElementHover();
+            handleButtonPress(buttonHoverId);
+        }
 
-			switch (ButtonHoverId) {
-			case 0:
-				sceneComponents[Scene::PauseMenu]->uiElement->setColor(ButtonHoverId, ElementState::Pressed);
-				isGamePaused = false;
-				sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
-				break;
-			case 1:
-				isGamePaused = false;
-				sceneComponents[Scene::PauseMenu]->button->setDefaultColor(ButtonHoverId);
-				currentScene = Scene::MainMenu;
-				break;
-			}
-		}
-		
-		if (event.type == sf::Event::KeyPressed) {
-			if (event.key.code == sf::Keyboard::Escape && !isGamePaused) {
-				isGamePaused = true;
-                currentScene = Scene::PauseMenu;
-			}
-			else if (event.key.code == sf::Keyboard::Escape && isGamePaused) {
-				isGamePaused = false;
-                currentScene = Scene::GamePlay;
-			}
-		}
+        // Handle Escape key press for pausing and resuming
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape && !isEscapePressed) {
+#ifdef _DEBUG
+				std::cout << "Escape key in Scene" << (int)currentScene << std::endl;
+#endif
+
+                isEscapePressed = true;
+                if (!isGamePaused) {
+                    isGamePaused = true;
+                }
+                else {
+                    isGamePaused = false;
+                }
+            }
+        }
+
+        if (event.type == sf::Event::KeyReleased) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                isEscapePressed = false;
+            }
+        }
     }
 }
 
@@ -185,7 +239,6 @@ void Game::Render() {
     window.clear(sf::Color(199, 119, 19, 255));
     
     // Render the button on currentScene
-    // sceneComponents[currentScene]->button->update();
 	sceneComponents[currentScene]->uiElement->update();
 
     if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay || currentScene == Scene::PauseMenu) {
