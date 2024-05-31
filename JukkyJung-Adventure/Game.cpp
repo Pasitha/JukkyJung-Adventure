@@ -88,11 +88,6 @@ Game::Game() :
     sceneComponents[Scene::Setting]->uiElement->addButton({ {"VOLUME", {50, 300}}, {"BACK", {50, 500}} }, TextAlignment::Center);
     sceneComponents[Scene::GamePlay]->uiElement->addButton({ {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} }, TextAlignment::Center);
     sceneComponents[Scene::PauseMenu]->uiElement->addButton({ {"RESUME", {850, 300}}, {"EXIT", {850, 500}} }, TextAlignment::Center);
-
-    // InitializeSceneComponents(Scene::MainMenu, { {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} });
-    // InitializeSceneComponents(Scene::Setting, { {"VOLUME", {50, 300}}, {"BACK", {50, 500}} });
-    // InitializeSceneComponents(Scene::GamePlay, { {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} });
-    // InitializeSceneComponents(Scene::PauseMenu, { {"RESUME", {850, 300}}, {"EXIT", {850, 500}} });
 }
 
 #ifdef _DEBUG
@@ -104,12 +99,9 @@ Game::~Game() {
 
 void Game::handleHover(Scene currentScene, bool isGamePaused) {
     switch (currentScene) {
-    case Scene::MainMenu: case Scene::Setting: case Scene::GamePlay:
+    case Scene::MainMenu: case Scene::Setting: case Scene::GamePlay: case Scene::PauseMenu:
         sceneComponents[currentScene]->uiElement->updateHover();
         break;
-    }
-    if (currentScene == Scene::GamePlay && isGamePaused) {
-        sceneComponents[Scene::PauseMenu]->uiElement->updateHover();
     }
 }
 
@@ -166,29 +158,18 @@ void Game::handleButtonPress(int buttonHoverId) {
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             isGamePaused = false;
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
+            currentScene = Scene::GamePlay;
             break;
         case 1:
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             isGamePaused = false;
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
-            currentScene = Scene::GamePlay;
+            currentScene = Scene::MainMenu;
             break;
         }
         break;
     }
 }
-
-// Initialize scene components with buttons and their positions
-// void Game::InitializeSceneComponents(Scene scene, const std::vector<std::pair<std::string, sf::Vector2f>>& buttons) {
-//     auto& sceneComp = *sceneComponents[scene];
-
-//     sceneComp.button = std::make_unique<Button>(&window);
-
-//     // Add buttons to the scene component
-//     for (const auto& button : buttons) {
-//         sceneComp.button->addButton(button.first, button.second);
-//     }
-// }
 
 // Handle events based on the current game scene
 void Game::HandleEvents() {
@@ -218,9 +199,11 @@ void Game::HandleEvents() {
 
                 isEscapePressed = true;
                 if (!isGamePaused) {
+					currentScene = Scene::PauseMenu;
                     isGamePaused = true;
                 }
                 else {
+					currentScene = Scene::GamePlay;
                     isGamePaused = false;
                 }
             }
@@ -241,7 +224,7 @@ void Game::Render() {
     // Render the button on currentScene
 	sceneComponents[currentScene]->uiElement->update();
 
-    if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay || currentScene == Scene::PauseMenu) {
+    if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay) {
 		// Render the spriteAnimation on currentScene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation(deltaTime);
         sceneComponents[currentScene]->spriteAnimation->drawAnimation({1000, 220});
@@ -256,6 +239,13 @@ void Game::Render() {
     }
     
     if (currentScene == Scene::PauseMenu && isGamePaused) {
+		// Render the button on currentScene
+		sceneComponents[Scene::GamePlay]->uiElement->update();
+
+		// Render the spriteAnimation on currentScene
+        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation(deltaTime);
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation({1000, 220});
+
 		// Render the pause menu when the game is paused
 		window.draw(backgroundPauseMenu);
 		window.draw(backgroundPauseMenuText);
