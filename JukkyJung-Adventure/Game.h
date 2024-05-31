@@ -83,12 +83,4 @@ private:
 
     float deltaTime = 0.f;                    // Time elapsed between frames
     sf::Clock clock;                          // Clock for measuring time
-
-private:
-    /**
-     * Function to initialize components for a specific scene with buttons and positions.
-     * @param scene The scene to initialize components for.
-     * @param buttons A vector of pairs, each containing a button label and its position.
-     */
-    void InitializeSceneComponents(Scene scene, const std::vector<std::pair<std::string, sf::Vector2f>>& buttons);
 };
