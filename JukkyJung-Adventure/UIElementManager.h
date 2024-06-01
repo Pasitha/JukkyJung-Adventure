@@ -21,6 +21,7 @@ public:
 
 	// Add a new button with a given label, position, and text alignment
 	void addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition, TextAlignment alignment = TextAlignment::Center);
+	void addButton(const std::vector<std::pair<std::string, sf::Vector2f>>& buttons, TextAlignment alignment = TextAlignment::Center);
 
 	// Add a new slider with a given label, position, and size
 	void addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition, const sf::Vector2f& sliderSize);
@@ -44,6 +45,24 @@ private:
 	// Update text position based on element type and alignment
 	void updateTextPosition(unsigned short elementId);
 
+private:
+	// Struct for Button components
+	struct Button {
+		sf::Sprite sprite;
+		sf::Text text;
+		TextAlignment alignment;
+		ElementState state;
+	};
+
+	// Struct for Slider components
+	struct Slider {
+		sf::RectangleShape track;
+		sf::RectangleShape thumb;
+		sf::Text label;
+		ElementState state;
+	};
+
+private:
 	// Constants for element colors
 	static const sf::Color NORMAL_COLOR;
 	static const sf::Color HOVER_COLOR;
@@ -62,19 +81,8 @@ private:
 
 	// SFML font, texture (optional for buttons), sprite (optional for buttons), and text
 	sf::Font elementFont;
-	sf::Texture elementTexture;  // Optional for buttons
-	sf::Sprite elementSprite;    // Optional for buttons
-	sf::Text elementText;
-
-	// Map to associate element IDs with their components (Sprite, Text)
-	std::map<size_t, std::pair<sf::Sprite, sf::Text>> elementComponents;
-
-	// Map to associate element IDs with their types and alignment
-	std::map<size_t, std::pair<std::string, TextAlignment>> elementInfo;
-
-	// Map to associate element IDs with their state
-	std::map<size_t, ElementState> elementStates;
-
-	// Slider specific components
-	std::map<size_t, sf::RectangleShape> sliders;
+	
+	// Maps for storing buttons and sliders
+	std::map<size_t, Button> buttons;
+	std::map<size_t, Slider> sliders;
 };
