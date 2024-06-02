@@ -239,7 +239,7 @@ void UIElementManager::updateTextPosition(unsigned short elementId) {
 			
         switch (button.alignment) {
         case TextAlignment::Left:
-            button.text.setOrigin(0, textBounds.height / 2); // Set origin to the left-center
+            // button.text.setOrigin(0, textBounds.height / 2); // Set origin to the left-center
             button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
             break;
 
@@ -252,8 +252,8 @@ void UIElementManager::updateTextPosition(unsigned short elementId) {
             break;
 
         case TextAlignment::Right:
-            button.text.setOrigin(textBounds.width, textBounds.height / 2); // Set origin to the right-center
-            button.text.setPosition(position.x + spriteBounds.width, position.y + spriteBounds.height / 2);
+            // button.text.setOrigin(textBounds.width, textBounds.height / 2); // Set origin to the right-center
+            button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
             break;
         }
     }
