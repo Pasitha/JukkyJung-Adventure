@@ -79,8 +79,11 @@ private:
 	// Pointer to the SFML render window
 	sf::RenderWindow* windowInstance;
 
-	// SFML font, texture (optional for buttons), sprite (optional for buttons), and text
+	// SFML font, texture, sprite, and text
 	sf::Font elementFont;
+	sf::Texture buttonTexture;
+	sf::Texture trackTexture;
+	sf::Texture thumbTexture;
 	
 	// Maps for storing buttons and sliders
 	std::map<size_t, Button> buttons;
