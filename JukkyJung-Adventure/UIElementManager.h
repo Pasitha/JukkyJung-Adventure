@@ -88,4 +88,9 @@ private:
 	// Maps for storing buttons and sliders
 	std::map<size_t, Button> buttons;
 	std::map<size_t, Slider> sliders;
+
+#ifdef _DEBUG
+	std::map<size_t, sf::RectangleShape> debugRectangle;
+	std::map<size_t, sf::RectangleShape> debugTextRectangle;
+#endif
 };
