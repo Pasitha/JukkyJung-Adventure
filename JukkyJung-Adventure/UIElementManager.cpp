@@ -28,16 +28,51 @@ UIElementManager::~UIElementManager() {
 // Add a new button with a given label, position, and text alignment
 void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition, TextAlignment alignment) {
     Button button;
-    button.text.setFont(elementFont);
     button.text.setString(buttonLabel);
+    button.text.setFont(elementFont);
+    button.text.setFillColor(sf::Color::Black);
+    button.text.setScale({ 1.5f, 1.5f });
+
     button.sprite.setTexture(buttonTexture);
     button.sprite.setPosition(buttonPosition);
+    button.sprite.setScale({ 1.75f, 2.75f });
+    
     button.alignment = alignment;
     button.state = ElementState::Normal;
 
-    button.sprite.setScale({ 1.75f, 2.75f });
-    button.text.setFillColor(sf::Color::Black);
-    button.text.setScale({ 1.5f, 1.5f });
+#ifdef _DEBUG
+	sf::RectangleShape debugShape({ button.sprite.getGlobalBounds().width, button.sprite.getGlobalBounds().height });
+	sf::RectangleShape debugText({ button.text.getGlobalBounds().width, button.text.getGlobalBounds().height });
+
+	debugShape.setOutlineColor(sf::Color::Red);
+	debugShape.setOutlineThickness(2.f);
+    debugShape.setFillColor(sf::Color(155, 255, 155, 155));
+    debugShape.setPosition(buttonPosition);
+
+    debugText.setOutlineColor(sf::Color::Blue);
+    debugText.setOutlineThickness(2.f);
+    debugText.setFillColor(sf::Color(255, 155, 155, 155));
+
+	switch (button.alignment) {
+	case TextAlignment::Left:
+		debugText.setOrigin(0, button.text.getGlobalBounds().height / 2); // Set origin to the left-center
+		debugText.setPosition(button.sprite.getPosition().x, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+		break;
+
+	case TextAlignment::Center:
+		debugText.setOrigin(button.text.getGlobalBounds().width / 2, button.text.getGlobalBounds().height / 2); // Set origin to the center
+        debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width / 2, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+		break;
+
+	case TextAlignment::Right:
+		debugText.setOrigin(button.text.getGlobalBounds().width, button.text.getGlobalBounds().height / 2); // Set origin to the right-center
+		debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+		break;
+	}
+
+    debugRectangle[numberOfElements] = debugShape;
+    debugTextRectangle[numberOfElements] = debugText;
+#endif
 
     // Add button to map
     buttons[numberOfElements] = button;
@@ -183,6 +218,14 @@ void UIElementManager::update() {
         windowInstance->draw(slider.thumb);
         windowInstance->draw(slider.label);
     }
+#ifdef _DEBUG
+    for (const auto& [id, debugButtons] : debugRectangle) {
+        windowInstance->draw(debugButtons);
+    }
+    for (const auto& [id, debugText] : debugTextRectangle) {
+        windowInstance->draw(debugText);
+    }
+#endif
 }
 
 // Update text position based on element type and alignment
@@ -190,23 +233,27 @@ void UIElementManager::updateTextPosition(unsigned short elementId) {
     if (buttons.find(elementId) != buttons.end()) {
         auto& button = buttons[elementId];
         sf::FloatRect textBounds = button.text.getGlobalBounds();
+        sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
         sf::Vector2f position = button.sprite.getPosition();
+
+			
         switch (button.alignment) {
         case TextAlignment::Left:
-            button.text.setPosition(position.x, position.y);
+            button.text.setOrigin(0, textBounds.height / 2); // Set origin to the left-center
+            button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
             break;
+
         case TextAlignment::Center:
-            button.text.setOrigin(textBounds.width / 2, textBounds.height / 2);
+            // button.text.setOrigin(textBounds.width / 2, textBounds.height / 2); // Set origin to the center
             button.text.setPosition(
-                position.x + button.sprite.getGlobalBounds().width / 2.f - textBounds.width / 2.f,
-				position.y + button.sprite.getGlobalBounds().height / 3.5f - textBounds.height / 3.5f
+                position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
+                position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
             );
             break;
+
         case TextAlignment::Right:
-            button.text.setPosition(
-                position.x + button.sprite.getGlobalBounds().width - textBounds.width,
-				position.y 
-            );
+            button.text.setOrigin(textBounds.width, textBounds.height / 2); // Set origin to the right-center
+            button.text.setPosition(position.x + spriteBounds.width, position.y + spriteBounds.height / 2);
             break;
         }
     }
