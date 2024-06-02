@@ -235,24 +235,18 @@ void UIElementManager::updateTextPosition(unsigned short elementId) {
         sf::FloatRect textBounds = button.text.getGlobalBounds();
         sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
         sf::Vector2f position = button.sprite.getPosition();
-
 			
         switch (button.alignment) {
         case TextAlignment::Left:
-            // button.text.setOrigin(0, textBounds.height / 2); // Set origin to the left-center
             button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
             break;
-
         case TextAlignment::Center:
-            // button.text.setOrigin(textBounds.width / 2, textBounds.height / 2); // Set origin to the center
             button.text.setPosition(
                 position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
                 position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
             );
             break;
-
         case TextAlignment::Right:
-            // button.text.setOrigin(textBounds.width, textBounds.height / 2); // Set origin to the right-center
             button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
             break;
         }
