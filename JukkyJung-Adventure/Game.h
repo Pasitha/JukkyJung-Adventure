@@ -2,7 +2,6 @@
 #include "common.h"
 
 // Forward declarations for classes used in Game
-class Button;
 class UIElementManager;
 class SpriteAnimation;
 class Character;
