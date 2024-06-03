@@ -100,11 +100,7 @@ Game::~Game() {
 #endif
 
 void Game::handleHover(Scene currentScene, bool isGamePaused) {
-    switch (currentScene) {
-    case Scene::MainMenu: case Scene::Setting: case Scene::GamePlay: case Scene::PauseMenu:
-        sceneComponents[currentScene]->uiElement->updateHover();
-        break;
-    }
+	sceneComponents[currentScene]->uiElement->updateHover();
 }
 
 void Game::handleButtonPress(int buttonHoverId) {
