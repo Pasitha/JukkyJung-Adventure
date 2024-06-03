@@ -54,4 +54,8 @@ private:
 
     // Map to associate button IDs with their components (Sprite and Text)
     std::map<size_t, std::pair<sf::Sprite, sf::Text>> buttonComponents;
+#ifdef _DEBUG
+    std::map<size_t, sf::RectangleShape> debugSprite;
+    std::map<size_t, sf::RectangleShape> debugTextRectangle;
+#endif
 };
