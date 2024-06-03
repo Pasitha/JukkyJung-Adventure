@@ -45,7 +45,34 @@ void Button::addButton(const std::string& buttonLabel, const sf::Vector2f& butto
     buttonText.setPosition({
         buttonSprite.getPosition().x + buttonSprite.getGlobalBounds().width / 2.f - buttonText.getGlobalBounds().width / 2.f,
         buttonSprite.getPosition().y + buttonSprite.getGlobalBounds().height / 3.5f - buttonText.getGlobalBounds().height / 3.5f
-    });
+	}); 
+
+#ifdef _DEBUG
+	sf::RectangleShape debugShape({ buttonSprite.getGlobalBounds().width, buttonSprite.getGlobalBounds().height });
+	sf::RectangleShape debugText({ buttonText.getGlobalBounds().width, buttonText.getGlobalBounds().height });
+
+	debugShape.setOutlineColor(sf::Color::Red);
+	debugShape.setOutlineThickness(2.f);
+    debugShape.setFillColor(sf::Color(155, 255, 155, 155));
+    debugShape.setPosition(buttonPosition);
+
+    debugText.setOutlineColor(sf::Color::Blue);
+    debugText.setOutlineThickness(2.f);
+    debugText.setFillColor(sf::Color(255, 155, 155, 155));
+    
+	debugText.setPosition(
+        buttonSprite.getPosition().x + buttonSprite.getGlobalBounds().width / 2.f - buttonText.getGlobalBounds().width / 2.f, 
+        buttonSprite.getPosition().y + buttonSprite.getGlobalBounds().height / 3.5f - buttonText.getGlobalBounds().height / 3.5f
+    );
+	// debugText.setOrigin(buttonText.getGlobalBounds().width / 2, buttonText.getGlobalBounds().height / 2); // Set origin to the center
+    // debugText.setPosition(
+    //     buttonSprite.getPosition().x + buttonSprite.getGlobalBounds().width / 2.f, 
+    //     buttonSprite.getPosition().y + buttonSprite.getGlobalBounds().height / 2.f
+    // );
+
+    debugSprite[numberOfButtons] = debugShape;
+    debugTextRectangle[numberOfButtons] = debugText;
+#endif
 
     // Add button components to the map
     buttonComponents[numberOfButtons++] = std::make_pair(buttonSprite, buttonText);
@@ -125,4 +152,12 @@ void Button::update() {
         windowInstance->draw(sprite);
         windowInstance->draw(text);
     }
+#ifdef _DEBUG
+    for (auto& [id, rectangle] : debugSprite) {
+        windowInstance->draw(rectangle);
+    }
+    for (auto& [id, rectangle] : debugTextRectangle) {
+        windowInstance->draw(rectangle);
+    }
+#endif
 }
