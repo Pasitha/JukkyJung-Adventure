@@ -15,7 +15,7 @@ UIElementManager::UIElementManager(sf::RenderWindow* window)
     FileManager::LoadFromFile(elementFont, "asset/UI/Font/kenvector_future.ttf");
     FileManager::LoadFromFile(buttonTexture, "asset/UI/PNG/grey_button15.png");
     FileManager::LoadFromFile(trackTexture, "asset/UI/PNG/grey_sliderHorizontal.png");
-    FileManager::LoadFromFile(thumbTexture, "asset/UI/PNG/grey_button15.png");
+    FileManager::LoadFromFile(thumbTexture, "asset/UI/PNG/grey_sliderDown.png");
 }
 
 // Destructor implementation only in debug mode
@@ -94,13 +94,16 @@ void UIElementManager::addButton(const std::vector<std::pair<std::string, sf::Ve
 // Add a new slider with a given label, position, and size
 void UIElementManager::addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition, const sf::Vector2f& sliderSize) {
     Slider slider;
-    slider.track.setSize(sliderSize);
-    slider.track.setPosition(sliderPosition);
-    slider.thumb.setSize({ sliderSize.x / 10, sliderSize.y });
-    slider.thumb.setPosition(sliderPosition);
     slider.label.setFont(elementFont);
     slider.label.setString(sliderLabel);
-    slider.label.setPosition(sliderPosition.x, sliderPosition.y - 20);
+    slider.label.setPosition(sliderPosition.x, sliderPosition.y - 50);
+
+    slider.track.setTexture(trackTexture);
+    slider.track.setPosition(sliderPosition);
+    slider.track.setScale({ 3.f, 3.f });
+
+    slider.thumb.setTexture(thumbTexture);
+    slider.thumb.setPosition({ sliderPosition.x, sliderPosition.y - 10 });
     slider.state = ElementState::Normal;
 
     // Add slider to map
@@ -141,19 +144,16 @@ void UIElementManager::setColor(unsigned short elementId, ElementState state) {
         sliders[elementId].state = state;
         switch (state) {
         case ElementState::Normal:
-            sliders[elementId].track.setFillColor(NORMAL_COLOR);
-            sliders[elementId].thumb.setFillColor(NORMAL_COLOR);
-            sliders[elementId].label.setFillColor(NORMAL_COLOR);
+            sliders[elementId].track.setColor(NORMAL_COLOR);
+            sliders[elementId].thumb.setColor(NORMAL_COLOR);
             break;
         case ElementState::Hovered:
-            sliders[elementId].track.setFillColor(HOVER_COLOR);
-            sliders[elementId].thumb.setFillColor(HOVER_COLOR);
-            sliders[elementId].label.setFillColor(HOVER_COLOR);
+            sliders[elementId].track.setColor(HOVER_COLOR);
+            sliders[elementId].thumb.setColor(HOVER_COLOR);
             break;
         case ElementState::Pressed:
-            sliders[elementId].track.setFillColor(PRESSED_COLOR);
-            sliders[elementId].thumb.setFillColor(PRESSED_COLOR);
-            sliders[elementId].label.setFillColor(PRESSED_COLOR);
+            sliders[elementId].track.setColor(PRESSED_COLOR);
+            sliders[elementId].thumb.setColor(PRESSED_COLOR);
             break;
         }
     }
@@ -175,7 +175,7 @@ void UIElementManager::updateHover() {
     }
 
     for (auto& [id, slider] : sliders) {
-        sf::FloatRect bounds = slider.track.getGlobalBounds();
+        sf::FloatRect bounds = slider.thumb.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
             setColor(id, ElementState::Hovered);
         }
