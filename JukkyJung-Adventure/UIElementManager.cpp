@@ -105,7 +105,7 @@ void UIElementManager::addButton(const std::vector<std::pair<std::string, sf::Ve
 
 
 // Add a new slider with a given label, position, and size
-void UIElementManager::addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition, const sf::Vector2f& sliderSize) {
+void UIElementManager::addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition) {
     Slider slider;
     slider.label.setFont(elementFont);
     slider.label.setString(sliderLabel);
