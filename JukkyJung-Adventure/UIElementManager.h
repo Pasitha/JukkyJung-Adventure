@@ -29,6 +29,8 @@ public:
 	// Set the position of an element by its ID
 	void setPosition(unsigned short elementId, const sf::Vector2f& position);
 
+	void setThumbPosition(unsigned short elementId);
+
 	// Set the color of an element by its ID and state
 	void setColor(unsigned short elementId, ElementState state);
 
