@@ -230,25 +230,29 @@ void UIElementManager::update() {
 
 // Update text position based on element type and alignment
 void UIElementManager::updateTextPosition(unsigned short elementId) {
-    if (buttons.find(elementId) != buttons.end()) {
-        auto& button = buttons[elementId];
-        sf::FloatRect textBounds = button.text.getGlobalBounds();
-        sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
-        sf::Vector2f position = button.sprite.getPosition();
-			
-        switch (button.alignment) {
-        case TextAlignment::Left:
-            button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
-            break;
-        case TextAlignment::Center:
-            button.text.setPosition(
-                position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
-                position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
-            );
-            break;
-        case TextAlignment::Right:
-            button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
-            break;
-        }
+  // This function updates the position of the text element associated with a UI element (button in this case) based on its alignment.
+  if (buttons.find(elementId) != buttons.end()) {
+    auto& button = buttons[elementId];
+    sf::FloatRect textBounds = button.text.getGlobalBounds();
+    sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
+    sf::Vector2f position = button.sprite.getPosition();
+
+    switch (button.alignment) {
+      case TextAlignment::Left:
+        // Align text to the left of the button's sprite
+        button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+        break;
+      case TextAlignment::Center:
+        // Align text centered horizontally within the button's sprite
+        button.text.setPosition(
+          position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
+          position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
+        );
+        break;
+      case TextAlignment::Right:
+        // Align text to the right of the button's sprite
+        button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+        break;
     }
+  }
 }
