@@ -27,59 +27,72 @@ UIElementManager::~UIElementManager() {
 
 // Add a new button with a given label, position, and text alignment
 void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition, TextAlignment alignment) {
+
+    // Create a new button instance
     Button button;
+
+    // Set button text properties
     button.text.setString(buttonLabel);
-    button.text.setFont(elementFont);
+    button.text.setFont(elementFont);  // Assuming elementFont is set elsewhere
     button.text.setFillColor(sf::Color::Black);
     button.text.setScale({ 1.5f, 1.5f });
 
-    button.sprite.setTexture(buttonTexture);
+    // Set button sprite properties
+    button.sprite.setTexture(buttonTexture);  // Assuming buttonTexture is set elsewhere
     button.sprite.setPosition(buttonPosition);
     button.sprite.setScale({ 1.75f, 2.75f });
-    
+
+    // Set button alignment and initial state
     button.alignment = alignment;
-    button.state = ElementState::Normal;
+    button.state = ElementState::Normal;  // Assuming ElementState is defined elsewhere
 
+    // Add debug UI elements in debug mode (optional)
 #ifdef _DEBUG
-	sf::RectangleShape debugShape({ button.sprite.getGlobalBounds().width, button.sprite.getGlobalBounds().height });
-	sf::RectangleShape debugText({ button.text.getGlobalBounds().width, button.text.getGlobalBounds().height });
+    // Create debug shapes for the button and its text
+    sf::RectangleShape debugShape({ button.sprite.getGlobalBounds().width, button.sprite.getGlobalBounds().height });
+    sf::RectangleShape debugText({ button.text.getGlobalBounds().width, button.text.getGlobalBounds().height });
 
-	debugShape.setOutlineColor(sf::Color::Red);
-	debugShape.setOutlineThickness(2.f);
+    // Set debug shape properties
+    debugShape.setOutlineColor(sf::Color::Red);
+    debugShape.setOutlineThickness(2.f);
     debugShape.setFillColor(sf::Color(155, 255, 155, 155));
     debugShape.setPosition(buttonPosition);
 
+    // Set debug text properties
     debugText.setOutlineColor(sf::Color::Blue);
     debugText.setOutlineThickness(2.f);
     debugText.setFillColor(sf::Color(255, 155, 155, 155));
 
-	switch (button.alignment) {
-	case TextAlignment::Left:
-		debugText.setOrigin(0, button.text.getGlobalBounds().height / 2); // Set origin to the left-center
-		debugText.setPosition(button.sprite.getPosition().x, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
-		break;
+    // Set debug text origin based on alignment
+    switch (button.alignment) {
+    case TextAlignment::Left:
+        debugText.setOrigin(0, button.text.getGlobalBounds().height / 2); // Set origin to the left-center
+        debugText.setPosition(button.sprite.getPosition().x, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+        break;
 
-	case TextAlignment::Center:
-		debugText.setOrigin(button.text.getGlobalBounds().width / 2, button.text.getGlobalBounds().height / 2); // Set origin to the center
+    case TextAlignment::Center:
+        debugText.setOrigin(button.text.getGlobalBounds().width / 2, button.text.getGlobalBounds().height / 2); // Set origin to the center
         debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width / 2, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
-		break;
+        break;
 
-	case TextAlignment::Right:
-		debugText.setOrigin(button.text.getGlobalBounds().width, button.text.getGlobalBounds().height / 2); // Set origin to the right-center
-		debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
-		break;
-	}
+    case TextAlignment::Right:
+        debugText.setOrigin(button.text.getGlobalBounds().width, button.text.getGlobalBounds().height / 2); // Set origin to the right-center
+        debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+        break;
+    }
 
+    // Add debug shapes to the respective maps
     debugRectangle[numberOfElements] = debugShape;
     debugTextRectangle[numberOfElements] = debugText;
 #endif
 
-    // Add button to map
+    // Add the button to the buttons map with a unique ID (numberOfElements)
     buttons[numberOfElements] = button;
 
-    // Set button text alignment (if needed)
+    // Update the text position based on alignment (if needed)
     updateTextPosition(numberOfElements);
-    // Increment the number of elements
+
+    // Increment the counter for the number of elements
     numberOfElements++;
 }
 
