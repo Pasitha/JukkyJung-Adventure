@@ -209,15 +209,27 @@ int UIElementManager::whichElementHover() const {
 
 // Update and render the elements
 void UIElementManager::update() {
+    // This function iterates through the UI elements managed by the class and draws them to the window.
+
+    // Draw buttons
     for (const auto& [id, button] : buttons) {
+        // Draw the button's sprite
         windowInstance->draw(button.sprite);
+        // Draw the button's text
         windowInstance->draw(button.text);
     }
+
+    // Draw sliders
     for (const auto& [id, slider] : sliders) {
+        // Draw the slider's track
         windowInstance->draw(slider.track);
+        // Draw the slider's thumb
         windowInstance->draw(slider.thumb);
+        // Draw the slider's label
         windowInstance->draw(slider.label);
     }
+
+// Draw debug UI elements (only in debug mode)
 #ifdef _DEBUG
     for (const auto& [id, debugButtons] : debugRectangle) {
         windowInstance->draw(debugButtons);
@@ -230,29 +242,29 @@ void UIElementManager::update() {
 
 // Update text position based on element type and alignment
 void UIElementManager::updateTextPosition(unsigned short elementId) {
-  // This function updates the position of the text element associated with a UI element (button in this case) based on its alignment.
-  if (buttons.find(elementId) != buttons.end()) {
-    auto& button = buttons[elementId];
-    sf::FloatRect textBounds = button.text.getGlobalBounds();
-    sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
-    sf::Vector2f position = button.sprite.getPosition();
+    // This function updates the position of the text element associated with a UI element (button in this case) based on its alignment.
+    if (buttons.find(elementId) != buttons.end()) {
+        auto& button = buttons[elementId];
+        sf::FloatRect textBounds = button.text.getGlobalBounds();
+        sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
+        sf::Vector2f position = button.sprite.getPosition();
 
-    switch (button.alignment) {
-      case TextAlignment::Left:
-        // Align text to the left of the button's sprite
-        button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
-        break;
-      case TextAlignment::Center:
-        // Align text centered horizontally within the button's sprite
-        button.text.setPosition(
-          position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
-          position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
-        );
-        break;
-      case TextAlignment::Right:
-        // Align text to the right of the button's sprite
-        button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
-        break;
+        switch (button.alignment) {
+        case TextAlignment::Left:
+            // Align text to the left of the button's sprite
+            button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+            break;
+        case TextAlignment::Center:
+            // Align text centered horizontally within the button's sprite
+            button.text.setPosition(
+            position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
+            position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
+            );
+            break;
+        case TextAlignment::Right:
+            // Align text to the right of the button's sprite
+            button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+            break;
+        }
     }
-  }
 }
