@@ -56,8 +56,8 @@ private:
 
 	// Struct for Slider components
 	struct Slider {
-		sf::RectangleShape track;
-		sf::RectangleShape thumb;
+		sf::Sprite track;
+		sf::Sprite thumb;
 		sf::Text label;
 		ElementState state;
 	};
