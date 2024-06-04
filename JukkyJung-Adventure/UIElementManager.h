@@ -24,7 +24,7 @@ public:
 	void addButton(const std::vector<std::pair<std::string, sf::Vector2f>>& buttons, TextAlignment alignment = TextAlignment::Center);
 
 	// Add a new slider with a given label, position, and size
-	void addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition, const sf::Vector2f& sliderSize);
+	void addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition);
 
 	// Set the position of an element by its ID
 	void setPosition(unsigned short elementId, const sf::Vector2f& position);
