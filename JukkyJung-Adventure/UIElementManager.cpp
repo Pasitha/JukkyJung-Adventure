@@ -242,7 +242,7 @@ void UIElementManager::update() {
         windowInstance->draw(slider.label);
     }
 
-// Draw debug UI elements (only in debug mode)
+    // Draw debug UI elements (only in debug mode)
 #ifdef _DEBUG
     for (const auto& [id, debugButtons] : debugRectangle) {
         windowInstance->draw(debugButtons);
