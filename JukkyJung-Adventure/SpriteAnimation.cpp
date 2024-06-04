@@ -48,6 +48,10 @@ void SpriteAnimation::changeState(const std::string& stateName) {
     }
 }
 
+void SpriteAnimation::moveSprite(sf::Vector2f offset) {
+    sprite.move(offset);
+}
+
 // Update the animation frame based on elapsed time
 void SpriteAnimation::updateAnimation(float deltaTime) {
     if (currentState) {
