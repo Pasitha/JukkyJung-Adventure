@@ -13,42 +13,6 @@ Game::Game() :
     // Load the game font from a file
     FileManager::LoadFromFile(gameFont, "asset/UI/Font/kenvector_future.ttf");
 
-    FileManager::LoadFromFile(settingPanelTexture, "asset/UI/PNG/grey_panel.png");
-    FileManager::LoadFromFile(volumeSliderTexture, "asset/UI/PNG/grey_sliderDown.png");
-    FileManager::LoadFromFile(horizontalSliderTexture, "asset/UI/PNG/grey_sliderHorizontal.png");
-    FileManager::LoadFromFile(musicCheckBoxTexture, "asset/UI/PNG/grey_box.png");
-    FileManager::LoadFromFile(effectCheckBoxTexture, "asset/UI/PNG/grey_box.png");
-
-    settingPanel.setTexture(settingPanelTexture);
-    volumeSlider.setTexture(volumeSliderTexture);
-    horizontalSlider.setTexture(horizontalSliderTexture);
-    musicCheckBox.setTexture(musicCheckBoxTexture);
-    effectCheckBox.setTexture(effectCheckBoxTexture);
-
-    settingPanel.setPosition({ 500, 200 });  // Adjust position as needed
-    settingPanel.setScale({ 3.f, 3.f });      // Adjust scale as needed
-
-    volumeSlider.setPosition({ 600, 350 });   // Adjust position as needed
-    volumeSlider.setScale({ 1.f, 1.f });       // Adjust scale as needed
-
-    horizontalSlider.setPosition({ 600, 375 }); // Adjust position as needed
-    horizontalSlider.setScale({ 1.f, 1.f });    // Adjust scale as needed
-
-    musicCheckBox.setPosition({ 600, 650 });   // Adjust position as needed
-    musicCheckBox.setScale({ 1.f, 1.f });       // Adjust scale as needed
-
-    effectCheckBox.setPosition({ 800, 650 });  // Adjust position as needed
-    effectCheckBox.setScale({ 1.f, 1.f });       // Adjust scale as needed
-
-	// settingPanel.setPosition({ 1250, 450 });
-    settingPanel.setScale({ 5.f, 5.f });
-
-    // volumeSlider.setPosition({ 1275, 550 });
-    volumeSlider.setScale({ 1.25f , 1.25f });
-
-    // horizontalSlider.setPosition({ 1275, 550 });
-    horizontalSlider.setScale({ 1.5f, 1.5f });
-
     // Initialize variables related to the game pause menu
     backgroundPauseMenuText.setString("Pause");
     backgroundPauseMenuText.setFont(gameFont);
@@ -137,8 +101,9 @@ void Game::handleButtonPress(int buttonHoverId) {
             currentScene = Scene::MainMenu;
             sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Normal);
             break;
-        case 2:
+        case 2: case 3: case 4:
             sceneComponents[Scene::Setting]->uiElement->setThumbPosition(buttonHoverId);
+            break;
         }
         break;
     case Scene::GamePlay:
@@ -198,7 +163,7 @@ void Game::HandleEvents() {
 
         // Handle Escape key press for pausing and resuming
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape && !isEscapePressed) {
+            if (event.key.code == sf::Keyboard::Escape && !isEscapePressed && currentScene == Scene::GamePlay) {
 #ifdef _DEBUG
 				std::cout << "Escape key in Scene" << (int)currentScene << std::endl;
 #endif
