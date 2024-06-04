@@ -132,8 +132,17 @@ void UIElementManager::setPosition(unsigned short elementId, const sf::Vector2f&
     }
     else if (sliders.find(elementId) != sliders.end()) {
         sliders[elementId].track.setPosition(position);
-        sliders[elementId].thumb.setPosition(position);
-        sliders[elementId].label.setPosition(position.x, position.y - 20);
+        sliders[elementId].thumb.setPosition(position.x, position.y - 10);
+        sliders[elementId].label.setPosition(position.x, position.y - 50);
+    }
+}
+
+void UIElementManager::setThumbPosition(unsigned short elementId) {
+    if (sliders.find(elementId) != sliders.end()) {
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
+		sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
+
+        sliders[elementId].thumb.setPosition(std::max(sliders[elementId].track.getGlobalBounds().width, mousePositionF.x), sliders[elementId].thumb.getPosition().y);
     }
 }
 
@@ -188,7 +197,7 @@ void UIElementManager::updateHover() {
     }
 
     for (auto& [id, slider] : sliders) {
-        sf::FloatRect bounds = slider.thumb.getGlobalBounds();
+        sf::FloatRect bounds = slider.track.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
             setColor(id, ElementState::Hovered);
         }
