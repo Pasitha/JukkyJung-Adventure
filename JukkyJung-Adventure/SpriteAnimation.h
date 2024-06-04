@@ -17,6 +17,8 @@ public:
     // Change to a different state
     void changeState(const std::string& stateName);
 
+    void moveSprite(sf::Vector2f offset);
+
     // Update the animation frame based on elapsed time
     void updateAnimation(float deltaTime);
 
