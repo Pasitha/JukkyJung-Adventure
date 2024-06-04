@@ -64,18 +64,6 @@ private:
     sf::Font gameFont;                        // Font used in the game for text rendering
     bool isGamePaused;                        // Flag indicating whether the game is in a paused state
     bool isEscapePressed;                     // Flag to track if the Escape key is currently pressed
-
-    sf::Sprite settingPanel;                  // Sprite for the settings panel
-    sf::Sprite volumeSlider;                  // Sprite for the volume slider
-    sf::Sprite horizontalSlider;              // Sprite for the horizontal slider
-    sf::Sprite musicCheckBox;                 // Sprite for the music checkbox
-    sf::Sprite effectCheckBox;                // Sprite for the effects checkbox
-
-    sf::Texture settingPanelTexture;          // Texture for the settings panel
-    sf::Texture volumeSliderTexture;          // Texture for the volume slider
-    sf::Texture horizontalSliderTexture;      // Texture for the horizontal slider
-    sf::Texture musicCheckBoxTexture;         // Texture for the music checkbox
-    sf::Texture effectCheckBoxTexture;        // Texture for the effects checkbox
     
     sf::Text backgroundPauseMenuText;         // Text displayed in the background during pause
     sf::RectangleShape backgroundPauseMenu;   // Background shape during pause
