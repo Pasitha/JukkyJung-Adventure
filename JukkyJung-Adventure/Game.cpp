@@ -89,7 +89,7 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->uiElement->addButton({ {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} }, TextAlignment::Center);
     sceneComponents[Scene::PauseMenu]->uiElement->addButton({ {"RESUME", {850, 300}}, {"EXIT", {850, 500}} }, TextAlignment::Center);
 
-    sceneComponents[Scene::Setting]->uiElement->addSlider("VOLUME", { 600, 350 }, { 100, 5 });
+    sceneComponents[Scene::Setting]->uiElement->addSlider("VOLUME", { 600, 350 });
 }
 
 #ifdef _DEBUG
