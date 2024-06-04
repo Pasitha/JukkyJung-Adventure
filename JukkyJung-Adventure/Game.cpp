@@ -135,6 +135,8 @@ void Game::handleButtonPress(int buttonHoverId) {
             currentScene = Scene::MainMenu;
             sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Normal);
             break;
+        case 2:
+            sceneComponents[Scene::Setting]->uiElement->setThumbPosition(buttonHoverId);
         }
         break;
     case Scene::GamePlay:
@@ -188,6 +190,10 @@ void Game::HandleEvents() {
             handleButtonPress(buttonHoverId);
         }
 
+        if (event.type == sf::Event::MouseButtonReleased) {
+
+        }
+
         // Handle Escape key press for pausing and resuming
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape && !isEscapePressed) {
@@ -229,11 +235,7 @@ void Game::Render() {
     }
 
     if (currentScene == Scene::Setting) {
-        window.draw(settingPanel);
-        window.draw(horizontalSlider);
-        window.draw(volumeSlider);
-        window.draw(musicCheckBox);
-        window.draw(effectCheckBox);
+        sceneComponents[Scene::Setting]->uiElement->update();
     }
     
     if (currentScene == Scene::PauseMenu && isGamePaused) {
