@@ -44,8 +44,11 @@ Game::Game() :
 
     sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24);
     sceneComponents[Scene::GamePlay]->spriteAnimation->setScale({ 2.5f, 2.5f });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-left", 3, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Idel-left");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-back", 0, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-left", 1, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-front", 2, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-right", 3, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Idel-front");
 
     // Initialize scene components with buttons and their positions
     sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
