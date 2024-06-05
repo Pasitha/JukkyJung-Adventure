@@ -45,5 +45,9 @@ private:
     sf::Sprite sprite;                                       // Sprite to display the current frame
     sf::Vector2i frameSize;                                  // Size of each frame
     int rowCount;                                            // Number of rows in the sprite sheet
+
+#ifdef _DEBUG
+    sf::RectangleShape debugShape;
+#endif
 };
 
