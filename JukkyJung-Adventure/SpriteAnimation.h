@@ -6,7 +6,7 @@ public:
     SpriteAnimation(sf::RenderWindow* window);
 
     // Load animation frames from a sprite sheet with multiple rows and columns
-    void loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount);
+    void loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount, sf::Vector2f position = { 0, 0 });
 
     // Set the scale of the sprite
     void setScale(const sf::Vector2f& scale);
@@ -23,7 +23,7 @@ public:
     void updateAnimation(float deltaTime);
 
     // Draw the current frame
-    void drawAnimation(sf::Vector2f position);
+    void drawAnimation();
 
 private:
     // Structure to hold information about an animation state
@@ -45,6 +45,8 @@ private:
     sf::Sprite sprite;                                       // Sprite to display the current frame
     sf::Vector2i frameSize;                                  // Size of each frame
     int rowCount;                                            // Number of rows in the sprite sheet
+
+    sf::Vector2f spritePosition;
 
 #ifdef _DEBUG
     sf::RectangleShape debugShape;
