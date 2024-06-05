@@ -4,16 +4,18 @@
 SpriteAnimation::SpriteAnimation(sf::RenderWindow* window) : windowInstance(window), currentState(nullptr) {}
 
 // Load animation frames from a sprite sheet with multiple rows and columns
-void SpriteAnimation::loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount) {
+void SpriteAnimation::loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount, sf::Vector2f position) {
     this->frameSize = frameSize;
     this->rowCount = rowCount;
 
     // Load the texture from file
     FileManager::LoadFromFile(texture, filePath);
     sprite.setTexture(texture);
+    sprite.setPosition(position);
 
 #ifdef _DEBUG
     debugShape.setSize((sf::Vector2f)frameSize);
+    debugShape.setPosition(position);
 
     std::cout << sprite.getGlobalBounds().width << " " << sprite.getGlobalBounds().height << std::endl;
 
@@ -84,12 +86,10 @@ void SpriteAnimation::updateAnimation(float deltaTime) {
 }
 
 // Draw the current frame
-void SpriteAnimation::drawAnimation(sf::Vector2f position) {
-    sprite.setPosition(position);
+void SpriteAnimation::drawAnimation() {
     windowInstance->draw(sprite);
 
 #ifdef _DEBUG
-    debugShape.setPosition(position);
     windowInstance->draw(debugShape);
 #endif
 }
