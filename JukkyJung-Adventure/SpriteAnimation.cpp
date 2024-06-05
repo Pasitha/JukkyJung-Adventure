@@ -11,10 +11,25 @@ void SpriteAnimation::loadSpriteSheet(const std::string& filePath, sf::Vector2i 
     // Load the texture from file
     FileManager::LoadFromFile(texture, filePath);
     sprite.setTexture(texture);
+
+#ifdef _DEBUG
+    debugShape.setSize((sf::Vector2f)frameSize);
+
+    std::cout << sprite.getGlobalBounds().width << " " << sprite.getGlobalBounds().height << std::endl;
+
+    // Set debug shape properties
+    debugShape.setOutlineColor(sf::Color::Red);
+    debugShape.setOutlineThickness(2.f);
+    debugShape.setFillColor(sf::Color(155, 255, 155, 55));
+#endif
 }
 
 void SpriteAnimation::setScale(const sf::Vector2f& scale) {
     sprite.setScale(scale);
+
+#ifdef _DEBUG
+    debugShape.setSize({ debugShape.getSize().x * scale.x, debugShape.getSize().y * scale.y });
+#endif
 }
 
 // Set the current state (row) of the animation
@@ -72,4 +87,9 @@ void SpriteAnimation::updateAnimation(float deltaTime) {
 void SpriteAnimation::drawAnimation(sf::Vector2f position) {
     sprite.setPosition(position);
     windowInstance->draw(sprite);
+
+#ifdef _DEBUG
+    debugShape.setPosition(position);
+    windowInstance->draw(debugShape);
+#endif
 }
