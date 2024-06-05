@@ -192,19 +192,19 @@ void Game::HandleEvents() {
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::W && currentScene == Scene::GamePlay) {
                 sceneComponents[currentScene]->spriteAnimation->changeState("Idel-back");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 0.f, 1.f });
+                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 0.f, -2.f });
             } 
             else if (event.key.code == sf::Keyboard::A && currentScene == Scene::GamePlay) {
                 sceneComponents[currentScene]->spriteAnimation->changeState("Idel-left");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ -1.f, 0.f });
+                sceneComponents[currentScene]->spriteAnimation->moveSprite({ -2.f, 0.f });
             }
             else if (event.key.code == sf::Keyboard::S && currentScene == Scene::GamePlay) {
                 sceneComponents[currentScene]->spriteAnimation->changeState("Idel-front");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 0.f, -1.f });
+                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 0.f, 2.f });
             }
             else if (event.key.code == sf::Keyboard::D && currentScene == Scene::GamePlay) {
                 sceneComponents[currentScene]->spriteAnimation->changeState("Idel-right");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 1.f, 0.f });
+                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 2.f, 0.f });
             }
         }
     }
