@@ -46,8 +46,6 @@ private:
     sf::Vector2i frameSize;                                  // Size of each frame
     int rowCount;                                            // Number of rows in the sprite sheet
 
-    sf::Vector2f spritePosition;
-
 #ifdef _DEBUG
     sf::RectangleShape debugShape;
 #endif
