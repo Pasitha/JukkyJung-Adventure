@@ -37,12 +37,12 @@ Game::Game() :
     sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
     sceneComponents[Scene::GamePlay]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
 
-    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/Planet-Sprite.png", { 256, 256 }, 1);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/Planet-Sprite.png", { 256, 256 }, 1, {1000, 220});
     sceneComponents[Scene::MainMenu]->spriteAnimation->setScale({ 2.5f, 2.5f });
     sceneComponents[Scene::MainMenu]->spriteAnimation->setState("Idel", 0, 50, .10f);
     sceneComponents[Scene::MainMenu]->spriteAnimation->changeState("Idel");
 
-    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24, {1000, 220});
     sceneComponents[Scene::GamePlay]->spriteAnimation->setScale({ 2.5f, 2.5f });
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-back", 0, 7, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-left", 1, 7, .35f);
@@ -220,7 +220,7 @@ void Game::Render() {
     if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay) {
 		// Render the spriteAnimation on currentScene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation(deltaTime);
-        sceneComponents[currentScene]->spriteAnimation->drawAnimation({1000, 220});
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation();
     }
 
     if (currentScene == Scene::Setting) {
@@ -233,7 +233,7 @@ void Game::Render() {
 
 		// Render the spriteAnimation on currentScene
         sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation(deltaTime);
-        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation({1000, 220});
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation();
 
 		// Render the pause menu when the game is paused
 		window.draw(backgroundPauseMenu);
