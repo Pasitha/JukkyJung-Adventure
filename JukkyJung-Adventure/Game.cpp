@@ -160,10 +160,6 @@ void Game::HandleEvents() {
             handleButtonPress(buttonHoverId);
         }
 
-        if (event.type == sf::Event::MouseButtonReleased) {
-
-        }
-
         // Handle Escape key press for pausing and resuming
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape && !isEscapePressed && currentScene == Scene::GamePlay) {
