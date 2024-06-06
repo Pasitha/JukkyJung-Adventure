@@ -1,8 +1,10 @@
 #pragma once
 #include "common.h"
 
+// SpriteAnimation class is responsible for managing and displaying sprite animations
 class SpriteAnimation {
 public:
+    // Constructor taking a pointer to the SFML render window
     SpriteAnimation(sf::RenderWindow* window);
 
     // Load animation frames from a sprite sheet with multiple rows and columns
@@ -17,6 +19,7 @@ public:
     // Change to a different state
     void changeState(const std::string& stateName);
 
+    // Move the sprite by a given offset
     void moveSprite(sf::Vector2f offset);
 
     // Update the animation frame based on elapsed time
@@ -47,6 +50,7 @@ private:
     int rowCount;                                            // Number of rows in the sprite sheet
 
 #ifdef _DEBUG
+    // Debug shape to visualize the sprite boundaries in debug mode
     sf::RectangleShape debugShape;
 #endif
 };
