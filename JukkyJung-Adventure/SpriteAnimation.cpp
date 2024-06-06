@@ -57,11 +57,13 @@ void SpriteAnimation::setState(const std::string& stateName, int startRow, int f
 }
 
 // Change to a different state
-void SpriteAnimation::changeState(const std::string& stateName) {
+void SpriteAnimation::changeState(const std::string& stateName, bool resetCurrentFrame) {
     auto it = states.find(stateName);
     if (it != states.end()) {
         currentState = &it->second;
-        currentState->currentFrame = 0; // Reset the current frame when switching states
+        if (resetCurrentFrame) {
+			currentState->currentFrame = 0; // Reset the current frame when switching states
+        }
     } else {
         throw std::runtime_error("State not found: " + stateName);
     }
