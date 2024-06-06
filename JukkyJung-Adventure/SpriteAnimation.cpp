@@ -58,15 +58,21 @@ void SpriteAnimation::setState(const std::string& stateName, int startRow, int f
 
 // Change to a different state
 void SpriteAnimation::changeState(const std::string& stateName, bool resetCurrentFrame) {
+    // Find the new state in the map
     auto it = states.find(stateName);
     if (it != states.end()) {
+        // Save the current frame from the current state
         int currentFrame = currentState->currentFrame;
+        // Update the current state to the new state
         currentState = &it->second;
+        // Retain the current frame if not resetting
         currentState->currentFrame = currentFrame;
+        // Reset the current frame to the first frame if specified
         if (resetCurrentFrame) {
-			currentState->currentFrame = 0; // Reset the current frame when switching states
+            currentState->currentFrame = 0;
         }
     } else {
+        // Throw an error if the state is not found
         throw std::runtime_error("State not found: " + stateName);
     }
 }
