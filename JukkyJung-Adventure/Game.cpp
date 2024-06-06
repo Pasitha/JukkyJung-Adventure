@@ -189,23 +189,31 @@ void Game::HandleEvents() {
             }
         }
 
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::W && currentScene == Scene::GamePlay) {
-                sceneComponents[currentScene]->spriteAnimation->changeState("Idel-back");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 0.f, -2.f });
+        if (currentScene == Scene::GamePlay) {
+            sf::Vector2f movement(0.f, 0.f);
+            std::string state;
+
+            if (event.key.code == sf::Keyboard::W) {
+                state = "Idel-back";
+                movement.y -= 2.f;
             } 
-            else if (event.key.code == sf::Keyboard::A && currentScene == Scene::GamePlay) {
-                sceneComponents[currentScene]->spriteAnimation->changeState("Idel-left");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ -2.f, 0.f });
+            if (event.key.code == sf::Keyboard::A) {
+                state = "Idel-left";
+                movement.x -= 2.f;
             }
-            else if (event.key.code == sf::Keyboard::S && currentScene == Scene::GamePlay) {
-                sceneComponents[currentScene]->spriteAnimation->changeState("Idel-front");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 0.f, 2.f });
+            if (event.key.code == sf::Keyboard::S) {
+                state = "Idel-front";
+                movement.y += 2.f;
             }
-            else if (event.key.code == sf::Keyboard::D && currentScene == Scene::GamePlay) {
-                sceneComponents[currentScene]->spriteAnimation->changeState("Idel-right");
-                sceneComponents[currentScene]->spriteAnimation->moveSprite({ 2.f, 0.f });
+            if (event.key.code == sf::Keyboard::D) {
+                state = "Idel-right";
+                movement.x += 2.f;
             }
+
+			if (movement != sf::Vector2f(0.f, 0.f)) {
+				sceneComponents[currentScene]->spriteAnimation->changeState(state);
+				sceneComponents[currentScene]->spriteAnimation->moveSprite(movement);
+			}
         }
     }
 }
