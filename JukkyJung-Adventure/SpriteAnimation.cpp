@@ -67,6 +67,7 @@ void SpriteAnimation::changeState(const std::string& stateName) {
     }
 }
 
+// Move the sprite by a given offset
 void SpriteAnimation::moveSprite(sf::Vector2f offset) {
     sprite.move(offset);
 
