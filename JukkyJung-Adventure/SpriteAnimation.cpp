@@ -27,6 +27,7 @@ void SpriteAnimation::loadSpriteSheet(const std::string& filePath, sf::Vector2i 
 #endif
 }
 
+// Set the scale of the sprite
 void SpriteAnimation::setScale(const sf::Vector2f& scale) {
     sprite.setScale(scale);
 
