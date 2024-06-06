@@ -85,11 +85,11 @@ void SpriteAnimation::updateAnimation(float deltaTime) {
 
         // Check if it's time to switch to the next frame
         if (currentState->elapsedTime >= currentState->duration) {
-        // Reset elapsed time
-        currentState->elapsedTime -= currentState->duration;
+            // Reset elapsed time
+            currentState->elapsedTime -= currentState->duration;
 
-        // Move to the next frame, looping back to the first frame if necessary
-        currentState->currentFrame = (currentState->currentFrame + 1) % currentState->frames.size();
+            // Move to the next frame, looping back to the first frame if necessary
+            currentState->currentFrame = (currentState->currentFrame + 1) % currentState->frames.size();
         }
 
         // Set the current frame texture rectangle for the sprite
