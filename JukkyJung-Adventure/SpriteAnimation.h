@@ -17,7 +17,7 @@ public:
     void setState(const std::string& stateName, int startRow, int frameCount, float duration);
 
     // Change to a different state
-    void changeState(const std::string& stateName);
+    void changeState(const std::string& stateName, bool resetCurrentFrame = false);
 
     // Move the sprite by a given offset
     void moveSprite(sf::Vector2f offset);
