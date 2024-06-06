@@ -60,7 +60,9 @@ void SpriteAnimation::setState(const std::string& stateName, int startRow, int f
 void SpriteAnimation::changeState(const std::string& stateName, bool resetCurrentFrame) {
     auto it = states.find(stateName);
     if (it != states.end()) {
+        int currentFrame = currentState->currentFrame;
         currentState = &it->second;
+        currentState->currentFrame = currentFrame;
         if (resetCurrentFrame) {
 			currentState->currentFrame = 0; // Reset the current frame when switching states
         }
