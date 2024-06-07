@@ -189,30 +189,38 @@ void Game::HandleEvents() {
             sf::Vector2f movement(0.f, 0.f);
             std::string state;
 
-            if (event.key.code == sf::Keyboard::W) {
-                state = "Idel-back";
-                movement.y -= 2.f;
-            } 
-            if (event.key.code == sf::Keyboard::A) {
-                state = "Idel-left";
-                movement.x -= 2.f;
-            }
-            if (event.key.code == sf::Keyboard::S) {
-                state = "Idel-front";
-                movement.y += 2.f;
-            }
-            if (event.key.code == sf::Keyboard::D) {
-                state = "Idel-right";
-                movement.x += 2.f;
+            // Process movement keys
+            const std::map<sf::Keyboard::Key, std::pair<std::string, sf::Vector2f>> movementMap = {
+				{sf::Keyboard::W, {"Idel-back", {0.f, -2.f}}},
+				{sf::Keyboard::A, {"Idel-left", {-2.f, 0.f}}},
+				{sf::Keyboard::S, {"Idel-front", {0.f, 2.f}}},
+				{sf::Keyboard::D, {"Idel-right", {2.f, 0.f}}},
+            };
+            /*
+				0
+				3
+				18
+				22
+            */
+
+            auto it = movementMap.find(event.key.code);
+            if (it != movementMap.end()) {
+                state = it->second.first;
+                movement = it->second.second;
             }
 
-			if (movement != sf::Vector2f(0.f, 0.f)) {
-				sceneComponents[currentScene]->spriteAnimation->changeState(state);
-				sceneComponents[currentScene]->spriteAnimation->moveSprite(movement);
+            // Update animation and position if there's movement
+            if (movement != sf::Vector2f(0.f, 0.f)) {
+                sceneComponents[currentScene]->spriteAnimation->changeState(state);
+                sceneComponents[currentScene]->spriteAnimation->moveSprite(movement);
 #ifdef _DEBUG
-				std::cout << "Change animation state to " << state << std::endl;
+                std::cout << "Change animation state to " << state << std::endl;
+                
+                for (const auto& [key, pair] : movementMap) {
+                    std::cout << key << std::endl;
+                }
 #endif
-			}
+            }
         }
     }
 }
