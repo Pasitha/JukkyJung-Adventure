@@ -209,6 +209,9 @@ void Game::HandleEvents() {
 			if (movement != sf::Vector2f(0.f, 0.f)) {
 				sceneComponents[currentScene]->spriteAnimation->changeState(state);
 				sceneComponents[currentScene]->spriteAnimation->moveSprite(movement);
+#ifdef _DEBUG
+				std::cout << "Change animation state to " << state << std::endl;
+#endif
 			}
         }
     }
