@@ -8,25 +8,25 @@ public:
     SpriteAnimation(sf::RenderWindow* window);
 
     // Load animation frames from a sprite sheet with multiple rows and columns
-    void loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount, sf::Vector2f position = { 0, 0 });
+    void loadSpriteSheet(const std::string& filePath, const std::string& spriteName, sf::Vector2i frameSize, int rowCount, sf::Vector2f position = { 0, 0 });
 
     // Set the scale of the sprite
-    void setScale(const sf::Vector2f& scale);
+    void setScale(const std::string& spriteName, const sf::Vector2f& scale);
 
     // Set the current state (row) of the animation
-    void setState(const std::string& stateName, int startRow, int frameCount, float duration);
+    void setState(const std::string& spriteName, const std::string& stateName, int startRow, int frameCount, float duration);
 
     // Change to a different state
-    void changeState(const std::string& stateName, bool resetCurrentFrame = false);
+    void changeState(const std::string& spriteName, const std::string& stateName, bool resetCurrentFrame = false);
 
     // Move the sprite by a given offset
-    void moveSprite(sf::Vector2f offset);
+    void moveSprite(const std::string& spriteName, sf::Vector2f offset);
 
     // Update the animation frame based on elapsed time
-    void updateAnimation(float deltaTime);
+    void updateAnimation(const std::string& spriteName, float deltaTime);
 
     // Draw the current frame
-    void drawAnimation();
+    void drawAnimation(const std::string& spriteName);
 
 private:
     // Structure to hold information about an animation state
@@ -39,19 +39,24 @@ private:
         AnimationState() : currentFrame(0), duration(0), elapsedTime(0) {}
     };
 
+    struct AnimationSprite {
+		sf::Texture texture;                                     // Texture of the sprite sheet
+		sf::Sprite sprite;                                       // Sprite to display the current frame
+		sf::Vector2i frameSize;                                  // Size of each frame
+		int rowCount;                                            // Number of rows in the sprite sheet
+
+		std::unordered_map<std::string, AnimationState> states;  // Map of state names to animation states
+		AnimationState* currentState;                            // Pointer to the current animation state
+    };
+
 	// Pointer to the SFML render window
     sf::RenderWindow* windowInstance;
 
-    std::unordered_map<std::string, AnimationState> states;  // Map of state names to animation states
-    AnimationState* currentState;                            // Pointer to the current animation state
-    sf::Texture texture;                                     // Texture of the sprite sheet
-    sf::Sprite sprite;                                       // Sprite to display the current frame
-    sf::Vector2i frameSize;                                  // Size of each frame
-    int rowCount;                                            // Number of rows in the sprite sheet
+    std::unordered_map<std::string, AnimationSprite> animationSprite;
 
 #ifdef _DEBUG
     // Debug shape to visualize the sprite boundaries in debug mode
-    sf::RectangleShape debugShape;
+    std::map<std::string, sf::RectangleShape> debugShape;
 #endif
 };
 
