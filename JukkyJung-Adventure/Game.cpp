@@ -50,6 +50,11 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-right", 3, 7, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Idel-front");
 
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", { 64, 64 }, 36, { 1500, 220 });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale({ 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Walk-back", 4, 9, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Walk-back");
+
     // Initialize scene components with buttons and their positions
     sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
     sceneComponents[Scene::Setting]->uiElement->addButton({ {"VOLUME", {50, 300}}, {"BACK", {50, 500}} }, TextAlignment::Center);
@@ -207,6 +212,10 @@ void Game::HandleEvents() {
             if (it != movementMap.end()) {
                 state = it->second.first;
                 movement = it->second.second;
+
+#ifdef _DEBUG
+				std::cout << "movement x = " << movement.x << ", y = " << movement.y << std::endl;
+#endif
             }
 
             // Update animation and position if there's movement
@@ -215,10 +224,6 @@ void Game::HandleEvents() {
                 sceneComponents[currentScene]->spriteAnimation->moveSprite(movement);
 #ifdef _DEBUG
                 std::cout << "Change animation state to " << state << std::endl;
-                
-                for (const auto& [key, pair] : movementMap) {
-                    std::cout << key << std::endl;
-                }
 #endif
             }
         }
