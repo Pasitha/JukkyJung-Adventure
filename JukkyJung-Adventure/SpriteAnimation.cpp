@@ -4,72 +4,78 @@
 SpriteAnimation::SpriteAnimation(sf::RenderWindow* window) : windowInstance(window), currentState(nullptr) {}
 
 // Load animation frames from a sprite sheet with multiple rows and columns
-void SpriteAnimation::loadSpriteSheet(const std::string& filePath, sf::Vector2i frameSize, int rowCount, sf::Vector2f position) {
-    this->frameSize = frameSize;
-    this->rowCount = rowCount;
-
+void SpriteAnimation::loadSpriteSheet(const std::string& filePath, const std::string& spriteName, sf::Vector2i frameSize, int rowCount, sf::Vector2f position) {
+    AnimationSprite Sprite;
     // Load the texture from file
-    FileManager::LoadFromFile(texture, filePath);
-    sprite.setTexture(texture);
-    sprite.setPosition(position);
+    FileManager::LoadFromFile(Sprite.texture, filePath);
+
+    Sprite.frameSize = frameSize;
+    Sprite.rowCount = rowCount;
+    Sprite.sprite.setTexture(Sprite.texture);
+    Sprite.sprite.setPosition(position);
+
+    animationSprite[spriteName] = Sprite;
 
 #ifdef _DEBUG
     // Create a debug shape to visualize the sprite bounds (optional)
-    debugShape.setSize((sf::Vector2f)frameSize);
-    debugShape.setPosition(position);
+    debugShape[spriteName].setSize((sf::Vector2f)frameSize);
+    debugShape[spriteName].setPosition(position);
 
-    std::cout << sprite.getGlobalBounds().width << " " << sprite.getGlobalBounds().height << std::endl;
+    std::cout << Sprite.sprite.getGlobalBounds().width << " " << Sprite.sprite.getGlobalBounds().height << std::endl;
 
     // Set debug shape properties
-    debugShape.setOutlineColor(sf::Color::Red);
-    debugShape.setOutlineThickness(2.f);
-    debugShape.setFillColor(sf::Color(155, 255, 155, 55));
+    debugShape[spriteName].setOutlineColor(sf::Color::Red);
+    debugShape[spriteName].setOutlineThickness(2.f);
+    debugShape[spriteName].setFillColor(sf::Color(155, 255, 155, 55));
 #endif
 }
 
 // Set the scale of the sprite
-void SpriteAnimation::setScale(const sf::Vector2f& scale) {
-    sprite.setScale(scale);
+void SpriteAnimation::setScale(const std::string& spriteName, const sf::Vector2f& scale) {
+    animationSprite[spriteName].sprite.setScale(scale);
 
 #ifdef _DEBUG
     // Update debug shape size when scaling the sprite
-    debugShape.setSize({ debugShape.getSize().x * scale.x, debugShape.getSize().y * scale.y });
+    debugShape[spriteName].setSize({ debugShape[spriteName].getSize().x * scale.x, debugShape[spriteName].getSize().y * scale.y });
 #endif
 }
 
 // Set the current state (row) of the animation
-void SpriteAnimation::setState(const std::string& stateName, int startRow, int frameCount, float duration) {
+void SpriteAnimation::setState(const std::string& spriteName, const std::string& stateName, int startRow, int frameCount, float duration) {
     AnimationState state;
     state.duration = duration;
 
     // Generate frames for the specified state by creating IntRects for each frame
     for (int i = 0; i < frameCount; ++i) {
-        state.frames.emplace_back(i * frameSize.x, startRow * frameSize.y, frameSize.x, frameSize.y);
+        state.frames.emplace_back(
+            i * animationSprite[spriteName].frameSize.x, startRow * animationSprite[spriteName].frameSize.y, 
+            animationSprite[spriteName].frameSize.x, animationSprite[spriteName].frameSize.y
+        );
     }
 
     // Add the state to the map of states
-    states[stateName] = state;
+    animationSprite[spriteName].states[stateName] = state;
 
     // Set the current state if it's the first state being added
-    if (currentState == nullptr) {
-        currentState = &states[stateName];
+    if (animationSprite[spriteName].currentState == nullptr) {
+        animationSprite[spriteName].currentState = &animationSprite[spriteName].states[stateName];
     }
 }
 
 // Change to a different state
-void SpriteAnimation::changeState(const std::string& stateName, bool resetCurrentFrame) {
+void SpriteAnimation::changeState(const std::string& spriteName, const std::string& stateName, bool resetCurrentFrame) {
     // Find the new state in the map
-    auto it = states.find(stateName);
-    if (it != states.end()) {
+    auto it = animationSprite[spriteName].states.find(stateName);
+    if (it != animationSprite[spriteName].states.end()) {
         // Save the current frame from the current state
-        int currentFrame = currentState->currentFrame;
+        int currentFrame = animationSprite[spriteName].currentState->currentFrame;
         // Update the current state to the new state
-        currentState = &it->second;
+        animationSprite[spriteName].currentState = &it->second;
         // Retain the current frame if not resetting
-        currentState->currentFrame = currentFrame;
+        animationSprite[spriteName].currentState->currentFrame = currentFrame;
         // Reset the current frame to the first frame if specified
         if (resetCurrentFrame) {
-            currentState->currentFrame = 0;
+            animationSprite[spriteName].currentState->currentFrame = 0;
         }
     } else {
         // Throw an error if the state is not found
@@ -78,41 +84,41 @@ void SpriteAnimation::changeState(const std::string& stateName, bool resetCurren
 }
 
 // Move the sprite by a given offset
-void SpriteAnimation::moveSprite(sf::Vector2f offset) {
-    sprite.move(offset);
+void SpriteAnimation::moveSprite(const std::string& spriteName, sf::Vector2f offset) {
+    animationSprite[spriteName].sprite.move(offset);
 
 #ifdef _DEBUG
     // Update debug shape position when moving the sprite
-    debugShape.move(offset);
+    debugShape[spriteName].move(offset);
 #endif
 }
 
 // Update the animation frame based on elapsed time
-void SpriteAnimation::updateAnimation(float deltaTime) {
-    if (currentState) {
+void SpriteAnimation::updateAnimation(const std::string& spriteName, float deltaTime) {
+    if (animationSprite[spriteName].currentState) {
         // Update elapsed time for the current animation state
-        currentState->elapsedTime += deltaTime;
+        animationSprite[spriteName].currentState->elapsedTime += deltaTime;
 
         // Check if it's time to switch to the next frame
-        if (currentState->elapsedTime >= currentState->duration) {
+        if (animationSprite[spriteName].currentState->elapsedTime >= animationSprite[spriteName].currentState->duration) {
             // Reset elapsed time
-            currentState->elapsedTime -= currentState->duration;
+            animationSprite[spriteName].currentState->elapsedTime -= animationSprite[spriteName].currentState->duration;
 
             // Move to the next frame, looping back to the first frame if necessary
-            currentState->currentFrame = (currentState->currentFrame + 1) % currentState->frames.size();
+            animationSprite[spriteName].currentState->currentFrame = (animationSprite[spriteName].currentState->currentFrame + 1) % animationSprite[spriteName].currentState->frames.size();
         }
 
         // Set the current frame texture rectangle for the sprite
-        sprite.setTextureRect(currentState->frames[currentState->currentFrame]);
+        animationSprite[spriteName].sprite.setTextureRect(animationSprite[spriteName].currentState->frames[animationSprite[spriteName].currentState->currentFrame]);
     }
 }
 
 // Draw the current frame of the animation
-void SpriteAnimation::drawAnimation() {
-    windowInstance->draw(sprite);
+void SpriteAnimation::drawAnimation(const std::string& spriteName) {
+    windowInstance->draw(animationSprite[spriteName].sprite);
 
 #ifdef _DEBUG
     // Optionally draw the debug shape to visualize the sprite bounds
-    windowInstance->draw(debugShape);
+    windowInstance->draw(debugShape[spriteName]);
 #endif
 }
