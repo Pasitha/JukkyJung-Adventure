@@ -37,23 +37,23 @@ Game::Game() :
     sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
     sceneComponents[Scene::GamePlay]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
 
-    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/Planet-Sprite.png", { 256, 256 }, 1, {1000, 220});
-    sceneComponents[Scene::MainMenu]->spriteAnimation->setScale({ 2.5f, 2.5f });
-    sceneComponents[Scene::MainMenu]->spriteAnimation->setState("Idel", 0, 50, .10f);
-    sceneComponents[Scene::MainMenu]->spriteAnimation->changeState("Idel");
+    sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/Planet-Sprite.png", "planet", {256, 256}, 1, {1000, 220});
+    sceneComponents[Scene::MainMenu]->spriteAnimation->setScale("planet", { 2.5f, 2.5f });
+    sceneComponents[Scene::MainMenu]->spriteAnimation->setState("planet", "Idel", 0, 50, .10f);
+    sceneComponents[Scene::MainMenu]->spriteAnimation->changeState("planet", "Idel");
 
-    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", { 64, 64 }, 24, {1000, 220});
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale({ 2.5f, 2.5f });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-back", 0, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-left", 1, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-front", 2, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Idel-right", 3, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Idel-front");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", "JukkyJung", { 64, 64 }, 24, {1000, 220});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("JukkyJung", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-back", 0, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-left", 1, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-front", 2, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-right", 3, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("JukkyJung", "Idel-front");
 
-    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", { 64, 64 }, 36, { 1500, 220 });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale({ 2.5f, 2.5f });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Walk-back", 4, 9, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Walk-back");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy", { 64, 64 }, 36, {1500, 220});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy", "Walk-back", 4, 9, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy", "Walk-back");
 
     // Initialize scene components with buttons and their positions
     sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
@@ -220,8 +220,8 @@ void Game::HandleEvents() {
 
             // Update animation and position if there's movement
             if (movement != sf::Vector2f(0.f, 0.f)) {
-                sceneComponents[currentScene]->spriteAnimation->changeState(state);
-                sceneComponents[currentScene]->spriteAnimation->moveSprite(movement);
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", state);
+                sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement);
 #ifdef _DEBUG
                 std::cout << "Change animation state to " << state << std::endl;
 #endif
@@ -237,14 +237,22 @@ void Game::Render() {
     // Render the button on currentScene
 	sceneComponents[currentScene]->uiElement->update();
 
-    if (currentScene == Scene::MainMenu || currentScene == Scene::GamePlay) {
+    if (currentScene == Scene::MainMenu) {
 		// Render the spriteAnimation on currentScene
-        sceneComponents[currentScene]->spriteAnimation->updateAnimation(deltaTime);
-        sceneComponents[currentScene]->spriteAnimation->drawAnimation();
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation("planet", deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation("planet");
     }
 
     if (currentScene == Scene::Setting) {
         sceneComponents[Scene::Setting]->uiElement->update();
+    }
+
+    if (currentScene == Scene::GamePlay) {
+		// Render the spriteAnimation on currentScene
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation("JukkyJung");
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation("Dummy", deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation("Dummy");
     }
     
     if (currentScene == Scene::PauseMenu && isGamePaused) {
@@ -252,8 +260,10 @@ void Game::Render() {
 		sceneComponents[Scene::GamePlay]->uiElement->update();
 
 		// Render the spriteAnimation on currentScene
-        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation(deltaTime);
-        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation();
+        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("JukkyJung");
+        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("Dummy", deltaTime);
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("Dummy");
 
 		// Render the pause menu when the game is paused
 		window.draw(backgroundPauseMenu);
