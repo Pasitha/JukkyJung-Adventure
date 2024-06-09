@@ -15,6 +15,7 @@ public:
 
     // Set the current state (row) of the animation
     void setState(const std::string& spriteName, const std::string& stateName, int startRow, int frameCount, float duration);
+    void setState(const std::string& spriteName, const std::string& stateName, int startRow, int startCol, int endCol, float duration);
 
     // Change to a different state
     void changeState(const std::string& spriteName, const std::string& stateName, bool resetCurrentFrame = false);
