@@ -50,16 +50,26 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-left", 1, 7, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-front", 2, 7, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-right", 3, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-back", 8, 9, .15f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-left", 9, 9, .15f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-front", 10, 9, .15f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-right", 11, 9, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-back", 8, 1, 8, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-left", 9, 1, 8, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-front", 10, 1, 8, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-right", 11, 1, 8, .15f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("JukkyJung", "Spellcast-front");
 
-    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy", { 64, 64 }, 36, {1500, 220});
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy", { 2.5f, 2.5f });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy", "Walk-left", 9, 8, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy", "Walk-left");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy1", { 64, 64 }, 36, {1500, 220});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy1", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy1", "Walk-left", 9, 8, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy1", "Walk-left");
+
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy2", { 64, 64 }, 36, {800, 320});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy2", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy2", "Walk-right", 11, 8, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy2", "Walk-right");
+
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Headman-Sprite.png", "Headman", { 64, 64 }, 36, {300, 320});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Headman", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Headman", "Idel-right", 15, 1, 2, .75f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Headman", "Idel-right");
 
     // Initialize UI elements (buttons and sliders) for each scene
     sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
@@ -260,8 +270,12 @@ void Game::Render() {
 		// Render the sprite animations for the GamePlay scene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
         sceneComponents[currentScene]->spriteAnimation->drawAnimation("JukkyJung");
-        sceneComponents[currentScene]->spriteAnimation->updateAnimation("Dummy", deltaTime);
-        sceneComponents[currentScene]->spriteAnimation->drawAnimation("Dummy");
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation("Dummy1", deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation("Dummy1");
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation("Dummy2", deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation("Dummy2");
+        sceneComponents[currentScene]->spriteAnimation->updateAnimation("Headman", deltaTime);
+        sceneComponents[currentScene]->spriteAnimation->drawAnimation("Headman");
     }
     
     if (currentScene == Scene::PauseMenu && isGamePaused) {
@@ -271,8 +285,12 @@ void Game::Render() {
 		// Render the sprite animations for the GamePlay scene in the background
         sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
         sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("JukkyJung");
-        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("Dummy", deltaTime);
-        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("Dummy");
+        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("Dummy1", deltaTime);
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("Dummy1");
+        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("Dummy2", deltaTime);
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("Dummy2");
+        sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("Headman", deltaTime);
+        sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("Headman");
 
 		// Render the pause menu overlay
 		window.draw(backgroundPauseMenu);
