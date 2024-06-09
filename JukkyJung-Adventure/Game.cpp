@@ -37,25 +37,31 @@ Game::Game() :
     sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
     sceneComponents[Scene::GamePlay]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
 
+    // Load and configure sprite animations for the MainMenu scene
     sceneComponents[Scene::MainMenu]->spriteAnimation->loadSpriteSheet("asset/Planet-Sprite.png", "planet", {256, 256}, 1, {1000, 220});
     sceneComponents[Scene::MainMenu]->spriteAnimation->setScale("planet", { 2.5f, 2.5f });
     sceneComponents[Scene::MainMenu]->spriteAnimation->setState("planet", "Idel", 0, 50, .10f);
     sceneComponents[Scene::MainMenu]->spriteAnimation->changeState("planet", "Idel");
 
+    // Load and configure sprite animations for the GamePlay scene
     sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", "JukkyJung", { 64, 64 }, 24, {1000, 220});
     sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("JukkyJung", { 2.5f, 2.5f });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-back", 0, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-left", 1, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-front", 2, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Idel-right", 3, 7, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("JukkyJung", "Idel-front");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-back", 0, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-left", 1, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-front", 2, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-right", 3, 7, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-back", 8, 9, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-left", 9, 9, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-front", 10, 9, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Walk-right", 11, 9, .15f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("JukkyJung", "Spellcast-front");
 
     sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy", { 64, 64 }, 36, {1500, 220});
     sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy", { 2.5f, 2.5f });
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy", "Walk-left", 9, 8, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy", "Walk-left");
 
-    // Initialize scene components with buttons and their positions
+    // Initialize UI elements (buttons and sliders) for each scene
     sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
     sceneComponents[Scene::Setting]->uiElement->addButton({ {"VOLUME", {50, 300}}, {"BACK", {50, 500}} }, TextAlignment::Center);
     sceneComponents[Scene::GamePlay]->uiElement->addButton({ {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} }, TextAlignment::Center);
@@ -73,15 +79,18 @@ Game::~Game() {
 }
 #endif
 
+// Handle hover events for UI elements based on the current scene
 void Game::handleHover(Scene currentScene, bool isGamePaused) {
 	sceneComponents[currentScene]->uiElement->updateHover();
 }
 
+// Handle button press events based on the current scene
 void Game::handleButtonPress(int buttonHoverId) {
     switch (currentScene) {
     case Scene::MainMenu:
         switch (buttonHoverId) {
         case 0:
+            // "Play" button pressed - switch to GamePlay scene
             sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             currentScene = Scene::GamePlay;
             sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
@@ -90,11 +99,13 @@ void Game::handleButtonPress(int buttonHoverId) {
 #endif
             break;
         case 1:
+            // "Setting" button pressed - switch to Setting scene
             sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             currentScene = Scene::Setting;
             sceneComponents[Scene::MainMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
             break;
         case 2:
+            // "Exit" button pressed - close the game window
             window.close();
             break;
         }
@@ -102,27 +113,25 @@ void Game::handleButtonPress(int buttonHoverId) {
     case Scene::Setting:
         switch (buttonHoverId) {
         case 0:
+            // "VOLUME" button pressed - handle volume adjustment
             sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             break;
         case 1:
+            // "BACK" button pressed - return to MainMenu scene
             sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             currentScene = Scene::MainMenu;
             sceneComponents[Scene::Setting]->uiElement->setColor(buttonHoverId, ElementState::Normal);
             break;
         case 2: case 3: case 4:
+            // Handle slider adjustments for volume settings
             sceneComponents[Scene::Setting]->uiElement->setThumbPosition(buttonHoverId);
             break;
         }
         break;
     case Scene::GamePlay:
         switch (buttonHoverId) {
-        case 0:
-            sceneComponents[Scene::GamePlay]->uiElement->setColor(buttonHoverId, ElementState::Normal);
-            break;
-        case 1:
-            sceneComponents[Scene::GamePlay]->uiElement->setColor(buttonHoverId, ElementState::Normal);
-            break;
-        case 2:
+        case 0: case 1: case 2:
+            // Handle button presses in GamePlay scene
             sceneComponents[Scene::GamePlay]->uiElement->setColor(buttonHoverId, ElementState::Normal);
             break;
         }
@@ -130,12 +139,14 @@ void Game::handleButtonPress(int buttonHoverId) {
     case Scene::PauseMenu:
         switch (buttonHoverId) {
         case 0:
+            // "RESUME" button pressed - resume the game
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             isGamePaused = false;
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
             currentScene = Scene::GamePlay;
             break;
         case 1:
+            // "EXIT" button pressed - exit to MainMenu scene
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Pressed);
             isGamePaused = false;
             sceneComponents[Scene::PauseMenu]->uiElement->setColor(buttonHoverId, ElementState::Normal);
@@ -151,6 +162,7 @@ void Game::HandleEvents() {
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
+            // Close the game window if the close event is triggered
             window.close();
         }
 
@@ -171,7 +183,7 @@ void Game::HandleEvents() {
 #ifdef _DEBUG
 				std::cout << "Escape key in Scene" << (int)currentScene << std::endl;
 #endif
-
+                // Toggle game pause state
                 isEscapePressed = true;
                 if (!isGamePaused) {
 					currentScene = Scene::PauseMenu;
@@ -184,29 +196,25 @@ void Game::HandleEvents() {
             }
         }
 
+        // Handle Escape key release
         if (event.type == sf::Event::KeyReleased) {
             if (event.key.code == sf::Keyboard::Escape) {
                 isEscapePressed = false;
             }
         }
 
+        // Handle movement keys in the GamePlay scene
         if (currentScene == Scene::GamePlay) {
             sf::Vector2f movement(0.f, 0.f);
             std::string state;
 
             // Process movement keys
             const std::map<sf::Keyboard::Key, std::pair<std::string, sf::Vector2f>> movementMap = {
-				{sf::Keyboard::W, {"Idel-back", {0.f, -2.f}}},
-				{sf::Keyboard::A, {"Idel-left", {-2.f, 0.f}}},
-				{sf::Keyboard::S, {"Idel-front", {0.f, 2.f}}},
-				{sf::Keyboard::D, {"Idel-right", {2.f, 0.f}}},
+				{sf::Keyboard::W, {"Walk-back", {0.f, -2.f}}},
+				{sf::Keyboard::A, {"Walk-left", {-2.f, 0.f}}},
+				{sf::Keyboard::S, {"Walk-front", {0.f, 2.f}}},
+				{sf::Keyboard::D, {"Walk-right", {2.f, 0.f}}},
             };
-            /*
-				0
-				3
-				18
-				22
-            */
 
             auto it = movementMap.find(event.key.code);
             if (it != movementMap.end()) {
@@ -232,13 +240,14 @@ void Game::HandleEvents() {
 
 // Render the current game scene
 void Game::Render() {
+    // Clear the window with a specific color
     window.clear(sf::Color(199, 119, 19, 255));
     
-    // Render the button on currentScene
+    // Render UI elements for the current scene
 	sceneComponents[currentScene]->uiElement->update();
 
     if (currentScene == Scene::MainMenu) {
-		// Render the spriteAnimation on currentScene
+		// Render the sprite animations for the MainMenu scene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation("planet", deltaTime);
         sceneComponents[currentScene]->spriteAnimation->drawAnimation("planet");
     }
@@ -248,7 +257,7 @@ void Game::Render() {
     }
 
     if (currentScene == Scene::GamePlay) {
-		// Render the spriteAnimation on currentScene
+		// Render the sprite animations for the GamePlay scene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
         sceneComponents[currentScene]->spriteAnimation->drawAnimation("JukkyJung");
         sceneComponents[currentScene]->spriteAnimation->updateAnimation("Dummy", deltaTime);
@@ -256,27 +265,29 @@ void Game::Render() {
     }
     
     if (currentScene == Scene::PauseMenu && isGamePaused) {
-		// Render the button on currentScene
+		// Render the UI elements for the PauseMenu scene
 		sceneComponents[Scene::GamePlay]->uiElement->update();
 
-		// Render the spriteAnimation on currentScene
+		// Render the sprite animations for the GamePlay scene in the background
         sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
         sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("JukkyJung");
         sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("Dummy", deltaTime);
         sceneComponents[Scene::GamePlay]->spriteAnimation->drawAnimation("Dummy");
 
-		// Render the pause menu when the game is paused
+		// Render the pause menu overlay
 		window.draw(backgroundPauseMenu);
 		window.draw(backgroundPauseMenuText);
 
 		sceneComponents[Scene::PauseMenu]->uiElement->update();
     }
+	// Display the rendered frame
 	window.display();
 }
 
 // Run the game loop
 void Game::GameLoop() {
     while (window.isOpen()) {
+        // Update deltaTime and handle events and rendering
         deltaTime = clock.restart().asSeconds();
         HandleEvents();
         Render();
