@@ -66,6 +66,28 @@ void SpriteAnimation::setState(const std::string& spriteName, const std::string&
     }
 }
 
+// Set the current state (row) of the animation
+void SpriteAnimation::setState(const std::string& spriteName, const std::string& stateName, int startRow, int startCol, int endCol, float duration) {
+    AnimationState state;
+    state.duration = duration;
+
+    // Generate frames for the specified state by creating IntRects for each frame
+    for (int col = startCol; col <= endCol; ++col) {
+        state.frames.emplace_back(
+            col * animationSprite[spriteName]->frameSize.x, startRow * animationSprite[spriteName]->frameSize.y,
+            animationSprite[spriteName]->frameSize.x, animationSprite[spriteName]->frameSize.y
+        );
+    }
+
+    // Add the state to the map of states
+    animationSprite[spriteName]->states[stateName] = state;
+
+    // Set the current state if it's the first state being added
+    if (animationSprite[spriteName]->currentState == nullptr) {
+        animationSprite[spriteName]->currentState = &animationSprite[spriteName]->states[stateName];
+    }
+}
+
 // Change to a different state
 void SpriteAnimation::changeState(const std::string& spriteName, const std::string& stateName, bool resetCurrentFrame) {
     // Find the new state in the map
