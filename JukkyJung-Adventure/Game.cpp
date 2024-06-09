@@ -52,8 +52,8 @@ Game::Game() :
 
     sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy", { 64, 64 }, 36, {1500, 220});
     sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy", { 2.5f, 2.5f });
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy", "Walk-back", 4, 9, .35f);
-    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy", "Walk-back");
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy", "Walk-left", 9, 8, .35f);
+    sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy", "Walk-left");
 
     // Initialize scene components with buttons and their positions
     sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
@@ -282,3 +282,4 @@ void Game::GameLoop() {
         Render();
     }
 }
+
