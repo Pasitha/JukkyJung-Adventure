@@ -47,16 +47,17 @@ private:
 
 		std::unordered_map<std::string, AnimationState> states;  // Map of state names to animation states
 		AnimationState* currentState;                            // Pointer to the current animation state
+
+        AnimationSprite() : rowCount(0), currentState(nullptr) {}
     };
 
 	// Pointer to the SFML render window
     sf::RenderWindow* windowInstance;
 
-    std::unordered_map<std::string, AnimationSprite> animationSprite;
+    std::unordered_map<std::string, std::shared_ptr<AnimationSprite>> animationSprite;
 
 #ifdef _DEBUG
     // Debug shape to visualize the sprite boundaries in debug mode
     std::map<std::string, sf::RectangleShape> debugShape;
 #endif
 };
-
