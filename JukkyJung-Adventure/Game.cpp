@@ -246,8 +246,8 @@ void Game::Render() {
     }
     
     if (currentScene == Scene::PauseMenu && isGamePaused) {
-		// Render the UI elements for the PauseMenu scene
-		sceneComponents[Scene::GamePlay]->uiElement->update();
+		// Render the GamePlay UI elements 
+        sceneComponents[Scene::GamePlay]->uiElement->update();
 
 		// Render the sprite animations for the GamePlay scene in the background
         sceneComponents[Scene::GamePlay]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
@@ -263,6 +263,7 @@ void Game::Render() {
 		window.draw(backgroundPauseMenu);
 		window.draw(backgroundPauseMenuText);
 
+		// Render the UI elements for the PauseMenu scene
 		sceneComponents[Scene::PauseMenu]->uiElement->update();
     }
 	// Display the rendered frame
