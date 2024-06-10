@@ -1,5 +1,7 @@
 #include "MapManager.h"
 
+MapManager::MapManager(sf::RenderWindow& window) : windowInstance(&window) {}
+
 void MapManager::addMap(const std::string& name, int width, int height, int tileSize, const std::string& tileset) {
     Map newMap(width, height, tileSize);
     loadTextures(newMap, tileset);
@@ -7,7 +9,9 @@ void MapManager::addMap(const std::string& name, int width, int height, int tile
 }
 
 void MapManager::loadTextures(Map& map, const std::string& tileset) {
-    FileManager::LoadFromFile(map.tilesetTexture, tileset);
+    if (!map.tilesetTexture.loadFromFile(tileset)) {
+        // Handle error
+    }
 }
 
 void MapManager::setTile(const std::string& name, int x, int y, int tileType) {
@@ -30,14 +34,14 @@ void MapManager::setTile(Map& map, int x, int y, int tileType) {
     }
 }
 
-void MapManager::draw(sf::RenderWindow& window) {
+void MapManager::draw() {
     for (auto& pair : m_maps) {
-        drawMap(window, pair.second);
+        drawMap(pair.second);
     }
 }
 
-void MapManager::drawMap(sf::RenderWindow& window, Map& map) {
+void MapManager::drawMap(Map& map) {
     for (const auto& sprite : map.tileSprites) {
-        window.draw(sprite);
+        windowInstance->draw(sprite);
     }
 }
