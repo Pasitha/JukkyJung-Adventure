@@ -271,14 +271,19 @@ void Game::Render() {
 
 // Run the game loop
 void Game::GameLoop() {
+    // Loop continuously while the window is open
     while (window.isOpen()) {
-        // Update deltaTime and handle events and rendering
+        // Update deltaTime to the time elapsed since the last frame
         deltaTime = clock.restart().asSeconds();
+        
+        // Handle input events (mouse, keyboard, etc.)
         HandleEvents();
 
-		// Handle movement keys in the GamePlay scene
+        // Check if the current scene is GamePlay
         if (currentScene == Scene::GamePlay) {
-            sf::Vector2f movement(0.f, 0.f);
+            sf::Vector2f movement(0.f, 0.f); // Initialize movement vector
+
+            // Check for key presses and update movement vector and animation state
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
                 movement.y = -100.f;
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-back");
@@ -295,9 +300,12 @@ void Game::GameLoop() {
                 movement.x = 100.f;
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
             }
+
+            // Check for diagonal movement and update movement vector and animation state accordingly
+
             // Diagonal Up-Left
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-                movement.x = -65.f * sqrt(2.f);  
+                movement.x = -65.f * sqrt(2.f);
                 movement.y = -65.f * sqrt(2.f);
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
             }
@@ -323,11 +331,13 @@ void Game::GameLoop() {
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
             }
 
+            // If there's any movement, update the sprite's position
             if (movement.x != 0.f || movement.y != 0.f) {
                 sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement * deltaTime);
             }            
         }
 
+        // Render the current frame
         Render();
     }
 }
