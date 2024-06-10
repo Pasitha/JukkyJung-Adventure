@@ -7,9 +7,7 @@ void MapManager::addMap(const std::string& name, int width, int height, int tile
 }
 
 void MapManager::loadTextures(Map& map, const std::string& tileset) {
-    if (!map.tilesetTexture.loadFromFile(tileset)) {
-        // Handle error
-    }
+    FileManager::LoadFromFile(map.tilesetTexture, tileset);
 }
 
 void MapManager::setTile(const std::string& name, int x, int y, int tileType) {
