@@ -212,40 +212,7 @@ void Game::HandleEvents() {
                 isEscapePressed = false;
             }
         }
-
-        // Handle movement keys in the GamePlay scene
-        if (currentScene == Scene::GamePlay) {
-            sf::Vector2f movement(0.f, 0.f);
-            std::string state;
-
-            // Process movement keys
-            const std::map<sf::Keyboard::Key, std::pair<std::string, sf::Vector2f>> movementMap = {
-				{sf::Keyboard::W, {"Walk-back", {0.f, -2.f}}},
-				{sf::Keyboard::A, {"Walk-left", {-2.f, 0.f}}},
-				{sf::Keyboard::S, {"Walk-front", {0.f, 2.f}}},
-				{sf::Keyboard::D, {"Walk-right", {2.f, 0.f}}},
-            };
-
-            auto it = movementMap.find(event.key.code);
-            if (it != movementMap.end()) {
-                state = it->second.first;
-                movement = it->second.second;
-
-#ifdef _DEBUG
-				std::cout << "movement x = " << movement.x << ", y = " << movement.y << std::endl;
-#endif
-            }
-
-            // Update animation and position if there's movement
-            if (movement != sf::Vector2f(0.f, 0.f)) {
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", state);
-                sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement);
-#ifdef _DEBUG
-                std::cout << "Change animation state to " << state << std::endl;
-#endif
-            }
-        }
-    }
+	}
 }
 
 // Render the current game scene
@@ -308,6 +275,59 @@ void Game::GameLoop() {
         // Update deltaTime and handle events and rendering
         deltaTime = clock.restart().asSeconds();
         HandleEvents();
+
+		// Handle movement keys in the GamePlay scene
+        if (currentScene == Scene::GamePlay) {
+            sf::Vector2f movement(0.f, 0.f);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+                movement.y = -100.f;
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-back");
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+                movement.x = -100.f;
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+                movement.y = 100.f;
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-front");
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+                movement.x = 100.f;
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
+            }
+            // Diagonal Up-Left
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+                movement.x = -65.f * sqrt(2.f);  
+                movement.y = -65.f * sqrt(2.f);
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
+            }
+
+            // Diagonal Up-Right
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+                movement.x = 65.f * sqrt(2.f);
+                movement.y = -65.f * sqrt(2.f);
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
+            }
+
+            // Diagonal Down-Left
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+                movement.x = -65.f * sqrt(2.f);
+                movement.y = 65.f * sqrt(2.f);
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
+            }
+
+            // Diagonal Down-Right
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+                movement.x = 65.f * sqrt(2.f);
+                movement.y = 65.f * sqrt(2.f);
+                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
+            }
+
+            if (movement.x != 0.f || movement.y != 0.f) {
+                sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement * deltaTime);
+            }            
+        }
+
         Render();
     }
 }
