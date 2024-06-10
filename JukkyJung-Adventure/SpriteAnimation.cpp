@@ -131,7 +131,7 @@ void SpriteAnimation::updateAnimation(const std::string& spriteName, float delta
             animationSprite[spriteName]->currentState->elapsedTime -= animationSprite[spriteName]->currentState->duration;
 
             // Move to the next frame, looping back to the first frame if necessary
-            animationSprite[spriteName]->currentState->currentFrame = (animationSprite[spriteName]->currentState->currentFrame + 1) % animationSprite[spriteName]->currentState->frames.size();
+            animationSprite[spriteName]->currentState->currentFrame = (static_cast<int>(animationSprite[spriteName]->currentState->currentFrame) + 1) % animationSprite[spriteName]->currentState->frames.size();
         }
 
         // Set the current frame texture rectangle for the sprite
