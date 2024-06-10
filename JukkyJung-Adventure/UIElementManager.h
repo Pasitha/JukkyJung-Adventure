@@ -101,12 +101,12 @@ private:
     // Constants for element colors
     static const sf::Color NORMAL_COLOR;
     static const sf::Color HOVER_COLOR;
-    static const sf::Color PRESSED_COLOR;  // New for pressed state
+    static const sf::Color PRESSED_COLOR;
 
     // Alpha values for color transparency
     static const int COLOR_ALPHA_NORMAL = 255;
     static const int COLOR_ALPHA_HOVER = 155;
-    static const int COLOR_ALPHA_PRESSED = 100;  // New for pressed state
+    static const int COLOR_ALPHA_PRESSED = 100;
 
     size_t numberOfElements;           // Number of elements managed
 
