@@ -4,95 +4,124 @@
 // Forward declarations for classes used in UIElementManager
 class sf::RenderWindow;
 
-// Text alignment options
+// Enumeration for text alignment options
 enum class TextAlignment { Left, Center, Right };
 
-// Element state
+// Enumeration for element states
 enum class ElementState { Normal, Hovered, Pressed };
 
 // UIElementManager class is responsible for managing UI elements
 class UIElementManager {
 public:
-	// Constructor and destructor
-	UIElementManager(sf::RenderWindow* window);
+    // Constructor to initialize the UIElementManager with a pointer to the SFML window
+    UIElementManager(sf::RenderWindow* window);
+    
 #ifdef _DEBUG
-	~UIElementManager();
+    // Destructor added only in debug mode as a reminder for cleanup
+    ~UIElementManager();
 #endif
 
-	// Add a new button with a given label, position, and text alignment
-	void addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition, TextAlignment alignment = TextAlignment::Center);
-	void addButton(const std::vector<std::pair<std::string, sf::Vector2f>>& buttons, TextAlignment alignment = TextAlignment::Center);
+    /**
+     * Adds a new button with the specified label, position, and text alignment.
+     * @param buttonLabel Label of the button
+     * @param buttonPosition Position of the button
+     * @param alignment Text alignment for the button (default: Center)
+     */
+    void addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition, TextAlignment alignment = TextAlignment::Center);
+    
+    /**
+     * Adds multiple buttons with the specified labels and positions.
+     * @param buttons Vector of pairs containing button labels and positions
+     * @param alignment Text alignment for the buttons (default: Center)
+     */
+    void addButton(const std::vector<std::pair<std::string, sf::Vector2f>>& buttons, TextAlignment alignment = TextAlignment::Center);
 
-	// Add a new slider with a given label, position, and size
-	void addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition);
+    /**
+     * Adds a new slider with the specified label and position.
+     * @param sliderLabel Label of the slider
+     * @param sliderPosition Position of the slider
+     */
+    void addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition);
 
-	// Set the position of an element by its ID
-	void setPosition(unsigned short elementId, const sf::Vector2f& position);
+    /**
+     * Sets the position of an element by its ID.
+     * @param elementId ID of the element
+     * @param position New position of the element
+     */
+    void setPosition(unsigned short elementId, const sf::Vector2f& position);
 
-	void setThumbPosition(unsigned short elementId);
+	/**
+     * Sets the thumb position for a slider by its ID.
+     * @param elementId ID of the element
+     */
+    void setThumbPosition(unsigned short elementId);
 
-	// Set the color of an element by its ID and state
-	void setColor(unsigned short elementId, ElementState state);
+    /**
+     * Sets the color of an element by its ID and state.
+     * @param elementId ID of the element
+     * @param state State of the element (Normal, Hovered, Pressed)
+     */
+    void setColor(unsigned short elementId, ElementState state);
 
-	// Check if any element is being hovered and update states
-	void updateHover();
+    // Updates hover states for elements based on mouse position
+    void updateHover();
 
-	// Get the ID of the element being hovered (-1 if none)
-	int whichElementHover() const;
+    /**
+     * Gets the ID of the element being hovered.
+     * @return ID of the hovered element, or -1 if none
+     */
+    int whichElementHover() const;
 
-	// Update and render the elements
-	void update();
+    // Updates and renders the elements
+    void update();
 
 private:
-	// Update text position based on element type and alignment
-	void updateTextPosition(unsigned short elementId);
+    /**
+     * Updates text position based on element type and alignment.
+     * @param elementId ID of the element
+     */
+    void updateTextPosition(unsigned short elementId);
 
-private:
-	// Struct for Button components
-	struct Button {
-		sf::Sprite sprite;
-		sf::Text text;
-		TextAlignment alignment;
-		ElementState state;
-	};
+    // Struct representing a button element
+    struct Button {
+        sf::Sprite sprite;           // Sprite for the button
+        sf::Text text;               // Text for the button
+        TextAlignment alignment;     // Text alignment for the button
+        ElementState state;          // State of the button
+    };
 
-	// Struct for Slider components
-	struct Slider {
-		sf::Sprite track;
-		sf::Sprite thumb;
-		sf::Text label;
-		ElementState state;
-	};
+    // Struct representing a slider element
+    struct Slider {
+        sf::Sprite track;            // Sprite for the slider track
+        sf::Sprite thumb;            // Sprite for the slider thumb
+        sf::Text label;              // Label for the slider
+        ElementState state;          // State of the slider
+    };
 
-private:
-	// Constants for element colors
-	static const sf::Color NORMAL_COLOR;
-	static const sf::Color HOVER_COLOR;
-	static const sf::Color PRESSED_COLOR;  // New for pressed state
+    // Constants for element colors
+    static const sf::Color NORMAL_COLOR;
+    static const sf::Color HOVER_COLOR;
+    static const sf::Color PRESSED_COLOR;  // New for pressed state
 
-	// Alpha values for color transparency
-	static const int COLOR_ALPHA_NORMAL = 255;
-	static const int COLOR_ALPHA_HOVER = 155;
-	static const int COLOR_ALPHA_PRESSED = 100;  // New for pressed state
+    // Alpha values for color transparency
+    static const int COLOR_ALPHA_NORMAL = 255;
+    static const int COLOR_ALPHA_HOVER = 155;
+    static const int COLOR_ALPHA_PRESSED = 100;  // New for pressed state
 
-	// Number of elements
-	size_t numberOfElements;
+    size_t numberOfElements;           // Number of elements managed
 
-	// Pointer to the SFML render window
-	sf::RenderWindow* windowInstance;
+    sf::RenderWindow* windowInstance;  // Pointer to the SFML render window
 
-	// SFML font, texture, sprite, and text
-	sf::Font elementFont;
-	sf::Texture buttonTexture;
-	sf::Texture trackTexture;
-	sf::Texture thumbTexture;
-	
-	// Maps for storing buttons and sliders
-	std::map<size_t, Button> buttons;
-	std::map<size_t, Slider> sliders;
+    sf::Font elementFont;              // Font for element text
+    sf::Texture buttonTexture;         // Texture for buttons
+    sf::Texture trackTexture;          // Texture for slider tracks
+    sf::Texture thumbTexture;          // Texture for slider thumbs
+    
+    std::map<size_t, Button> buttons;  // Map of button elements
+    std::map<size_t, Slider> sliders;  // Map of slider elements
 
 #ifdef _DEBUG
-	std::map<size_t, sf::RectangleShape> debugRectangle;
-	std::map<size_t, sf::RectangleShape> debugTextRectangle;
+    std::map<size_t, sf::RectangleShape> debugRectangle;      // Debug rectangles for buttons
+    std::map<size_t, sf::RectangleShape> debugTextRectangle;  // Debug rectangles for text
 #endif
 };
