@@ -40,6 +40,7 @@ private:
         std::vector<sf::Sprite> tileSprites; // Vector of tile sprites
 
         // Constructor to initialize a map with the specified dimensions and tile size
+        Map() : width(0), height(0), tileSize(0), tiles(0, 0) {}
         Map(int w, int h, int ts) : width(w), height(h), tileSize(ts), tiles(w * h, 0) {}
     };
 
