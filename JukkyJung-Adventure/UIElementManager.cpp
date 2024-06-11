@@ -90,7 +90,7 @@ void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vecto
     buttons[numberOfElements] = button;
 
     // Update the text position based on alignment (if needed)
-    updateTextPosition(numberOfElements);
+    updateTextPosition(static_cast<unsigned short>(numberOfElements));
 
     // Increment the counter for the number of elements
     numberOfElements++;
