@@ -189,20 +189,20 @@ void UIElementManager::updateHover() {
     for (auto& [id, button] : buttons) {
         sf::FloatRect bounds = button.sprite.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
-            setColor(id, ElementState::Hovered);
+            setColor(static_cast<unsigned short>(id), ElementState::Hovered);
         }
         else {
-            setColor(id, ElementState::Normal);
+            setColor(static_cast<unsigned short>(id), ElementState::Normal);
         }
     }
 
     for (auto& [id, slider] : sliders) {
         sf::FloatRect bounds = slider.track.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
-            setColor(id, ElementState::Hovered);
+            setColor(static_cast<unsigned short>(id), ElementState::Hovered);
         }
         else {
-            setColor(id, ElementState::Normal);
+            setColor(static_cast<unsigned short>(id), ElementState::Normal);
         }
     }
 }
