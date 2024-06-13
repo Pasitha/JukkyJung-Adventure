@@ -20,13 +20,15 @@ void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, 
         }
     }
 
-    m_maps[name] = map;
+    maps[name] = map;
 }
 
 // Draws all maps managed by the MapManager
 void MapManager::draw() {
-    for (auto& pair : m_maps) {
-        drawMap(pair.second);
+    for (const auto& pair : maps) {
+        for (const auto& tile : pair.second.tileSprites) {
+			windowInstance->draw(tile);
+        }
     }
 }
 
