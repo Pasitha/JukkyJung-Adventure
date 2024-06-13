@@ -49,13 +49,6 @@ private:
     std::unordered_map<std::string, Map> m_maps; // Unordered map of maps, keyed by their names
 
     /**
-     * Loads the texture for the tileset of the specified map.
-     * @param map Reference to the map
-     * @param tileset Path to the tileset texture file
-     */
-    void loadTextures(Map& map, const std::string& tileset);
-
-    /**
      * Sets the tile type at the specified position on the map.
      * @param map Reference to the map
      * @param x X-coordinate of the tile
