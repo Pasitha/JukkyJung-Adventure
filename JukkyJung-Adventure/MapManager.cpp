@@ -15,7 +15,7 @@ void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, 
             sf::Sprite sprite;
             sprite.setTexture(map->tilesetTexture);
             sprite.setTextureRect(sf::IntRect(row * tileWidth, 0, col * tileHeight, col * tileHeight));
-            sprite.setPosition(sf::Vector2<float>(row * tileWidth, col * tileHeight));
+            sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
 
             map->tileSprites.push_back(sprite);
         }
