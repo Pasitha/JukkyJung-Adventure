@@ -5,7 +5,7 @@
 class MapManager {
 public:
     // Constructor to initialize the MapManager with a reference to the SFML window
-    MapManager(sf::RenderWindow& window);
+    MapManager(sf::RenderWindow* window);
 
     /**
      * Adds a new map with the specified parameters.
@@ -15,7 +15,7 @@ public:
      * @param tileSize Size of each tile in pixels
      * @param tileset Path to the tileset texture file
      */
-    void addMap(const std::string& name, int width, int height, int tileSize, const std::string& tileset);
+    void addMap(const std::string& name, int tileWidth, int tileHeight, int mapWidth, int mapHeight, const std::string& tileset);
 
     /**
      * Sets the tile type at the specified position on the map.
@@ -32,16 +32,16 @@ public:
 private:
     // Struct representing a single map, including its properties and tile data
     struct Map {
-        int width;                           // Width of the map in tiles
-        int height;                          // Height of the map in tiles
-        int tileSize;                        // Size of each tile in pixels
-        sf::Texture tilesetTexture;          // Texture of the tileset
-        std::vector<int> tiles;              // Vector of tile types
-        std::vector<sf::Sprite> tileSprites; // Vector of tile sprites
+        int tileWidth;
+        int tileHeight;
+        int mapWidth;
+        int mapHeight;
+        sf::Texture tilesetTexture;
+        std::vector<sf::Sprite> tileSprites;
 
         // Constructor to initialize a map with the specified dimensions and tile size
-        Map() : width(0), height(0), tileSize(0), tiles(0, 0) {}
-        Map(int w, int h, int ts) : width(w), height(h), tileSize(ts), tiles(w * h, 0) {}
+        Map() : tileWidth(0), tileHeight(0), mapWidth(0), mapHeight(0) {}
+        Map(int w, int h, int mw, int mh) : tileWidth(w), tileHeight(h), mapWidth(mw), mapHeight(mh) {}
     };
 
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
