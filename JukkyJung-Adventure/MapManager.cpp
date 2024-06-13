@@ -14,10 +14,10 @@ void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, 
         for (int col = 0; col < mapHeight / tileHeight; col++) {
             sf::Sprite sprite;
             sprite.setTexture(map->tilesetTexture);
-            sprite.setTextureRect(sf::IntRect(row * tileWidth, 0, col * tileHeight, col * tileHeight));
+            sprite.setTextureRect(sf::IntRect(row * tileWidth, row * tileWidth, col * tileHeight, col * tileHeight));
             sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
 
-            map->tileSprites.push_back(sprite);
+            map->tileSprites.emplace_back(sprite);
         }
     }
 
@@ -25,11 +25,9 @@ void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, 
 }
 
 // Draws all maps managed by the MapManager
-void MapManager::draw() {
-    for (const auto& pair : maps) {
-        for (const auto& tile : pair.second->tileSprites) {
-			windowInstance->draw(tile);
-        }
+void MapManager::draw(const std::string& name) {
+    for (const auto& tile : maps[name]->tileSprites) {
+        windowInstance->draw(tile);
     }
 }
 
