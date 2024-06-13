@@ -17,15 +17,6 @@ public:
      */
     void addMap(const std::string& name, int tileWidth, int tileHeight, int mapWidth, int mapHeight, const std::string& tileset);
 
-    /**
-     * Sets the tile type at the specified position on the map.
-     * @param name Name of the map
-     * @param x X-coordinate of the tile
-     * @param y Y-coordinate of the tile
-     * @param tileType Type of the tile
-     */
-    void setTile(const std::string& name, int x, int y, int tileType);
-
     // Draws all maps managed by the MapManager
     void draw();
 
@@ -47,15 +38,6 @@ private:
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
 
     std::unordered_map<std::string, Map> m_maps; // Unordered map of maps, keyed by their names
-
-    /**
-     * Sets the tile type at the specified position on the map.
-     * @param map Reference to the map
-     * @param x X-coordinate of the tile
-     * @param y Y-coordinate of the tile
-     * @param tileType Type of the tile
-     */
-    void setTile(Map& map, int x, int y, int tileType);
 
     /**
      * Draws the specified map.
