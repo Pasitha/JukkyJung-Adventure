@@ -21,6 +21,10 @@ Game::Game() :
     backgroundPauseMenu.setSize({ 1920.f, 1080.f });
     backgroundPauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
 
+    FileManager::LoadFromFile(mapTexture, "asset/village.png");
+    mapSprite.setTexture(mapTexture);
+    mapSprite.setScale({ 2.f, 2.f });
+
     // Initialize game components for each scene
     sceneComponents[Scene::MainMenu] = std::make_unique<SceneComponents>();
     sceneComponents[Scene::GamePlay] = std::make_unique<SceneComponents>();
@@ -33,6 +37,16 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->uiElement = std::make_unique<UIElementManager>(&window);
     sceneComponents[Scene::PauseMenu]->uiElement = std::make_unique<UIElementManager>(&window);
     
+    // Initialize UI elements (buttons and sliders) for each scene
+    sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
+    sceneComponents[Scene::Setting]->uiElement->addButton({ {"VOLUME", {50, 300}}, {"BACK", {50, 500}} }, TextAlignment::Center);
+    sceneComponents[Scene::GamePlay]->uiElement->addButton({ {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} }, TextAlignment::Center);
+    sceneComponents[Scene::PauseMenu]->uiElement->addButton({ {"RESUME", {850, 300}}, {"EXIT", {850, 500}} }, TextAlignment::Center);
+
+    sceneComponents[Scene::Setting]->uiElement->addSlider("MASTER VOLUME", { 600, 350 });
+    sceneComponents[Scene::Setting]->uiElement->addSlider("MUSIC", { 600, 450 });
+    sceneComponents[Scene::Setting]->uiElement->addSlider("FX", { 600, 550 });
+
     // Initialize asset manager for each scene
     sceneComponents[Scene::MainMenu]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
     sceneComponents[Scene::GamePlay]->spriteAnimation = std::make_unique<SpriteAnimation>(&window);
@@ -45,7 +59,7 @@ Game::Game() :
 
     // Load and configure sprite animations for the GamePlay scene
     sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/JukkyJung-Sprite.png", "JukkyJung", { 64, 64 }, 24, {1000, 220});
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("JukkyJung", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("JukkyJung", { 2.f, 2.f });
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-back", 0, 7, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-left", 1, 7, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("JukkyJung", "Spellcast-front", 2, 7, .35f);
@@ -57,29 +71,23 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("JukkyJung", "Spellcast-front");
 
     sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy1", { 64, 64 }, 36, {1500, 220});
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy1", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy1", { 2.f, 2.f });
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy1", "Walk-left", 9, 8, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy1", "Walk-left");
 
-    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy2", { 64, 64 }, 36, {800, 320});
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy2", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Zombie-Sprite.png", "Dummy2", { 64, 64 }, 36, {200, 480});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Dummy2", { 2.f, 2.f });
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Dummy2", "Walk-right", 11, 8, .35f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Dummy2", "Walk-right");
 
-    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Headman-Sprite.png", "Headman", { 64, 64 }, 36, {300, 320});
-    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Headman", { 2.5f, 2.5f });
+    sceneComponents[Scene::GamePlay]->spriteAnimation->loadSpriteSheet("asset/Headman-Sprite.png", "Headman", { 64, 64 }, 36, {960, 730});
+    sceneComponents[Scene::GamePlay]->spriteAnimation->setScale("Headman", { 2.f, 2.f });
     sceneComponents[Scene::GamePlay]->spriteAnimation->setState("Headman", "Idel-right", 15, 1, 2, .75f);
     sceneComponents[Scene::GamePlay]->spriteAnimation->changeState("Headman", "Idel-right");
 
-    // Initialize UI elements (buttons and sliders) for each scene
-    sceneComponents[Scene::MainMenu]->uiElement->addButton({ {"Play", {150, 300}}, {"Setting", {150, 500}}, {"Exit", {150, 700}} }, TextAlignment::Center);
-    sceneComponents[Scene::Setting]->uiElement->addButton({ {"VOLUME", {50, 300}}, {"BACK", {50, 500}} }, TextAlignment::Center);
-    sceneComponents[Scene::GamePlay]->uiElement->addButton({ {"ATTACK", {50, 800}}, {"ITEM", {400, 800}}, {"SKIP ROUND", {750, 800}} }, TextAlignment::Center);
-    sceneComponents[Scene::PauseMenu]->uiElement->addButton({ {"RESUME", {850, 300}}, {"EXIT", {850, 500}} }, TextAlignment::Center);
+    sceneComponents[Scene::GamePlay]->map = std::make_unique<MapManager>(&window);
 
-    sceneComponents[Scene::Setting]->uiElement->addSlider("MASTER VOLUME", { 600, 350 });
-    sceneComponents[Scene::Setting]->uiElement->addSlider("MUSIC", { 600, 450 });
-    sceneComponents[Scene::Setting]->uiElement->addSlider("FX", { 600, 550 });
+    sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 60, 34, "asset/terrain_atlas.png");
 }
 
 #ifdef _DEBUG
@@ -234,6 +242,9 @@ void Game::Render() {
     }
 
     if (currentScene == Scene::GamePlay) {
+        window.draw(mapSprite);
+        // sceneComponents[currentScene]->map->draw();
+
 		// Render the sprite animations for the GamePlay scene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
         sceneComponents[currentScene]->spriteAnimation->drawAnimation("JukkyJung");
