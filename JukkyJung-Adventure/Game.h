@@ -4,6 +4,7 @@
 // Forward declarations for classes used in Game
 class UIElementManager;
 class SpriteAnimation;
+class MapManager;
 class Character;
 class Combat;
 
@@ -25,6 +26,7 @@ private:
     struct SceneComponents {
         std::unique_ptr<UIElementManager> uiElement;    // UI elements manager for the scene
         std::unique_ptr<SpriteAnimation> spriteAnimation; // Sprite animation component for the scene
+        std::unique_ptr<MapManager> map;
         std::unique_ptr<Combat> combat;                 // Combat component for the scene
     };
 
@@ -67,6 +69,9 @@ private:
     
     sf::Text backgroundPauseMenuText;         // Text displayed in the background during pause
     sf::RectangleShape backgroundPauseMenu;   // Background shape during pause
+
+    sf::Sprite mapSprite;
+    sf::Texture mapTexture;
 
     float deltaTime = 0.f;                    // Time elapsed between frames
     sf::Clock clock;                          // Clock for measuring time
