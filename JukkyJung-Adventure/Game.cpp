@@ -314,35 +314,30 @@ void Game::GameLoop() {
             }
 
             // Check for diagonal movement and update movement vector and animation state accordingly
-
             // Diagonal Up-Left
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
                 movement.x = -65.f * sqrt(2.f);
                 movement.y = -65.f * sqrt(2.f);
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
             }
-
             // Diagonal Up-Right
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
                 movement.x = 65.f * sqrt(2.f);
                 movement.y = -65.f * sqrt(2.f);
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
             }
-
             // Diagonal Down-Left
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
                 movement.x = -65.f * sqrt(2.f);
                 movement.y = 65.f * sqrt(2.f);
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
             }
-
             // Diagonal Down-Right
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
                 movement.x = 65.f * sqrt(2.f);
                 movement.y = 65.f * sqrt(2.f);
                 sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
             }
-
             // If there's any movement, update the sprite's position
             if (movement.x != 0.f || movement.y != 0.f) {
                 sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement * deltaTime);
