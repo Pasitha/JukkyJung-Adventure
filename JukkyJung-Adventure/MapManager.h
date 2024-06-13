@@ -37,7 +37,7 @@ private:
 
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
 
-    std::unordered_map<std::string, Map> m_maps; // Unordered map of maps, keyed by their names
+    std::unordered_map<std::string, Map> maps; // Unordered map of maps, keyed by their names
 
     /**
      * Draws the specified map.
