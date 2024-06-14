@@ -16,6 +16,9 @@
     <Filter Include="Source Files\discord_game_sdk">
       <UniqueIdentifier>{d0de2062-fb51-44a2-82cf-d57fe75ce59d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\UI">
+      <UniqueIdentifier>{05ece276-e861-4e8a-8120-d43ca3d4e054}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,6 +90,15 @@
     <ClCompile Include="Combat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElementManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Discord.h">
@@ -116,5 +128,457 @@
     <ClInclude Include="Combat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElementManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="asset\JukkyJung-Sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_boxCheckmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_boxCross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_boxTick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button00.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button01.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button02.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button03.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button04.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button05.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button06.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button07.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button08.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button09.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button10.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button11.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button12.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_button13.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_checkmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_circle.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_cross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_panel.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_sliderDown.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_sliderLeft.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_sliderRight.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_sliderUp.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\blue_tick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\dropdownBottom.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\dropdownMid.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\dropdownTop.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_boxCheckmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_boxCross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_boxTick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button00.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button01.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button02.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button03.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button04.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button05.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button06.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button07.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button08.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button09.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button10.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button11.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button12.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_button13.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_checkmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_circle.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_cross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_panel.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_sliderDown.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_sliderLeft.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_sliderRight.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_sliderUp.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\green_tick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_arrowDownGrey.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_arrowDownWhite.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_arrowUpGrey.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_arrowUpWhite.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_box.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_boxCheckmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_boxCross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_boxTick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button00.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button01.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button02.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button03.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button04.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button05.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button06.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button07.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button08.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button09.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button10.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button11.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button12.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button13.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button14.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_button15.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_checkmarkGrey.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_checkmarkWhite.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_circle.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_crossGrey.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_crossWhite.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_panel.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderDown.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderEnd.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderHorizontal.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderLeft.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderRight.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderUp.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_sliderVertical.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_tickGrey.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\grey_tickWhite.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_boxCheckmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_boxCross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_boxTick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button00.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button01.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button02.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button03.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button04.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button05.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button06.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button07.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button08.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button09.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button10.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button11.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button12.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_button13.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_checkmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_circle.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_cross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_panel.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_sliderDown.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_sliderLeft.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_sliderRight.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_sliderUp.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\red_tick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_boxCheckmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_boxCross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_boxTick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button00.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button01.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button02.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button03.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button04.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button05.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button06.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button07.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button08.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button09.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button10.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button11.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button12.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_button13.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_checkmark.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_circle.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_cross.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_panel.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_sliderDown.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_sliderLeft.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_sliderRight.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_sliderUp.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
+    <Image Include="asset\UI\PNG\yellow_tick.png">
+      <Filter>Resource Files\UI</Filter>
+    </Image>
   </ItemGroup>
 </Project>
