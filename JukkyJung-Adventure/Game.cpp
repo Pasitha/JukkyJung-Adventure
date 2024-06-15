@@ -242,8 +242,8 @@ void Game::Render() {
     }
 
     if (currentScene == Scene::GamePlay) {
-        window.draw(mapSprite);
-        // sceneComponents[currentScene]->map->draw();
+        // window.draw(mapSprite);
+        sceneComponents[currentScene]->map->draw("village");
 
 		// Render the sprite animations for the GamePlay scene
         sceneComponents[currentScene]->spriteAnimation->updateAnimation("JukkyJung", deltaTime);
@@ -348,4 +348,3 @@ void Game::GameLoop() {
         Render();
     }
 }
-
