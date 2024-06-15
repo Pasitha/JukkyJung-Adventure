@@ -10,11 +10,15 @@ void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, 
 	// Loads the texture for the tileset of the specified map
     FileManager::LoadFromFile(map->tilesetTexture, tileset);
 
-    for (int row = 0; row < mapWidth / tileWidth; row++) {
-        for (int col = 0; col < mapHeight / tileHeight; col++) {
+#ifdef _DEBUG
+    std::cout << "MapWidth " << mapWidth / tileWidth << ", MapHeight " << mapHeight / tileHeight << std::endl;
+#endif
+
+    for (int col = 0; col < 32; col++) {
+        for (int row = 0; row < 32; row++) {
             sf::Sprite sprite;
             sprite.setTexture(map->tilesetTexture);
-            sprite.setTextureRect(sf::IntRect(row * tileWidth, row * tileWidth, col * tileHeight, col * tileHeight));
+            sprite.setTextureRect(sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight));
             sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
 
             map->tileSprites.emplace_back(sprite);
