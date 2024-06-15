@@ -18,7 +18,7 @@ public:
     void addMap(const std::string& name, int tileWidth, int tileHeight, int mapWidth, int mapHeight, const std::string& tileset);
 
     // Draws all maps managed by the MapManager
-    void draw();
+    void draw(const std::string& name);
 
 private:
     // Struct representing a single map, including its properties and tile data
@@ -38,10 +38,4 @@ private:
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
 
     std::unordered_map<std::string, std::shared_ptr<Map>> maps; // Unordered map of maps, keyed by their names
-
-    /**
-     * Draws the specified map.
-     * @param map Reference to the map
-     */
-    void drawMap(Map& map);
 };
