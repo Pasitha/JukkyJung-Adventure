@@ -30,11 +30,3 @@ void MapManager::draw(const std::string& name) {
         windowInstance->draw(tile);
     }
 }
-
-// Draws the specified map
-void MapManager::drawMap(Map& map) {
-    for (const auto& sprite : map.tileSprites) {
-        windowInstance->draw(sprite);
-    }
-}
-
