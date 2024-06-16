@@ -4,20 +4,20 @@
 MapManager::MapManager(sf::RenderWindow* window) : windowInstance(window) {}
 
 // Adds a new map with the specified parameters
-void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, int mapWidth, int mapHeight, const std::string& tileset) {
+void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, int rowSpriteCount, int colSpriteCount, int mapWidth, int mapHeight, const std::string& tileset) {
     std::shared_ptr<Map> map = std::make_shared<Map>(tileWidth, tileHeight, mapWidth, mapHeight);
 
 	// Loads the texture for the tileset of the specified map
-    FileManager::LoadFromFile(map->tilesetTexture, tileset);
+    FileManager::LoadFromFile(map->tileSetTexture, tileset);
 
 #ifdef _DEBUG
     std::cout << "MapWidth " << mapWidth / tileWidth << ", MapHeight " << mapHeight / tileHeight << std::endl;
 #endif
 
-    for (int col = 0; col < 32; col++) {
-        for (int row = 0; row < 32; row++) {
+    for (int col = 0; col < colSpriteCount; col++) {
+        for (int row = 0; row < rowSpriteCount; row++) {
             sf::Sprite sprite;
-            sprite.setTexture(map->tilesetTexture);
+            sprite.setTexture(map->tileSetTexture);
             sprite.setTextureRect(sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight));
             sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
 
