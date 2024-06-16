@@ -4,7 +4,7 @@
 SpriteAnimation::SpriteAnimation(sf::RenderWindow* window) : windowInstance(window) {}
 
 // Load animation frames from a sprite sheet with multiple rows and columns
-void SpriteAnimation::loadSpriteSheet(const std::string& filePath, const std::string& spriteName, sf::Vector2i frameSize, int rowCount, sf::Vector2f position) {
+void SpriteAnimation::loadSpriteSheet(const std::string& filePath, const std::string& spriteName, sf::Vector2i frameSize, uint64_t rowCount, sf::Vector2f position) {
     std::shared_ptr<AnimationSprite> Sprite = std::make_shared<AnimationSprite>();
     // Load the texture from file
     if (FileManager::LoadFromFile(Sprite->texture, filePath)) {
@@ -45,12 +45,15 @@ void SpriteAnimation::setScale(const std::string& spriteName, const sf::Vector2f
 }
 
 // Set the current state (row) of the animation
-void SpriteAnimation::setState(const std::string& spriteName, const std::string& stateName, int startRow, int frameCount, float duration) {
+void SpriteAnimation::setState(const std::string& spriteName, const std::string& stateName, uint64_t startRow, uint64_t frameCount, float duration) {
     AnimationState state;
     state.duration = duration;
 
     // Generate frames for the specified state by creating IntRects for each frame
-    for (int col = 0; col < frameCount; col++) {
+    for (uint64_t col = 0; col < frameCount; col++) {
+#ifdef _DEBUG
+        std::cout << "setState for startRow: " << startRow << ", to " << frameCount << " ( " << col << " )" << std::endl;
+#endif
         state.frames.emplace_back(
             col * animationSprites[spriteName]->frameSize.x, startRow * animationSprites[spriteName]->frameSize.y, 
             animationSprites[spriteName]->frameSize.x, animationSprites[spriteName]->frameSize.y
@@ -67,12 +70,12 @@ void SpriteAnimation::setState(const std::string& spriteName, const std::string&
 }
 
 // Set the current state (row) of the animation
-void SpriteAnimation::setState(const std::string& spriteName, const std::string& stateName, int startRow, int startCol, int endCol, float duration) {
+void SpriteAnimation::setState(const std::string& spriteName, const std::string& stateName, uint64_t startRow, uint64_t startCol, uint64_t endCol, float duration) {
     AnimationState state;
     state.duration = duration;
 
     // Generate frames for the specified state by creating IntRects for each frame
-    for (int col = startCol; col <= endCol; col++) {
+    for (uint64_t col = startCol; col <= endCol; col++) {
         state.frames.emplace_back(
             col * animationSprites[spriteName]->frameSize.x, startRow * animationSprites[spriteName]->frameSize.y,
             animationSprites[spriteName]->frameSize.x, animationSprites[spriteName]->frameSize.y
@@ -94,7 +97,7 @@ void SpriteAnimation::changeState(const std::string& spriteName, const std::stri
     auto it = animationSprites[spriteName]->states.find(stateName);
     if (it != animationSprites[spriteName]->states.end()) {
         // Save the current frame from the current state
-        int currentFrame = animationSprites[spriteName]->currentState->currentFrame;
+        uint64_t currentFrame = animationSprites[spriteName]->currentState->currentFrame;
         // Update the current state to the new state
         animationSprites[spriteName]->currentState = &it->second;
         // Retain the current frame if not resetting
@@ -131,7 +134,7 @@ void SpriteAnimation::updateAnimation(const std::string& spriteName, float delta
             animationSprites[spriteName]->currentState->elapsedTime -= animationSprites[spriteName]->currentState->duration;
 
             // Move to the next frame, looping back to the first frame if necessary
-            animationSprites[spriteName]->currentState->currentFrame = (static_cast<int>(animationSprites[spriteName]->currentState->currentFrame) + 1) % animationSprites[spriteName]->currentState->frames.size();
+            animationSprites[spriteName]->currentState->currentFrame = (animationSprites[spriteName]->currentState->currentFrame) + 1 % animationSprites[spriteName]->currentState->frames.size();
         }
 
         // Set the current frame texture rectangle for the sprite
