@@ -15,7 +15,7 @@ public:
      * @param tileSize Size of each tile in pixels
      * @param tileset Path to the tileset texture file
      */
-    void addMap(const std::string& name, int tileWidth, int tileHeight, int mapWidth, int mapHeight, const std::string& tileset);
+    void addMap(const std::string& name, int tileWidth, int tileHeight, int rowSpriteCount, int colSpriteCount, int mapWidth, int mapHeight, const std::string& tileset);
 
     // Draws all maps managed by the MapManager
     void draw(const std::string& name);
@@ -27,7 +27,7 @@ private:
         int tileHeight;
         int mapWidth;
         int mapHeight;
-        sf::Texture tilesetTexture;
+        sf::Texture tileSetTexture;
         std::vector<sf::Sprite> tileSprites;
 
         // Constructor to initialize a map with the specified dimensions and tile size
