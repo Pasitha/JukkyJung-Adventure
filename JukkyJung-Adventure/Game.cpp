@@ -87,7 +87,8 @@ Game::Game() :
 
     sceneComponents[Scene::GamePlay]->map = std::make_unique<MapManager>(&window);
 
-    sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 60, 34, "asset/terrain_atlas.png");
+    sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 32, 32, 60, 34, "asset/terrain_atlas.png");
+    sceneComponents[Scene::GamePlay]->map->setMapScale("village", { 2.5f, 2.5f });
 }
 
 #ifdef _DEBUG
