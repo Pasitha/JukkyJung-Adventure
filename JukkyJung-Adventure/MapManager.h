@@ -15,7 +15,7 @@ public:
      * @param tileSize Size of each tile in pixels
      * @param tileset Path to the tileset texture file
      */
-    void addMap(const std::string& name, int tileWidth, int tileHeight, int rowSpriteCount, int colSpriteCount, int mapWidth, int mapHeight, const std::string& tileset);
+    void addMap(const std::string& name, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight, const std::string& tileset);
 
     void setMapScale(const std::string& name, const sf::Vector2f& scale);
 
@@ -25,16 +25,18 @@ public:
 private:
     // Struct representing a single map, including its properties and tile data
     struct Map {
-        int tileWidth;
-        int tileHeight;
-        int mapWidth;
-        int mapHeight;
+        uint64_t tileWidth;
+        uint64_t tileHeight;
+        uint64_t mapWidth;
+        uint64_t mapHeight;
+        uint64_t rowSpriteCount;
+        uint64_t colSpriteCount;
         sf::Texture tileSetTexture;
         std::vector<sf::Sprite> tileSprites;
 
         // Constructor to initialize a map with the specified dimensions and tile size
-        Map() : tileWidth(0), tileHeight(0), mapWidth(0), mapHeight(0) {}
-        Map(int w, int h, int mw, int mh) : tileWidth(w), tileHeight(h), mapWidth(mw), mapHeight(mh) {}
+        Map() : tileWidth(0), tileHeight(0), rowSpriteCount(0), colSpriteCount(0), mapWidth(0), mapHeight(0) {}
+        Map(uint64_t w, uint64_t h, uint64_t rsc, uint64_t cpc, uint64_t mw, uint64_t mh) : tileWidth(w), tileHeight(h), rowSpriteCount(rsc), colSpriteCount(cpc), mapWidth(mw), mapHeight(mh) {}
     };
 
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
