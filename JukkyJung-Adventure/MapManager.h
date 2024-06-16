@@ -17,6 +17,8 @@ public:
      */
     void addMap(const std::string& name, int tileWidth, int tileHeight, int rowSpriteCount, int colSpriteCount, int mapWidth, int mapHeight, const std::string& tileset);
 
+    void setMapScale(const std::string& name, const sf::Vector2f& scale);
+
     // Draws all maps managed by the MapManager
     void draw(const std::string& name);
 
