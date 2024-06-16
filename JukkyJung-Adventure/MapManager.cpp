@@ -28,6 +28,12 @@ void MapManager::addMap(const std::string& name, int tileWidth, int tileHeight, 
     maps[name] = map;
 }
 
+void MapManager::setMapScale(const std::string& name, const sf::Vector2f& scale) {
+    for (auto& tile : maps[name]->tileSprites) {
+        tile.setScale(scale);
+    }
+}
+
 // Draws all maps managed by the MapManager
 void MapManager::draw(const std::string& name) {
     for (const auto& tile : maps[name]->tileSprites) {
