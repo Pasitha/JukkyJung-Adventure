@@ -21,10 +21,6 @@ Game::Game() :
     backgroundPauseMenu.setSize({ 1920.f, 1080.f });
     backgroundPauseMenu.setFillColor(sf::Color(0, 0, 0, 155));
 
-    FileManager::LoadFromFile(mapTexture, "asset/village.png");
-    mapSprite.setTexture(mapTexture);
-    mapSprite.setScale({ 2.f, 2.f });
-
     // Initialize game components for each scene
     sceneComponents[Scene::MainMenu] = std::make_unique<SceneComponents>();
     sceneComponents[Scene::GamePlay] = std::make_unique<SceneComponents>();
@@ -243,7 +239,6 @@ void Game::Render() {
     }
 
     if (currentScene == Scene::GamePlay) {
-        // window.draw(mapSprite);
         sceneComponents[currentScene]->map->draw("village");
 
 		// Render the sprite animations for the GamePlay scene
