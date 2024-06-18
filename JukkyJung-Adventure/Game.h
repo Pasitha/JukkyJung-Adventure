@@ -70,9 +70,6 @@ private:
     sf::Text backgroundPauseMenuText;         // Text displayed in the background during pause
     sf::RectangleShape backgroundPauseMenu;   // Background shape during pause
 
-    sf::Sprite mapSprite;
-    sf::Texture mapTexture;
-
     float deltaTime = 0.f;                    // Time elapsed between frames
     sf::Clock clock;                          // Clock for measuring time
 };
