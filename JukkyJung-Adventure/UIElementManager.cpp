@@ -87,7 +87,7 @@ void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vecto
     buttons[numberOfElements] = button;
 
     // Update the text position based on alignment (if needed)
-    updateTextPosition(static_cast<unsigned short>(numberOfElements));
+    updateTextPosition(static_cast<uint16_t>(numberOfElements));
 
     // Increment the counter for the number of elements
     numberOfElements++;
@@ -129,7 +129,7 @@ void UIElementManager::addSlider(const std::string& sliderLabel, const sf::Vecto
 }
 
 // Set the position of an element by its ID
-void UIElementManager::setPosition(unsigned short elementId, const sf::Vector2f& position) {
+void UIElementManager::setPosition(uint16_t elementId, const sf::Vector2f& position) {
     // Check if the element is a button and set its position
     if (buttons.find(elementId) != buttons.end()) {
         buttons[elementId].sprite.setPosition(position);
@@ -144,7 +144,7 @@ void UIElementManager::setPosition(unsigned short elementId, const sf::Vector2f&
 }
 
 // Set the thumb position of a slider by its ID
-void UIElementManager::setThumbPosition(unsigned short elementId) {
+void UIElementManager::setThumbPosition(uint16_t elementId) {
     // Check if the element is a slider and set its thumb position based on mouse position
     if (sliders.find(elementId) != sliders.end()) {
         sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
@@ -154,7 +154,7 @@ void UIElementManager::setThumbPosition(unsigned short elementId) {
 }
 
 // Set the color of an element by its ID and state
-void UIElementManager::setColor(unsigned short elementId, ElementState state) {
+void UIElementManager::setColor(uint16_t elementId, ElementState state) {
     // Check if the element is a button and set its color based on state
     if (buttons.find(elementId) != buttons.end()) {
         buttons[elementId].state = state;
@@ -200,9 +200,9 @@ void UIElementManager::updateHover() {
     for (auto& [id, button] : buttons) {
         sf::FloatRect bounds = button.sprite.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
-            setColor(static_cast<unsigned short>(id), ElementState::Hovered);
+            setColor(static_cast<uint16_t>(id), ElementState::Hovered);
         } else {
-            setColor(static_cast<unsigned short>(id), ElementState::Normal);
+            setColor(static_cast<uint16_t>(id), ElementState::Normal);
         }
     }
 
@@ -210,9 +210,9 @@ void UIElementManager::updateHover() {
     for (auto& [id, slider] : sliders) {
         sf::FloatRect bounds = slider.track.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
-            setColor(static_cast<unsigned short>(id), ElementState::Hovered);
+            setColor(static_cast<uint16_t>(id), ElementState::Hovered);
         } else {
-            setColor(static_cast<unsigned short>(id), ElementState::Normal);
+            setColor(static_cast<uint16_t>(id), ElementState::Normal);
         }
     }
 }
@@ -270,12 +270,14 @@ void UIElementManager::update() {
 }
 
 // Update text position based on element type and alignment
-void UIElementManager::updateTextPosition(unsigned short elementId) {
+void UIElementManager::updateTextPosition(uint16_t elementId) {
     // Check if the element is a button
     if (buttons.find(elementId) != buttons.end()) {
         auto& button = buttons[elementId];
+
         sf::FloatRect textBounds = button.text.getGlobalBounds();
         sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
+
         sf::Vector2f position = button.sprite.getPosition();
 
         // Update the text position based on alignment
@@ -292,4 +294,3 @@ void UIElementManager::updateTextPosition(unsigned short elementId) {
         }
     }
 }
-
