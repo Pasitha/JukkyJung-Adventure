@@ -95,12 +95,12 @@ Game::~Game() {
 #endif
 
 // Handle hover events for UI elements based on the current scene
-void Game::handleHover(Scene currentScene, bool isGamePaused) {
+void Game::HandleHover(Scene currentScene, bool isGamePaused) {
 	sceneComponents[currentScene]->uiElement->updateHover();
 }
 
 // Handle button press events based on the current scene
-void Game::handleButtonPress(int buttonHoverId) {
+void Game::HandleButtonPress(int buttonHoverId) {
     switch (currentScene) {
     case Scene::MainMenu:
         switch (buttonHoverId) {
@@ -172,6 +172,60 @@ void Game::handleButtonPress(int buttonHoverId) {
     }
 }
 
+// Handles player movement in the GamePlay scene
+void Game::HandlePlayerMovement() {
+    // Initialize movement vector
+	sf::Vector2f movement(0.f, 0.f);
+
+	// Check for key presses and update movement vector and animation state
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		movement.y = -100.f;
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-back");
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		movement.x = -100.f;
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+		movement.y = 100.f;
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-front");
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		movement.x = 100.f;
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
+	}
+
+	// Check for diagonal movement and update movement vector and animation state accordingly
+	// Diagonal Up-Left
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		movement.x = -65.f * sqrt(2.f);
+		movement.y = -65.f * sqrt(2.f);
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
+	}
+	// Diagonal Up-Right
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		movement.x = 65.f * sqrt(2.f);
+		movement.y = -65.f * sqrt(2.f);
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
+	}
+	// Diagonal Down-Left
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		movement.x = -65.f * sqrt(2.f);
+		movement.y = 65.f * sqrt(2.f);
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
+	}
+	// Diagonal Down-Right
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		movement.x = 65.f * sqrt(2.f);
+		movement.y = 65.f * sqrt(2.f);
+		sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
+	}
+	// If there's any movement, update the sprite's position
+	if (movement.x != 0.f || movement.y != 0.f) {
+		sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement * deltaTime);
+	}            
+}
+
 // Handle events based on the current game scene
 void Game::HandleEvents() {
     sf::Event event;
@@ -183,13 +237,13 @@ void Game::HandleEvents() {
 
         // Handle hover events
         if (event.type == sf::Event::MouseMoved) {
-            handleHover(currentScene, isGamePaused);
+            HandleHover(currentScene, isGamePaused);
         }
 
         // Handle button press events
         if (event.type == sf::Event::MouseButtonPressed) {
             int buttonHoverId = sceneComponents[currentScene]->uiElement->whichElementHover();
-            handleButtonPress(buttonHoverId);
+            HandleButtonPress(buttonHoverId);
         }
 
         // Handle Escape key press for pausing and resuming
@@ -226,7 +280,9 @@ void Game::Render() {
     window.clear(sf::Color(199, 119, 19, 255));
     
     // Render UI elements for the current scene
-	sceneComponents[currentScene]->uiElement->update();
+    if (sceneComponents[currentScene]->uiElement) {
+		sceneComponents[currentScene]->uiElement->update();
+    }
 
     if (currentScene == Scene::MainMenu) {
 		// Render the sprite animations for the MainMenu scene
@@ -289,55 +345,7 @@ void Game::GameLoop() {
 
         // Check if the current scene is GamePlay
         if (currentScene == Scene::GamePlay) {
-            sf::Vector2f movement(0.f, 0.f); // Initialize movement vector
-
-            // Check for key presses and update movement vector and animation state
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-                movement.y = -100.f;
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-back");
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-                movement.x = -100.f;
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-                movement.y = 100.f;
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-front");
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-                movement.x = 100.f;
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
-            }
-
-            // Check for diagonal movement and update movement vector and animation state accordingly
-            // Diagonal Up-Left
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-                movement.x = -65.f * sqrt(2.f);
-                movement.y = -65.f * sqrt(2.f);
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
-            }
-            // Diagonal Up-Right
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-                movement.x = 65.f * sqrt(2.f);
-                movement.y = -65.f * sqrt(2.f);
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
-            }
-            // Diagonal Down-Left
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-                movement.x = -65.f * sqrt(2.f);
-                movement.y = 65.f * sqrt(2.f);
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-left");
-            }
-            // Diagonal Down-Right
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-                movement.x = 65.f * sqrt(2.f);
-                movement.y = 65.f * sqrt(2.f);
-                sceneComponents[currentScene]->spriteAnimation->changeState("JukkyJung", "Walk-right");
-            }
-            // If there's any movement, update the sprite's position
-            if (movement.x != 0.f || movement.y != 0.f) {
-                sceneComponents[currentScene]->spriteAnimation->moveSprite("JukkyJung", movement * deltaTime);
-            }            
+            HandlePlayerMovement();
         }
 
         // Render the current frame
