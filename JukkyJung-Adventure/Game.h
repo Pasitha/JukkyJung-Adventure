@@ -24,10 +24,10 @@ private:
 
     // Struct representing game components for each scene, including Button, UIElementManager, SpriteAnimation, and Combat components
     struct SceneComponents {
-        std::unique_ptr<UIElementManager> uiElement;    // UI elements manager for the scene
+        std::unique_ptr<UIElementManager> uiElement;      // UI elements manager for the scene
         std::unique_ptr<SpriteAnimation> spriteAnimation; // Sprite animation component for the scene
-        std::unique_ptr<MapManager> map;
-        std::unique_ptr<Combat> combat;                 // Combat component for the scene
+        std::unique_ptr<MapManager> map;                  // Map manager for the scene
+        std::unique_ptr<Combat> combat;                   // Combat component for the scene
     };
 
 public:
@@ -38,24 +38,8 @@ public:
 #ifdef _DEBUG
     ~Game();
 #endif
-private:
-    /**
-     * Handles hover events based on the current scene.
-     * This function is responsible for updating button hover states.
-     */
-    void handleHover(Scene currentScene, bool isGamePaused);
-
-    /**
-     * Handles button press events based on the current scene.
-     * This function processes button clicks and updates the game state accordingly.
-     */
-    void handleButtonPress(int buttonHoverId);
 
 public:
-    // Function to handle user input events
-    void HandleEvents();
-    // Function to render the current state of the game
-    void Render();
     // Main game loop function
     void GameLoop();
 
@@ -72,4 +56,26 @@ private:
 
     float deltaTime = 0.f;                    // Time elapsed between frames
     sf::Clock clock;                          // Clock for measuring time
+
+private:
+    /**
+     * Handles hover events based on the current scene.
+     * This function is responsible for updating button hover states.
+     */
+    void HandleHover(Scene currentScene, bool isGamePaused);
+
+    /**
+     * Handles button press events based on the current scene.
+     * This function processes button clicks and updates the game state accordingly.
+     */
+    void HandleButtonPress(int buttonHoverId);
+
+    // Handles player movement in the GamePlay scene
+    void HandlePlayerMovement();
+
+    // Function to handle user input events
+    void HandleEvents();
+
+    // Function to render the current state of the game
+    void Render();
 };
