@@ -176,7 +176,6 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="JukkyJung.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
@@ -191,7 +190,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="JukkyJung.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="UIElementManager.h" />
