@@ -48,20 +48,20 @@ public:
      * @param elementId ID of the element
      * @param position New position of the element
      */
-    void setPosition(uint16_t elementId, const sf::Vector2f& position);
+    void setPosition(uint64_t elementId, const sf::Vector2f& position);
 
 	/**
      * Sets the thumb position for a slider by its ID.
      * @param elementId ID of the element
      */
-    void setThumbPosition(uint16_t elementId);
+    void setThumbPosition(uint64_t elementId);
 
     /**
      * Sets the color of an element by its ID and state.
      * @param elementId ID of the element
      * @param state State of the element (Normal, Hovered, Pressed)
      */
-    void setColor(uint16_t elementId, ElementState state);
+    void setColor(uint64_t elementId, ElementState state);
 
     // Updates hover states for elements based on mouse position
     void updateHover();
@@ -80,7 +80,7 @@ private:
      * Updates text position based on element type and alignment.
      * @param elementId ID of the element
      */
-    void updateTextPosition(uint16_t elementId);
+    void updateTextPosition(uint64_t elementId);
 
     // Struct representing a button element
     struct Button {
