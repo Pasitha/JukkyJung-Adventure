@@ -110,12 +110,12 @@ private:
 
     uint64_t numberOfElements;           // Number of elements managed
 
-    sf::RenderWindow* windowInstance;  // Pointer to the SFML render window
+    sf::RenderWindow* windowInstance;    // Pointer to the SFML render window
 
-    sf::Font elementFont;              // Font for element text
-    sf::Texture buttonTexture;         // Texture for buttons
-    sf::Texture trackTexture;          // Texture for slider tracks
-    sf::Texture thumbTexture;          // Texture for slider thumbs
+    sf::Font elementFont;                // Font for element text
+    sf::Texture buttonTexture;           // Texture for buttons
+    sf::Texture trackTexture;            // Texture for slider tracks
+    sf::Texture thumbTexture;            // Texture for slider thumbs
     
     std::map<uint64_t, Button> buttons;  // Map of button elements
     std::map<uint64_t, Slider> sliders;  // Map of slider elements
