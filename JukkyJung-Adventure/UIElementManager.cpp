@@ -27,24 +27,23 @@ UIElementManager::~UIElementManager() {
 
 // Add a new button with a given label, position, and text alignment
 void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition, TextAlignment alignment) {
-
     // Create a new button instance
     Button button;
 
     // Set button text properties
     button.text.setString(buttonLabel);
-    button.text.setFont(elementFont);  // Assuming elementFont is set elsewhere
+    button.text.setFont(elementFont);
     button.text.setFillColor(sf::Color::Black);
     button.text.setScale({ 1.5f, 1.5f });
 
     // Set button sprite properties
-    button.sprite.setTexture(buttonTexture);  // Assuming buttonTexture is set elsewhere
+    button.sprite.setTexture(buttonTexture);
     button.sprite.setPosition(buttonPosition);
     button.sprite.setScale({ 1.75f, 2.75f });
 
     // Set button alignment and initial state
     button.alignment = alignment;
-    button.state = ElementState::Normal;  // Assuming ElementState is defined elsewhere
+    button.state = ElementState::Normal;
 
     // Add debug UI elements in debug mode (optional)
 #ifdef _DEBUG
@@ -65,20 +64,18 @@ void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vecto
 
     // Set debug text origin based on alignment
     switch (button.alignment) {
-    case TextAlignment::Left:
-        debugText.setOrigin(0, button.text.getGlobalBounds().height / 2); // Set origin to the left-center
-        debugText.setPosition(button.sprite.getPosition().x, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
-        break;
-
-    case TextAlignment::Center:
-        debugText.setOrigin(button.text.getGlobalBounds().width / 2, button.text.getGlobalBounds().height / 2); // Set origin to the center
-        debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width / 2, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
-        break;
-
-    case TextAlignment::Right:
-        debugText.setOrigin(button.text.getGlobalBounds().width, button.text.getGlobalBounds().height / 2); // Set origin to the right-center
-        debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
-        break;
+        case TextAlignment::Left:
+            debugText.setOrigin(0, button.text.getGlobalBounds().height / 2);
+            debugText.setPosition(button.sprite.getPosition().x, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+            break;
+        case TextAlignment::Center:
+            debugText.setOrigin(button.text.getGlobalBounds().width / 2, button.text.getGlobalBounds().height / 2);
+            debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width / 2, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+            break;
+        case TextAlignment::Right:
+            debugText.setOrigin(button.text.getGlobalBounds().width, button.text.getGlobalBounds().height / 2);
+            debugText.setPosition(button.sprite.getPosition().x + button.sprite.getGlobalBounds().width, button.sprite.getPosition().y + button.sprite.getGlobalBounds().height / 2);
+            break;
     }
 
     // Add debug shapes to the respective maps
@@ -96,40 +93,49 @@ void UIElementManager::addButton(const std::string& buttonLabel, const sf::Vecto
     numberOfElements++;
 }
 
-// Add a new buttons with a given label, position, and text alignment for many buttons
+// Add new buttons with given labels, positions, and text alignment for multiple buttons
 void UIElementManager::addButton(const std::vector<std::pair<std::string, sf::Vector2f>>& buttons, TextAlignment alignment) {
+    // Iterate through each button and add it using the addButton method
     for (const auto& btn : buttons) {
         addButton(btn.first, btn.second, alignment);
     }
 }
 
-
-// Add a new slider with a given label, position, and size
+// Add a new slider with a given label and position
 void UIElementManager::addSlider(const std::string& sliderLabel, const sf::Vector2f& sliderPosition) {
+    // Create a new slider instance
     Slider slider;
+
+    // Set slider label properties
     slider.label.setFont(elementFont);
     slider.label.setString(sliderLabel);
     slider.label.setPosition(sliderPosition.x, sliderPosition.y - 50);
 
+    // Set slider track properties
     slider.track.setTexture(trackTexture);
     slider.track.setPosition(sliderPosition);
     slider.track.setScale({ 3.f, 3.f });
 
+    // Set slider thumb properties
     slider.thumb.setTexture(thumbTexture);
     slider.thumb.setPosition({ sliderPosition.x, sliderPosition.y - 10 });
     slider.state = ElementState::Normal;
 
     // Add slider to map
     sliders[numberOfElements] = slider;
+
+    // Increment the counter for the number of elements
     numberOfElements++;
 }
 
 // Set the position of an element by its ID
 void UIElementManager::setPosition(unsigned short elementId, const sf::Vector2f& position) {
+    // Check if the element is a button and set its position
     if (buttons.find(elementId) != buttons.end()) {
         buttons[elementId].sprite.setPosition(position);
-		updateTextPosition(elementId);
+        updateTextPosition(elementId);
     }
+    // Check if the element is a slider and set its position
     else if (sliders.find(elementId) != sliders.end()) {
         sliders[elementId].track.setPosition(position);
         sliders[elementId].thumb.setPosition(position.x, position.y - 10);
@@ -137,71 +143,75 @@ void UIElementManager::setPosition(unsigned short elementId, const sf::Vector2f&
     }
 }
 
+// Set the thumb position of a slider by its ID
 void UIElementManager::setThumbPosition(unsigned short elementId) {
+    // Check if the element is a slider and set its thumb position based on mouse position
     if (sliders.find(elementId) != sliders.end()) {
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
-		sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
-
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
+        sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
         sliders[elementId].thumb.setPosition(std::max(sliders[elementId].track.getGlobalBounds().width, mousePositionF.x), sliders[elementId].thumb.getPosition().y);
     }
 }
 
 // Set the color of an element by its ID and state
 void UIElementManager::setColor(unsigned short elementId, ElementState state) {
+    // Check if the element is a button and set its color based on state
     if (buttons.find(elementId) != buttons.end()) {
         buttons[elementId].state = state;
         switch (state) {
-        case ElementState::Normal:
-            buttons[elementId].sprite.setColor(NORMAL_COLOR);
-            break;
-        case ElementState::Hovered:
-            buttons[elementId].sprite.setColor(HOVER_COLOR);
-            break;
-        case ElementState::Pressed:
-            buttons[elementId].sprite.setColor(PRESSED_COLOR);
-            break;
+            case ElementState::Normal:
+                buttons[elementId].sprite.setColor(NORMAL_COLOR);
+                break;
+            case ElementState::Hovered:
+                buttons[elementId].sprite.setColor(HOVER_COLOR);
+                break;
+            case ElementState::Pressed:
+                buttons[elementId].sprite.setColor(PRESSED_COLOR);
+                break;
         }
     }
+    // Check if the element is a slider and set its color based on state
     else if (sliders.find(elementId) != sliders.end()) {
         sliders[elementId].state = state;
         switch (state) {
-        case ElementState::Normal:
-            sliders[elementId].track.setColor(NORMAL_COLOR);
-            sliders[elementId].thumb.setColor(NORMAL_COLOR);
-            break;
-        case ElementState::Hovered:
-            sliders[elementId].track.setColor(HOVER_COLOR);
-            sliders[elementId].thumb.setColor(HOVER_COLOR);
-            break;
-        case ElementState::Pressed:
-            sliders[elementId].track.setColor(PRESSED_COLOR);
-            sliders[elementId].thumb.setColor(PRESSED_COLOR);
-            break;
+            case ElementState::Normal:
+                sliders[elementId].track.setColor(NORMAL_COLOR);
+                sliders[elementId].thumb.setColor(NORMAL_COLOR);
+                break;
+            case ElementState::Hovered:
+                sliders[elementId].track.setColor(HOVER_COLOR);
+                sliders[elementId].thumb.setColor(HOVER_COLOR);
+                break;
+            case ElementState::Pressed:
+                sliders[elementId].track.setColor(PRESSED_COLOR);
+                sliders[elementId].thumb.setColor(PRESSED_COLOR);
+                break;
         }
     }
 }
 
 // Check if any element is being hovered and update states
 void UIElementManager::updateHover() {
+    // Get the current mouse position in the window
     sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
     sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
 
+    // Update hover state for buttons
     for (auto& [id, button] : buttons) {
         sf::FloatRect bounds = button.sprite.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
             setColor(static_cast<unsigned short>(id), ElementState::Hovered);
-        }
-        else {
+        } else {
             setColor(static_cast<unsigned short>(id), ElementState::Normal);
         }
     }
 
+    // Update hover state for sliders
     for (auto& [id, slider] : sliders) {
         sf::FloatRect bounds = slider.track.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
             setColor(static_cast<unsigned short>(id), ElementState::Hovered);
-        }
-        else {
+        } else {
             setColor(static_cast<unsigned short>(id), ElementState::Normal);
         }
     }
@@ -209,9 +219,11 @@ void UIElementManager::updateHover() {
 
 // Get the ID of the element being hovered (-1 if none)
 int UIElementManager::whichElementHover() const {
+    // Get the current mouse position in the window
     sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
     sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
 
+    // Check if a button is being hovered and return its ID
     for (const auto& [id, button] : buttons) {
         sf::FloatRect bounds = button.sprite.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
@@ -219,6 +231,7 @@ int UIElementManager::whichElementHover() const {
         }
     }
 
+    // Check if a slider is being hovered and return its ID
     for (const auto& [id, slider] : sliders) {
         sf::FloatRect bounds = slider.track.getGlobalBounds();
         if (bounds.contains(mousePositionF)) {
@@ -226,28 +239,22 @@ int UIElementManager::whichElementHover() const {
         }
     }
 
+    // Return -1 if no element is being hovered
     return -1;
 }
 
 // Update and render the elements
 void UIElementManager::update() {
-    // This function iterates through the UI elements managed by the class and draws them to the window.
-
     // Draw buttons
     for (const auto& [id, button] : buttons) {
-        // Draw the button's sprite
         windowInstance->draw(button.sprite);
-        // Draw the button's text
         windowInstance->draw(button.text);
     }
 
     // Draw sliders
     for (const auto& [id, slider] : sliders) {
-        // Draw the slider's track
         windowInstance->draw(slider.track);
-        // Draw the slider's thumb
         windowInstance->draw(slider.thumb);
-        // Draw the slider's label
         windowInstance->draw(slider.label);
     }
 
@@ -264,29 +271,25 @@ void UIElementManager::update() {
 
 // Update text position based on element type and alignment
 void UIElementManager::updateTextPosition(unsigned short elementId) {
-    // This function updates the position of the text element associated with a UI element (button in this case) based on its alignment.
+    // Check if the element is a button
     if (buttons.find(elementId) != buttons.end()) {
         auto& button = buttons[elementId];
         sf::FloatRect textBounds = button.text.getGlobalBounds();
         sf::FloatRect spriteBounds = button.sprite.getGlobalBounds();
         sf::Vector2f position = button.sprite.getPosition();
 
+        // Update the text position based on alignment
         switch (button.alignment) {
-        case TextAlignment::Left:
-            // Align text to the left of the button's sprite
-            button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
-            break;
-        case TextAlignment::Center:
-            // Align text centered horizontally within the button's sprite
-            button.text.setPosition(
-            position.x + spriteBounds.width / 2.f - textBounds.width / 2.f,
-            position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f
-            );
-            break;
-        case TextAlignment::Right:
-            // Align text to the right of the button's sprite
-            button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
-            break;
+            case TextAlignment::Left:
+                button.text.setPosition(position.x, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+                break;
+            case TextAlignment::Center:
+                button.text.setPosition(position.x + spriteBounds.width / 2.f - textBounds.width / 2.f, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+                break;
+            case TextAlignment::Right:
+                button.text.setPosition(position.x + spriteBounds.width - textBounds.width, position.y + spriteBounds.height / 3.5f - textBounds.height / 3.5f);
+                break;
         }
     }
 }
+
