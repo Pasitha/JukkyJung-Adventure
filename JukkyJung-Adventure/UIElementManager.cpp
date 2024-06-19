@@ -129,7 +129,7 @@ void UIElementManager::addSlider(const std::string& sliderLabel, const sf::Vecto
 }
 
 // Set the position of an element by its ID
-void UIElementManager::setPosition(uint16_t elementId, const sf::Vector2f& position) {
+void UIElementManager::setPosition(uint64_t elementId, const sf::Vector2f& position) {
     // Check if the element is a button and set its position
     if (buttons.find(elementId) != buttons.end()) {
         buttons[elementId].sprite.setPosition(position);
@@ -144,7 +144,7 @@ void UIElementManager::setPosition(uint16_t elementId, const sf::Vector2f& posit
 }
 
 // Set the thumb position of a slider by its ID
-void UIElementManager::setThumbPosition(uint16_t elementId) {
+void UIElementManager::setThumbPosition(uint64_t elementId) {
     // Check if the element is a slider and set its thumb position based on mouse position
     if (sliders.find(elementId) != sliders.end()) {
         sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
@@ -154,7 +154,7 @@ void UIElementManager::setThumbPosition(uint16_t elementId) {
 }
 
 // Set the color of an element by its ID and state
-void UIElementManager::setColor(uint16_t elementId, ElementState state) {
+void UIElementManager::setColor(uint64_t elementId, ElementState state) {
     // Check if the element is a button and set its color based on state
     if (buttons.find(elementId) != buttons.end()) {
         buttons[elementId].state = state;
@@ -270,7 +270,7 @@ void UIElementManager::update() {
 }
 
 // Update text position based on element type and alignment
-void UIElementManager::updateTextPosition(uint16_t elementId) {
+void UIElementManager::updateTextPosition(uint64_t elementId) {
     // Check if the element is a button
     if (buttons.find(elementId) != buttons.end()) {
         auto& button = buttons[elementId];
