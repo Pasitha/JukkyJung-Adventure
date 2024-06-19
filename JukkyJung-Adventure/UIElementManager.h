@@ -104,11 +104,11 @@ private:
     static const sf::Color PRESSED_COLOR;
 
     // Alpha values for color transparency
-    static const int COLOR_ALPHA_NORMAL = 255;
-    static const int COLOR_ALPHA_HOVER = 155;
-    static const int COLOR_ALPHA_PRESSED = 100;
+    static const uint8_t COLOR_ALPHA_NORMAL = 255;
+    static const uint8_t COLOR_ALPHA_HOVER = 155;
+    static const uint8_t COLOR_ALPHA_PRESSED = 100;
 
-    size_t numberOfElements;           // Number of elements managed
+    uint64_t numberOfElements;           // Number of elements managed
 
     sf::RenderWindow* windowInstance;  // Pointer to the SFML render window
 
@@ -117,11 +117,11 @@ private:
     sf::Texture trackTexture;          // Texture for slider tracks
     sf::Texture thumbTexture;          // Texture for slider thumbs
     
-    std::map<size_t, Button> buttons;  // Map of button elements
-    std::map<size_t, Slider> sliders;  // Map of slider elements
+    std::map<uint64_t, Button> buttons;  // Map of button elements
+    std::map<uint64_t, Slider> sliders;  // Map of slider elements
 
 #ifdef _DEBUG
-    std::map<size_t, sf::RectangleShape> debugRectangle;      // Debug rectangles for buttons
-    std::map<size_t, sf::RectangleShape> debugTextRectangle;  // Debug rectangles for text
+    std::map<uint64_t, sf::RectangleShape> debugRectangle;      // Debug rectangles for buttons
+    std::map<uint64_t, sf::RectangleShape> debugTextRectangle;  // Debug rectangles for text
 #endif
 };
