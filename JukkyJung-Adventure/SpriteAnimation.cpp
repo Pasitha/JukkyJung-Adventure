@@ -76,6 +76,9 @@ void SpriteAnimation::setState(const std::string& spriteName, const std::string&
 
     // Generate frames for the specified state by creating IntRects for each frame
     for (uint64_t col = startCol; col <= endCol; col++) {
+#ifdef _DEBUG
+        std::cout << "setState for startRow: " << startRow << ", to col " << endCol << " ( " << col << " )" << std::endl;
+#endif
         state.frames.emplace_back(
             col * animationSprites[spriteName]->frameSize.x, startRow * animationSprites[spriteName]->frameSize.y,
             animationSprites[spriteName]->frameSize.x, animationSprites[spriteName]->frameSize.y
@@ -134,7 +137,7 @@ void SpriteAnimation::updateAnimation(const std::string& spriteName, float delta
             animationSprites[spriteName]->currentState->elapsedTime -= animationSprites[spriteName]->currentState->duration;
 
             // Move to the next frame, looping back to the first frame if necessary
-            animationSprites[spriteName]->currentState->currentFrame = (animationSprites[spriteName]->currentState->currentFrame) + 1 % animationSprites[spriteName]->currentState->frames.size();
+            animationSprites[spriteName]->currentState->currentFrame = (animationSprites[spriteName]->currentState->currentFrame + 1) % animationSprites[spriteName]->currentState->frames.size();
         }
 
         // Set the current frame texture rectangle for the sprite
