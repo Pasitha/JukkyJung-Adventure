@@ -1,18 +1,23 @@
 #pragma once
 // STL
 #include <iostream>
-#include <chrono>
 #include <sstream>
-#include <cstdlib>
-#include <functional>
+#include <fstream>
+#include <functional>  // for function objects
+
 #include <future>
 #include <thread>
 #include <mutex>
-#include <chrono>
+
+#include <chrono>  // for time-related functionalities
+#include <ctime>   // for time manipulation
+
 #include <unordered_map>
-#include <cmath>
-#include <csignal>
-#include <ctime>
+#include <queue>
+
+#include <cmath>  // for math functions
+#include <cstdlib> // for general utilities (e.g., atoi)
+#include <csignal> // for signal handling
 
 // SFML
 #include <SFML/Graphics.hpp>
@@ -22,8 +27,9 @@
 #include <discord.h>
 
 #include "Discord.h"
-#include "SpriteAnimation.h"
 #include "FileManager.h"
+#include "SpriteAnimation.h"
+#include "MapManager.h"
 #include "Button.h"
 #include "UIElementManager.h"
 #include "Character.h"
