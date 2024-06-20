@@ -93,17 +93,20 @@ void FileManager::LoadAsync(T& resource, const std::string& fileName, std::promi
     promise.set_value(success);
 }
 
+// Function to parse a CSV file and return a 2D vector of strings
 std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName) {
     std::vector<std::vector<std::string>> data;
-    std::ifstream file(fileName); // Open file
+    std::ifstream file(fileName); // Open the file
     if (!file.is_open()) {
-		// Throw an exception on loading failure
-		throw std::runtime_error("Failed to load file: " + fileName);
+        // Throw an exception on loading failure
+        throw std::runtime_error("Failed to load file: " + fileName);
     }
 
     std::string line;
-    while (std::getline(file, line)) { // Read each line from the file
-        data.push_back(SplitLine(line, ',')); // Split the line into tokens and add to data
+    // Read each line from the file
+    while (std::getline(file, line)) {
+        // Split the line into tokens and add to data
+        data.push_back(SplitLine(line, ','));
     }
 
     file.close(); // Close the file
