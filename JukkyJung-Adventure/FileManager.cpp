@@ -97,7 +97,8 @@ std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& f
     std::vector<std::vector<std::string>> data;
     std::ifstream file(fileName); // Open file
     if (!file.is_open()) {
-        // Handle file opening error
+		// Throw an exception on loading failure
+		throw std::runtime_error("Failed to load file: " + fileName);
     }
 
     std::string line;
