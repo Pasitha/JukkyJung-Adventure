@@ -85,6 +85,8 @@ Game::Game() :
 
     sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 32, 32, 60, 34, "asset/terrain_atlas.png");
     sceneComponents[Scene::GamePlay]->map->setMapScale("village", { 2.5f, 2.5f });
+
+    std::vector<std::vector<std::string>> mapdata = FileManager::ParseCSV("asset/village._ground_grass_decorate.csv");
 }
 
 #ifdef _DEBUG
@@ -278,7 +280,7 @@ void Game::HandleEvents() {
 void Game::Render() {
     // Clear the window with a specific color
     window.clear(sf::Color(199, 119, 19, 255));
-    
+
     // Render UI elements for the current scene
     if (sceneComponents[currentScene]->uiElement) {
 		sceneComponents[currentScene]->uiElement->update();
