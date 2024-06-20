@@ -93,6 +93,22 @@ void FileManager::LoadAsync(T& resource, const std::string& fileName, std::promi
     promise.set_value(success);
 }
 
+std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName) {
+    std::vector<std::vector<std::string>> data;
+    std::ifstream file(fileName); // Open file
+    if (!file.is_open()) {
+        // Handle file opening error
+    }
+
+    std::string line;
+    while (std::getline(file, line)) { // Read each line from the file
+        data.push_back(SplitLine(line, ',')); // Split the line into tokens and add to data
+    }
+
+    file.close(); // Close the file
+    return data;
+}
+
 // Function to clear the entire cache
 void FileManager::ClearCache() {
     imageCache.clear();
@@ -113,6 +129,30 @@ template void FileManager::ClearCache<sf::Music>();
 template<typename T>
 void FileManager::ClearCache() {
     ClearCacheForType(GetCache<T>());
+}
+
+// Helper function to split a line into tokens based on a delimiter
+std::vector<std::string> FileManager::SplitLine(const std::string& line, char delimiter) {
+    std::vector<std::string> tokens;
+    std::stringstream ss(line);
+    std::string token;
+
+    // Extract tokens based on the delimiter
+    while (std::getline(ss, token, delimiter)) {
+        // Handle potential quotes within tokens
+        if (token.front() == '"' && token.back() == '"') {
+            // Remove leading and trailing quotes if present
+            token = token.substr(1, token.size() - 2);
+        }
+        tokens.push_back(token);
+    }
+
+    // Handle the last token (if no trailing delimiter)
+    if (!ss.eof()) {
+        tokens.push_back(ss.str());
+    }
+
+    return tokens;
 }
 
 // Helper function to clear cache for a specific resource type
