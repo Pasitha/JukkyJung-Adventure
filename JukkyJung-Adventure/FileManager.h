@@ -23,6 +23,9 @@ private:
     static std::unordered_map<std::string, sf::SoundBuffer> soundBufferCache;
     static std::unordered_map<std::string, sf::Music> musicCache;
 
+    // Helper function to split a line into tokens based on a delimiter
+    static std::vector<std::string> SplitLine(const std::string& line, char delimiter);
+
     // Helper function to clear cache for a specific resource type
     template<typename T>
     static void ClearCacheForType(std::unordered_map<std::string, T>& cache);
@@ -43,6 +46,9 @@ public:
     // Template function to load a resource from a file asynchronously
     template<typename T>
     static std::future<bool> LoadAsync(const std::string& fileName);
+
+    // Function to parse a CSV file and return a 2D vector of strings
+    static std::vector<std::vector<std::string>> ParseCSV(const std::string& fileName);
 
     // Function to clear the entire cache
     static void ClearCache();
