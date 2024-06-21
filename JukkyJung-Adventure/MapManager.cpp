@@ -17,7 +17,13 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
     // Set texture rect and position for each tile sprite and add to the map
     for (uint64_t col = 0; col < colSpriteCount; ++col) {
         for (uint64_t row = 0; row < rowSpriteCount; ++row) {
-            sprite.setTextureRect(sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight));
+#ifdef _DEBUG
+            std::cout << col * rowSpriteCount + row << std::endl;
+#endif
+            sf::IntRect currentTileTexture = sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight);
+            map->tileTextureRect.emplace_back(currentTileTexture);
+
+            sprite.setTextureRect(currentTileTexture);
             sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
             map->tileSprites.emplace_back(sprite);
         }
@@ -34,12 +40,30 @@ void MapManager::setMapScale(const std::string& name, const sf::Vector2f& scale)
         for (uint64_t row = 0; row < maps[name]->rowSpriteCount; ++row) {
             auto& sprite = maps[name]->tileSprites[col * maps[name]->rowSpriteCount + row];
             sprite.setScale(scale);
-            sprite.setTextureRect(sf::IntRect(row * maps[name]->tileWidth, col * maps[name]->tileHeight, maps[name]->tileWidth, maps[name]->tileHeight));
             sprite.setPosition(sf::Vector2f(row * maps[name]->tileWidth * scale.x, col * maps[name]->tileHeight * scale.y));
         }
     }
 }
 
+void MapManager::setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData) {
+#ifdef _DEBUG
+	std::cout << "tileSprite size: " << maps[name]->tileSprites.size() << std::endl;
+#endif
+    for (uint64_t col = 0; col < maps[name]->colSpriteCount; ++col) {
+        for (uint64_t row = 0; row < maps[name]->rowSpriteCount; ++row) {
+#ifdef _DEBUG
+            std::cout << "tile ID: " << std::atoi(mapData[col][row].c_str()) << std::endl;
+#endif
+            __int16 tileID = std::atoi(mapData[col][row].c_str());
+
+            if (tileID != -1) {
+				auto& sprite = maps[name]->tileSprites[tileID];
+				sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
+            }
+        }
+    }
+}
+    
 // Draws the specified map
 void MapManager::draw(const std::string& name) {
     // Draw each tile sprite in the map
