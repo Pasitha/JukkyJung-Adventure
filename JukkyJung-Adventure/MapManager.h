@@ -19,6 +19,8 @@ public:
 
     void setMapScale(const std::string& name, const sf::Vector2f& scale);
 
+    void setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData);
+
     // Draws all maps managed by the MapManager
     void draw(const std::string& name);
 
@@ -32,6 +34,7 @@ private:
         uint64_t rowSpriteCount;
         uint64_t colSpriteCount;
         sf::Texture tileSetTexture;
+        std::vector<sf::IntRect> tileTextureRect;
         std::vector<sf::Sprite> tileSprites;
 
         // Constructor to initialize a map with the specified dimensions and tile size
