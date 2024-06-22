@@ -12,8 +12,8 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
     FileManager::LoadFromFile(map->tileSetTexture, tileset);
 
     // Set texture rect and position for each tile sprite and add to the map
-    for (uint64_t col = 0; col < colSpriteCount; ++col) {
-        for (uint64_t row = 0; row < rowSpriteCount; ++row) {
+    for (uint64_t col = 0; col < colSpriteCount; col++) {
+        for (uint64_t row = 0; row < rowSpriteCount; row++) {
 #ifdef _DEBUG
             std::cout << col * rowSpriteCount + row << std::endl;
 #endif
@@ -26,16 +26,16 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
 	sf::Sprite sprite;
 	sprite.setTexture(map->tileSetTexture);
 
-    for (uint16_t col = 0; col < mapHeight; ++col) {
-        for (uint16_t row = 0; row < mapWidth; ++row) {
+    for (uint16_t col = 0; col < mapHeight; col++) {
+        for (uint16_t row = 0; row < mapWidth; row++) {
 			sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
 			map->tileSprites.emplace_back(sprite);
         }
     }
 
     // Set texture rect and position for each tile sprite and add to the map
-    for (uint64_t col = 0; col < colSpriteCount; ++col) {
-        for (uint64_t row = 0; row < rowSpriteCount; ++row) {
+    for (uint64_t col = 0; col < colSpriteCount; col++) {
+        for (uint64_t row = 0; row < rowSpriteCount; row++) {
             map->tileSprites[col * rowSpriteCount + row].setTextureRect(map->tileTextureRect[col * rowSpriteCount + row]);
         }
     }
