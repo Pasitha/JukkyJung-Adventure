@@ -11,9 +11,6 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
     // Load the texture for the tileset of the specified map
     FileManager::LoadFromFile(map->tileSetTexture, tileset);
 
-    sf::Sprite sprite;
-    sprite.setTexture(map->tileSetTexture);
-
     // Set texture rect and position for each tile sprite and add to the map
     for (uint64_t col = 0; col < colSpriteCount; ++col) {
         for (uint64_t row = 0; row < rowSpriteCount; ++row) {
@@ -23,9 +20,23 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
             sf::IntRect currentTileTexture = sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight);
             map->tileTextureRect.emplace_back(currentTileTexture);
 
-            sprite.setTextureRect(currentTileTexture);
-            sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
-            map->tileSprites.emplace_back(sprite);
+        }
+    }
+
+	sf::Sprite sprite;
+	sprite.setTexture(map->tileSetTexture);
+
+    for (uint16_t col = 0; col < mapHeight; ++col) {
+        for (uint16_t row = 0; row < mapWidth; ++row) {
+			sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
+			map->tileSprites.emplace_back(sprite);
+        }
+    }
+
+    // Set texture rect and position for each tile sprite and add to the map
+    for (uint64_t col = 0; col < colSpriteCount; ++col) {
+        for (uint64_t row = 0; row < rowSpriteCount; ++row) {
+            map->tileSprites[col * rowSpriteCount + row].setTextureRect(map->tileTextureRect[col * rowSpriteCount + row]);
         }
     }
 
@@ -36,9 +47,9 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
 // Sets the scale for the specified map
 void MapManager::setMapScale(const std::string& name, const sf::Vector2f& scale) {
     // Update scale, texture rect, and position for each tile sprite in the map
-    for (uint64_t col = 0; col < maps[name]->colSpriteCount; ++col) {
-        for (uint64_t row = 0; row < maps[name]->rowSpriteCount; ++row) {
-            auto& sprite = maps[name]->tileSprites[col * maps[name]->rowSpriteCount + row];
+    for (uint64_t col = 0; col < maps[name]->mapHeight; ++col) {
+        for (uint64_t row = 0; row < maps[name]->mapWidth; ++row) {
+            auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
             sprite.setScale(scale);
             sprite.setPosition(sf::Vector2f(row * maps[name]->tileWidth * scale.x, col * maps[name]->tileHeight * scale.y));
         }
@@ -46,22 +57,32 @@ void MapManager::setMapScale(const std::string& name, const sf::Vector2f& scale)
 }
 
 void MapManager::setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData) {
-#ifdef _DEBUG
-	std::cout << "tileSprite size: " << maps[name]->tileSprites.size() << std::endl;
-#endif
-    for (uint64_t col = 0; col < maps[name]->colSpriteCount; ++col) {
-        for (uint64_t row = 0; row < maps[name]->rowSpriteCount; ++row) {
-#ifdef _DEBUG
-            std::cout << "tile ID: " << std::atoi(mapData[col][row].c_str()) << std::endl;
-#endif
-            __int16 tileID = std::atoi(mapData[col][row].c_str());
+    for (uint64_t col = 0; col < maps[name]->mapHeight; ++col) {
+        for (uint64_t row = 0; row < maps[name]->mapWidth; ++row) {
+            short tileID = std::atoi(mapData[col][row].c_str());
 
             if (tileID != -1) {
-				auto& sprite = maps[name]->tileSprites[tileID];
+				auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
 				sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
             }
         }
     }
+
+#ifdef TEST2
+    int i = 0;
+    for (const auto& dataVector : mapData) {
+        for (const auto& data : dataVector) {
+            short tileID = std::atoi(data.c_str());
+#ifdef _DEBUG
+            std::cout << "tileID: " << tileID << std::endl;
+#endif
+            if (tileID != -1) {
+                auto& sprite = maps[name]->tileSprites[i++];
+				sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
+            }
+        }
+    }
+#endif
 }
     
 // Draws the specified map
