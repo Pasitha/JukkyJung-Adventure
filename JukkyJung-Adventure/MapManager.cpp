@@ -26,17 +26,10 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
 	sf::Sprite sprite;
 	sprite.setTexture(map->tileSetTexture);
 
-    for (uint16_t col = 0; col < mapHeight; col++) {
-        for (uint16_t row = 0; row < mapWidth; row++) {
+    for (uint16_t col = 0; col < mapWidth; col++) {
+        for (uint16_t row = 0; row < mapHeight; row++) {
 			sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
 			map->tileSprites.emplace_back(sprite);
-        }
-    }
-
-    // Set texture rect and position for each tile sprite and add to the map
-    for (uint64_t col = 0; col < colSpriteCount; col++) {
-        for (uint64_t row = 0; row < rowSpriteCount; row++) {
-            map->tileSprites[col * rowSpriteCount + row].setTextureRect(map->tileTextureRect[col * rowSpriteCount + row]);
         }
     }
 
@@ -52,6 +45,15 @@ void MapManager::setMapScale(const std::string& name, const sf::Vector2f& scale)
             auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
             sprite.setScale(scale);
             sprite.setPosition(sf::Vector2f(row * maps[name]->tileWidth * scale.x, col * maps[name]->tileHeight * scale.y));
+        }
+    }
+}
+
+void MapManager::setDefaultTile(const std::string& name, uint64_t defaultTileID) {
+    for (uint64_t col = 0; col < maps[name]->mapHeight; ++col) {
+        for (uint64_t row = 0; row < maps[name]->mapWidth; ++row) {
+			auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
+			sprite.setTextureRect(maps[name]->tileTextureRect[defaultTileID]);
         }
     }
 }
