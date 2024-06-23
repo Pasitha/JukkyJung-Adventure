@@ -19,6 +19,8 @@ public:
 
     void setMapScale(const std::string& name, const sf::Vector2f& scale);
 
+    void setDefaultTile(const std::string& name, uint64_t defaultTileID);
+
     void setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData);
 
     // Draws all maps managed by the MapManager
