@@ -84,9 +84,11 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->map = std::make_unique<MapManager>(&window);
 
     sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 32, 32, 60, 34, "asset/terrain_atlas.png");
+    sceneComponents[Scene::GamePlay]->map->setDefaultTile("village", 118);
+    sceneComponents[Scene::GamePlay]->map->setTileMap("village", FileManager::ParseCSV("asset/village._ground_grass_decorate.csv"));
     sceneComponents[Scene::GamePlay]->map->setMapScale("village", { 2.5f, 2.5f });
 
-    std::vector<std::vector<std::string>> mapdata = FileManager::ParseCSV("asset/village._ground_grass_decorate.csv");
+
 }
 
 #ifdef _DEBUG
