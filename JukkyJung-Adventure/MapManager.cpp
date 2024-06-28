@@ -59,12 +59,18 @@ void MapManager::setDefaultTile(const std::string& name, uint64_t defaultTileID)
 }
 
 void MapManager::setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData) {
+#ifdef _DEBUG
+    std::cout << "Map height: " << maps[name]->mapHeight << ", Map width: " << maps[name]->mapWidth << " total map size: " << maps[name]->mapWidth * maps[name]->mapHeight << std::endl;
+#endif
     for (uint64_t col = 0; col < maps[name]->mapHeight; col++) {
         for (uint64_t row = 0; row < maps[name]->mapWidth; row++) {
             short tileID = std::atoi(mapData[col][row].c_str());
+#ifdef _DEBUG
+			std::cout << "col: " << col << " row: " << row << " at index " << col * maps[name]->mapWidth + row << " current tileID : " << tileID << std::endl;
+#endif
 
             if (tileID != -1) {
-				auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
+				auto& sprite = maps[name]->tileSprites[col * maps[name]->mapWidth + row];
 				sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
             }
         }
