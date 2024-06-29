@@ -15,7 +15,7 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
     for (uint64_t col = 0; col < colSpriteCount; col++) {
         for (uint64_t row = 0; row < rowSpriteCount; row++) {
 #ifdef _DEBUG
-            std::cout << col * rowSpriteCount + row << std::endl;
+            std::cout << "push new sprite ID: " << col * rowSpriteCount + row << std::endl;
 #endif
             sf::IntRect currentTileTexture = sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight);
             map->tileTextureRect.emplace_back(currentTileTexture);
