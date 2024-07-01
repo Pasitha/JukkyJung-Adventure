@@ -99,4 +99,3 @@ private:
      */
     void Render();
 };
-
