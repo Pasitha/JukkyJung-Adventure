@@ -4,7 +4,7 @@
 const float Character::Scale = 0.3f;
 
 // Constructor for the Character class
-Character::Character() {
+Character::Character(sf::RenderWindow* window) : windowInstance(window) {
     // Load font from file
     FileManager::LoadFromFile(textFont, "asset/font/ReadexPro.ttf");
 }
@@ -51,23 +51,39 @@ void Character::setElementalPower(const std::string& characterName, ElementalPow
 
 // Private helper function to add a character with specified attributes
 void Character::addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath) {
-    auto& attributes = charactersAttributes[name];
-    attributes.name = name;
-    attributes.health = health;
-    attributes.attack = attack;
-    attributes.elementalPower = elementalPower;
+    if (charactersAttributes.find(name) == charactersAttributes.end()) {
+		auto& attributes = charactersAttributes[name];
+		attributes.name = name;
+		attributes.health = health;
+		attributes.attack = attack;
+		attributes.elementalPower = elementalPower;
 
-    // Load texture from file
-    FileManager::LoadFromFile(attributes.texture, characterTexturePath);
+		// Load texture from file
+		FileManager::LoadFromFile(attributes.texture, characterTexturePath);
 
-    // Set sprite properties
-    attributes.sprite.setTexture(attributes.texture);
-    attributes.sprite.setScale({ Scale, Scale });
+		// Set sprite properties
+		attributes.sprite.setTexture(attributes.texture);
+		attributes.sprite.setScale({ Scale, Scale });
+    }
+#ifdef _DEBUG
+    else {
+        std::cout << "Character already exists: " << name << std::endl;
+    }
+#endif
 }
 
+/*
+void Character::setCharacterPosition(const std::string characterName, const sf::Vector2f& characterPosition, const bool isFlip = false) {
+    charactersAttributes[characterName].sprite.setPosition(characterPosition);
+
+    if (isFlip) {
+		charactersAttributes[characterName].sprite.setScale(-1.f, 0.f);
+    }
+}
+*/
 // Function to draw the character on the game window
-void Character::draw(sf::RenderWindow* window, std::string name) {
-    window->draw(charactersAttributes[name].sprite);
+void Character::draw(std::string name) {
+    windowInstance->draw(charactersAttributes[name].sprite);
 }
 
 // Setter method for character's attributes
