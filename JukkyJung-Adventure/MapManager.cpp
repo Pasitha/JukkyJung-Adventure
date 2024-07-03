@@ -4,7 +4,7 @@
 MapManager::MapManager(sf::RenderWindow* window) : windowInstance(window) {}
 
 // Adds a new map with the specified parameters
-void MapManager::addMap(const std::string& mapName, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight, const std::string& tileset) {
+void MapManager::addMap(const std::string& mapName, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight) {
     // Create a new map with the specified dimensions and tile size
     std::shared_ptr<Map> map = std::make_shared<Map>(tileWidth, tileHeight, rowSpriteCount, colSpriteCount, mapWidth, mapHeight);
 
