@@ -18,7 +18,7 @@ public:
      * @param mapHeight Height of the map in tiles
      * @param tileset Path to the tileset texture file
      */
-    void addMap(const std::string& mapName, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight, const std::string& tileset);
+    void addMap(const std::string& mapName, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight);
 
     void addLayer(const std::string& mapName, uint16_t layerID, const std::string& tileset);
 
