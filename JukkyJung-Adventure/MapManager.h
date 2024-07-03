@@ -10,17 +10,23 @@ public:
     /**
      * Adds a new map with the specified parameters.
      * @param name Name of the map
-     * @param width Width of the map in tiles
-     * @param height Height of the map in tiles
-     * @param tileSize Size of each tile in pixels
+     * @param tileWidth Width of each tile in pixels
+     * @param tileHeight Height of each tile in pixels
+     * @param rowSpriteCount Number of sprite rows in the tileset
+     * @param colSpriteCount Number of sprite columns in the tileset
+     * @param mapWidth Width of the map in tiles
+     * @param mapHeight Height of the map in tiles
      * @param tileset Path to the tileset texture file
      */
     void addMap(const std::string& name, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight, const std::string& tileset);
 
+    // Sets the scale for the specified map
     void setMapScale(const std::string& name, const sf::Vector2f& scale);
 
+    // Sets the default tile for the specified map
     void setDefaultTile(const std::string& name, uint64_t defaultTileID);
 
+    // Sets the tile map for the specified map using tile IDs from mapData
     void setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData);
 
     // Draws all maps managed by the MapManager
