@@ -17,19 +17,17 @@ void MapManager::addMap(const std::string& name, uint64_t tileWidth, uint64_t ti
 #ifdef _DEBUG
             std::cout << "push new sprite ID: " << col * rowSpriteCount + row << std::endl;
 #endif
-            sf::IntRect currentTileTexture = sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight);
-            map->tileTextureRect.emplace_back(currentTileTexture);
-
+            map->tileTextureRect.emplace_back(sf::IntRect(row * tileWidth, col * tileHeight, tileWidth, tileHeight));
         }
     }
 
-	sf::Sprite sprite;
-	sprite.setTexture(map->tileSetTexture);
+    sf::Sprite sprite;
+    sprite.setTexture(map->tileSetTexture);
 
-    for (uint16_t col = 0; col < mapWidth; col++) {
-        for (uint16_t row = 0; row < mapHeight; row++) {
-			sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
-			map->tileSprites.emplace_back(sprite);
+    for (uint16_t col = 0; col < mapHeight; col++) {
+        for (uint16_t row = 0; row < mapWidth; row++) {
+            sprite.setPosition(sf::Vector2f(row * tileWidth, col * tileHeight));
+            map->tileSprites.emplace_back(sprite);
         }
     }
 
@@ -42,23 +40,30 @@ void MapManager::setMapScale(const std::string& name, const sf::Vector2f& scale)
     // Update scale, texture rect, and position for each tile sprite in the map
     for (uint64_t col = 0; col < maps[name]->mapHeight; ++col) {
         for (uint64_t row = 0; row < maps[name]->mapWidth; ++row) {
-            auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
+            auto& sprite = maps[name]->tileSprites[col * maps[name]->mapWidth + row];
             sprite.setScale(scale);
             sprite.setPosition(sf::Vector2f(row * maps[name]->tileWidth * scale.x, col * maps[name]->tileHeight * scale.y));
         }
     }
 }
 
+// Sets the default tile for the specified map
 void MapManager::setDefaultTile(const std::string& name, uint64_t defaultTileID) {
     for (uint64_t col = 0; col < maps[name]->mapHeight; col++) {
         for (uint64_t row = 0; row < maps[name]->mapWidth; row++) {
-			auto& sprite = maps[name]->tileSprites[col * maps[name]->mapHeight + row];
-			sprite.setTextureRect(maps[name]->tileTextureRect[defaultTileID]);
+            auto& sprite = maps[name]->tileSprites[col * maps[name]->mapWidth + row];
+            sprite.setTextureRect(maps[name]->tileTextureRect[defaultTileID]);
         }
     }
 }
 
+// Sets the tile map for the specified map using tile IDs from mapData
 void MapManager::setTileMap(const std::string& name, const std::vector<std::vector<std::string>>& mapData) {
+    // Error handling: Map data size mismatch
+    if (mapData.size() != maps[name]->mapHeight || mapData[0].size() != maps[name]->mapWidth) {
+        std::cerr << "Error: Map data dimensions (" << mapData.size() << "x" << mapData[0].size() << ") don't match map size (" << maps[name]->mapHeight << "x" << maps[name]->mapWidth << ")" << std::endl;
+        return;
+    }
 #ifdef _DEBUG
     std::cout << "Map height: " << maps[name]->mapHeight << ", Map width: " << maps[name]->mapWidth << " total map size: " << maps[name]->mapWidth * maps[name]->mapHeight << std::endl;
 #endif
@@ -66,37 +71,22 @@ void MapManager::setTileMap(const std::string& name, const std::vector<std::vect
         for (uint64_t row = 0; row < maps[name]->mapWidth; row++) {
             short tileID = std::atoi(mapData[col][row].c_str());
 #ifdef _DEBUG
-			std::cout << "col: " << col << " row: " << row << " at index " << col * maps[name]->mapWidth + row << " current tileID : " << tileID << std::endl;
+            std::cout << "col: " << col << " row: " << row << " at index " << col * maps[name]->mapWidth + row << " current tileID : " << tileID << std::endl;
 #endif
 
             if (tileID != -1) {
-				auto& sprite = maps[name]->tileSprites[col * maps[name]->mapWidth + row];
-				sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
+                auto& sprite = maps[name]->tileSprites[col * maps[name]->mapWidth + row];
+                sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
             }
         }
     }
-
-#ifdef TEST2
-    int i = 0;
-    for (const auto& dataVector : mapData) {
-        for (const auto& data : dataVector) {
-            short tileID = std::atoi(data.c_str());
-#ifdef _DEBUG
-            std::cout << "tileID: " << tileID << std::endl;
-#endif
-            if (tileID != -1) {
-                auto& sprite = maps[name]->tileSprites[i++];
-				sprite.setTextureRect(maps[name]->tileTextureRect[tileID]);
-            }
-        }
-    }
-#endif
 }
-    
-// Draws the specified map
+
+// Draws the specified map managed by the MapManager
 void MapManager::draw(const std::string& name) {
     // Draw each tile sprite in the map
     for (const auto& tile : maps[name]->tileSprites) {
         windowInstance->draw(tile);
     }
 }
+
