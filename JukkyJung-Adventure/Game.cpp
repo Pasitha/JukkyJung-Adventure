@@ -92,7 +92,7 @@ Game::Game() :
     sceneComponents[Scene::GamePlay]->map->setDefaultTile("village", 2, 224);
     sceneComponents[Scene::GamePlay]->map->setTileMap("village", 1, "asset/terrain_atlas.png", FileManager::ParseCSV("asset/village._ground_grass_decorate.csv"));
     sceneComponents[Scene::GamePlay]->map->setTileMap("village", 2, "asset/terrain_atlas.png", FileManager::ParseCSV("asset/village._ground_water path.csv"));
-    sceneComponents[Scene::GamePlay]->map->setMapScale("village", { .5f, .5f });
+    sceneComponents[Scene::GamePlay]->map->setMapScale("village", { 2.f, 2.f });
 }
 
 #ifdef _DEBUG
