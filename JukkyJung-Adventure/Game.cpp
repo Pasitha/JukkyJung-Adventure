@@ -83,10 +83,15 @@ Game::Game() :
 
     sceneComponents[Scene::GamePlay]->map = std::make_unique<MapManager>(&window);
 
-    sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 32, 32, 60, 34, "asset/terrain_atlas.png");
-    sceneComponents[Scene::GamePlay]->map->setDefaultTile("village", 112);
-    // sceneComponents[Scene::GamePlay]->map->setTileMap("village", FileManager::ParseCSV("asset/village._ground_grass_decorate.csv"));
-    sceneComponents[Scene::GamePlay]->map->setTileMap("village", FileManager::ParseCSV("asset/village._ground_water path.csv"));
+    sceneComponents[Scene::GamePlay]->map->addMap("village", 32, 32, 32, 32, 60, 34);
+    sceneComponents[Scene::GamePlay]->map->addLayer("village", 0, "asset/terrain_atlas.png");
+    sceneComponents[Scene::GamePlay]->map->addLayer("village", 1, "asset/terrain_atlas.png");
+    sceneComponents[Scene::GamePlay]->map->addLayer("village", 2, "asset/terrain_atlas.png");
+    sceneComponents[Scene::GamePlay]->map->setDefaultTile("village", 0, 112);
+    sceneComponents[Scene::GamePlay]->map->setDefaultTile("village", 1, 224);
+    sceneComponents[Scene::GamePlay]->map->setDefaultTile("village", 2, 224);
+    sceneComponents[Scene::GamePlay]->map->setTileMap("village", 1, "asset/terrain_atlas.png", FileManager::ParseCSV("asset/village._ground_grass_decorate.csv"));
+    sceneComponents[Scene::GamePlay]->map->setTileMap("village", 2, "asset/terrain_atlas.png", FileManager::ParseCSV("asset/village._ground_water path.csv"));
     sceneComponents[Scene::GamePlay]->map->setMapScale("village", { .5f, .5f });
 }
 
