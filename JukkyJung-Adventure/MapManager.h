@@ -23,7 +23,7 @@ public:
     void addLayer(const std::string& mapName, uint16_t layerID, const std::string& tileset);
 
     // Sets the scale for the specified map
-    void setMapScale(const std::string& mapName, uint16_t layerID, const sf::Vector2f& scale);
+    void setMapScale(const std::string& mapName, const sf::Vector2f& scale);
 
     // Sets the default tile for the specified map
     void setDefaultTile(const std::string& mapName, uint16_t layerID, uint64_t defaultTileID);
