@@ -38,16 +38,17 @@ void MapManager::addLayer(const std::string& mapName, uint16_t layerID, const st
 }
 
 // Sets the scale for the specified map
-void MapManager::setMapScale(const std::string& mapName, uint16_t layerID, const sf::Vector2f& scale) {
+void MapManager::setMapScale(const std::string& mapName, const sf::Vector2f& scale) {
     auto& map = maps[mapName];
-    auto& layer = map->layers[layerID];
 
     // Update scale, texture rect, and position for each tile sprite in the map
-    for (uint64_t col = 0; col < map->mapHeight; ++col) {
-        for (uint64_t row = 0; row < map->mapWidth; ++row) {
-            auto& sprite = layer.tileSprites[col * map->mapWidth + row];
-            sprite.setScale(scale);
-            sprite.setPosition(sf::Vector2f(row * map->tileWidth * scale.x, col * map->tileHeight * scale.y));
+    for (auto& [layerID, layer] : map->layers) {
+        for (uint64_t col = 0; col < map->mapHeight; ++col) {
+            for (uint64_t row = 0; row < map->mapWidth; ++row) {
+                auto& sprite = layer.tileSprites[col * map->mapWidth + row];
+                sprite.setScale(scale);
+                sprite.setPosition(sf::Vector2f(row * map->tileWidth * scale.x, col * map->tileHeight * scale.y));
+            }
         }
     }
 }
