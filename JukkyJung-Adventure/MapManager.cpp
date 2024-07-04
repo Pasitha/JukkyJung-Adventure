@@ -19,7 +19,7 @@ void MapManager::addLayer(const std::string& mapName, uint16_t layerID, const st
     layer.tileSetTexturePath = tileset;
 
     // Load the texture if not already loaded
-    if (map->tileSetTextures.find(tileset) == map->tileSetTextures.end()) {
+    if (map->tileSetTextures.count(tileset) > 0) {
 		// Load the texture for the tileset
 		FileManager::LoadFromFile(map->tileSetTextures[tileset], tileset);
     }
