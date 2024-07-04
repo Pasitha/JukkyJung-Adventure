@@ -16,8 +16,13 @@ void MapManager::addLayer(const std::string& mapName, uint16_t layerID, const st
     auto& map = maps[mapName];
     auto& layer = map->layers[layerID];
 
-    // Load the texture for the tileset
-    FileManager::LoadFromFile(layer.tileSetTexture, tileset);
+    layer.tileSetTexturePath = tileset;
+
+    // Load the texture if not already loaded
+    if (map->tileSetTextures.find(tileset) == map->tileSetTextures.end()) {
+		// Load the texture for the tileset
+		FileManager::LoadFromFile(map->tileSetTextures[tileset], tileset);
+    }
 
     // Set texture rect and position for each tile sprite
     for (uint64_t col = 0; col < map->colSpriteCount; col++) {
@@ -27,7 +32,7 @@ void MapManager::addLayer(const std::string& mapName, uint16_t layerID, const st
     }
 
     sf::Sprite sprite;
-    sprite.setTexture(layer.tileSetTexture);
+    sprite.setTexture(map->tileSetTextures[tileset]);
 
     for (uint64_t col = 0; col < map->mapHeight; col++) {
         for (uint64_t row = 0; row < map->mapWidth; row++) {
