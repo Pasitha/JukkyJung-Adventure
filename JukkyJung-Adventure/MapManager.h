@@ -48,13 +48,14 @@ private:
 
         // Each layer will have its own texture and tile sprites
         struct Layer {
-            sf::Texture tileSetTexture;
+            std::string tileSetTexturePath;
             std::vector<sf::IntRect> tileTextureRect;
             std::vector<sf::Sprite> tileSprites;
 
             Layer() {}
         };
 
+        std::unordered_map<std::string, sf::Texture> tileSetTextures;
         std::unordered_map<uint16_t, Layer> layers;
 
         // Constructor to initialize a map with the specified dimensions and tile size
