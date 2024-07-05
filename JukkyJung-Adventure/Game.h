@@ -45,6 +45,8 @@ public:
 
 private:
     sf::RenderWindow window;                  // SFML window for rendering
+    sf::View camera;                          // SFML view for camera control
+
     Scene currentScene;                       // Current scene in the game
     std::unordered_map<Scene, std::unique_ptr<SceneComponents>> sceneComponents;  // Map of scenes to their components
     sf::Font gameFont;                        // Font used in the game for text rendering
@@ -61,21 +63,40 @@ private:
     /**
      * Handles hover events based on the current scene.
      * This function is responsible for updating button hover states.
+     * @param currentScene The current scene in the game
+     * @param isGamePaused Flag indicating whether the game is paused
      */
     void HandleHover(Scene currentScene, bool isGamePaused);
 
     /**
      * Handles button press events based on the current scene.
      * This function processes button clicks and updates the game state accordingly.
+     * @param buttonHoverId ID of the button that was pressed
      */
     void HandleButtonPress(int buttonHoverId);
 
-    // Handles player movement in the GamePlay scene
+    /**
+     * Handles player movement in the GamePlay scene.
+     * This function updates the player's position based on input.
+     */
     void HandlePlayerMovement();
 
-    // Function to handle user input events
+    /**
+     * Handles user input events.
+     * This function processes input from the user, such as keyboard and mouse events.
+     */
     void HandleEvents();
 
-    // Function to render the current state of the game
+    /**
+     * Updates the camera position and settings based on the current game state.
+     * This function ensures the camera follows the player or other target.
+     */
+    void UpdateCamera();
+
+    /**
+     * Renders the current state of the game.
+     * This function draws all game objects to the window.
+     */
     void Render();
 };
+
