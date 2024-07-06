@@ -94,6 +94,10 @@ void SpriteAnimation::setState(const std::string& spriteName, const std::string&
     }
 }
 
+sf::Vector2f SpriteAnimation::getPosition(const std::string& spriteName) {
+    return animationSprites[spriteName].get()->sprite.getPosition();
+}
+
 // Change to a different state
 void SpriteAnimation::changeState(const std::string& spriteName, const std::string& stateName, bool resetCurrentFrame) {
     // Find the new state in the map
