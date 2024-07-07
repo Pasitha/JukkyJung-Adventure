@@ -62,6 +62,12 @@ public:
      */
     void draw(const std::string& mapName);
 
+    /**
+     * Updates the camera view to follow the target.
+     * @param targetPosition Position of the target to follow
+     */
+    void updateCamera(const sf::Vector2f& targetPosition);
+
 private:
     // Struct representing a single map, including its properties and tile data
     struct Map {
@@ -105,6 +111,9 @@ private:
 
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
 
+    sf::View camera;                         // Camera view for the map
+
     std::unordered_map<std::string, std::shared_ptr<Map>> maps; // Unordered map of maps, keyed by their names
+
 };
 
