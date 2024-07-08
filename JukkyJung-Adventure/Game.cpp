@@ -10,6 +10,10 @@ Game::Game() :
     // Set a frame rate limit to the window
     window.setFramerateLimit(60);
 
+    // Initialize the camera to the size of the window
+    camera.setSize(sf::Vector2f(window.getSize()));
+    camera.setCenter(sf::Vector2f(window.getSize()) / 2.f);
+
     // Load the game font from a file
     FileManager::LoadFromFile(gameFont, "asset/UI/Font/kenvector_future.ttf");
 
@@ -282,6 +286,32 @@ void Game::HandleEvents() {
 	}
 }
 
+
+void Game::UpdateCamera() {
+    // Example: Center the camera on the player's position
+    sf::Vector2f playerPosition = sceneComponents[Scene::GamePlay]->spriteAnimation->getPosition("JukkyJung");
+    camera.setCenter(playerPosition);
+
+    // Optionally add constraints to keep the camera within the bounds of the game world
+    sf::Vector2f halfSize = camera.getSize() / 2.f;
+    sf::Vector2f worldSize(1920.f, 1080.f);
+    if (playerPosition.x < halfSize.x) {
+        camera.setCenter(halfSize.x, camera.getCenter().y);
+    }
+    else if (playerPosition.x > worldSize.x - halfSize.x) {
+        camera.setCenter(worldSize.x - halfSize.x, camera.getCenter().y);
+    }
+    if (playerPosition.y < halfSize.y) {
+        camera.setCenter(camera.getCenter().x, halfSize.y);
+    }
+    else if (playerPosition.y > worldSize.y - halfSize.y) {
+        camera.setCenter(camera.getCenter().x, worldSize.y - halfSize.y);
+    }
+
+    // Apply the camera to the window
+    window.setView(camera);
+}
+
 // Render the current game scene
 void Game::Render() {
     // Clear the window with a specific color
@@ -348,6 +378,9 @@ void Game::GameLoop() {
         // Update deltaTime to the time elapsed since the last frame
         deltaTime = clock.restart().asSeconds();
         
+        // Update and apply the camera
+        UpdateCamera();
+
         // Handle input events (mouse, keyboard, etc.)
         HandleEvents();
 
