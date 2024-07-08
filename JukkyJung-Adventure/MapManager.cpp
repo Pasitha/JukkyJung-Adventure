@@ -1,7 +1,11 @@
 #include "MapManager.h"
 
 // Constructor to initialize the MapManager with a reference to the SFML window
-MapManager::MapManager(sf::RenderWindow* window) : windowInstance(window) {}
+MapManager::MapManager(sf::RenderWindow* window) : windowInstance(window) {
+    // Initialize the camera view to the window size
+    camera.setSize(windowInstance->getSize().x, windowInstance->getSize().y);
+    camera.setCenter(windowInstance->getSize().x / 2, windowInstance->getSize().y / 2);
+}
 
 // Adds a new map with the specified parameters
 void MapManager::addMap(const std::string& mapName, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight) {
@@ -97,11 +101,24 @@ void MapManager::setTileMap(const std::string& mapName, int layerID, const std::
 
 // Draws the specified map managed by the MapManager
 void MapManager::draw(const std::string& mapName) {
+    // Set the camera view to the window
+    windowInstance->setView(camera);
+
     // Draw each tile sprite in the map
     for (const auto& [layerID, Layer] : maps[mapName]->layers) {
 		for (const auto& tile : Layer.tileSprites) {
 			windowInstance->draw(tile);
 		}
     }
+
+    // Reset the view to default (optional, if you need to draw UI or other elements)
+    windowInstance->setView(windowInstance->getDefaultView());
 }
 
+void MapManager::updateCamera(const sf::Vector2f& targetPosition) {
+    // Center the camera on the target position
+    camera.setCenter(targetPosition);
+
+    // Set the camera view to the window
+    windowInstance->setView(camera);
+}
