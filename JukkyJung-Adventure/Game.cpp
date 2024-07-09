@@ -378,9 +378,6 @@ void Game::GameLoop() {
         // Update deltaTime to the time elapsed since the last frame
         deltaTime = clock.restart().asSeconds();
         
-        // Update and apply the camera
-        UpdateCamera();
-
         // Handle input events (mouse, keyboard, etc.)
         HandleEvents();
 
@@ -388,6 +385,10 @@ void Game::GameLoop() {
         if (currentScene == Scene::GamePlay) {
             HandlePlayerMovement();
         }
+
+        // Update camera based on player's position 
+        sf::Vector2f playerPosition = sceneComponents[Scene::GamePlay]->spriteAnimation->getPosition("JukkyJung");
+        sceneComponents[currentScene]->map->updateCamera(playerPosition);
 
         // Render the current frame
         Render();
