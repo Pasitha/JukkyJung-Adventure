@@ -384,11 +384,12 @@ void Game::GameLoop() {
         // Check if the current scene is GamePlay
         if (currentScene == Scene::GamePlay) {
             HandlePlayerMovement();
+
+			// Update camera based on player's position 
+			sf::Vector2f playerPosition = sceneComponents[Scene::GamePlay]->spriteAnimation->getPosition("JukkyJung");
+			sceneComponents[currentScene]->map->updateCamera(playerPosition);
         }
 
-        // Update camera based on player's position 
-        sf::Vector2f playerPosition = sceneComponents[Scene::GamePlay]->spriteAnimation->getPosition("JukkyJung");
-        sceneComponents[currentScene]->map->updateCamera(playerPosition);
 
         // Render the current frame
         Render();
