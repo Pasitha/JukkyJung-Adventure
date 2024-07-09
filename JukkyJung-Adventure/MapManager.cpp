@@ -116,8 +116,11 @@ void MapManager::draw(const std::string& mapName) {
 }
 
 void MapManager::updateCamera(const sf::Vector2f& targetPosition) {
-    // Center the camera on the target position
-    camera.setCenter(targetPosition);
+    // Check if camera is valid before setting the view
+    if (camera.getSize().x <= 0 || camera.getSize().y <= 0) {
+        std::cerr << "Error: Invalid camera size!" << std::endl;
+        return;
+    }
 
     // Set the camera view to the window
     windowInstance->setView(camera);
