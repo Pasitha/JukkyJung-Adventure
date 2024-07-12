@@ -54,8 +54,6 @@ public:
      */
     void setTileMap(const std::string& mapName, int layerID, const std::string& tileset, const std::vector<std::vector<std::string>>& mapData);
 
-    // void drawLayer(const std::string& mapName, int layerID);
-
     /**
      * Draws all maps managed by the MapManager.
      * @param mapName Name of the map to be drawn
