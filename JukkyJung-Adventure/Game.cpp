@@ -286,7 +286,6 @@ void Game::HandleEvents() {
 	}
 }
 
-
 void Game::UpdateCamera() {
     // Example: Center the camera on the player's position
     sf::Vector2f playerPosition = sceneComponents[Scene::GamePlay]->spriteAnimation->getPosition("JukkyJung");
@@ -389,7 +388,6 @@ void Game::GameLoop() {
 			sf::Vector2f playerPosition = sceneComponents[Scene::GamePlay]->spriteAnimation->getPosition("JukkyJung");
 			sceneComponents[currentScene]->map->updateCamera(playerPosition);
         }
-
 
         // Render the current frame
         Render();
