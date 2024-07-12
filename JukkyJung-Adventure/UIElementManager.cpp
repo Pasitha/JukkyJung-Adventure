@@ -149,7 +149,9 @@ void UIElementManager::setThumbPosition(uint64_t elementId) {
     if (sliders.find(elementId) != sliders.end()) {
         sf::Vector2i mousePosition = sf::Mouse::getPosition(*windowInstance);
         sf::Vector2f mousePositionF(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
-        sliders[elementId].thumb.setPosition(std::max(sliders[elementId].track.getGlobalBounds().width, mousePositionF.x), sliders[elementId].thumb.getPosition().y);
+        const auto& sliderTrackBounds = sliders[elementId].track.getGlobalBounds();
+        float newX = std::max(sliderTrackBounds.left, std::min(mousePositionF.x, sliderTrackBounds.left + sliderTrackBounds.width - sliders[elementId].thumb.getGlobalBounds().width));
+        sliders[elementId].thumb.setPosition(newX, sliders[elementId].thumb.getPosition().y);
     }
 }
 
