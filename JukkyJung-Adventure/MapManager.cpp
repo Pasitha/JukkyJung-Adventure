@@ -9,11 +9,8 @@ MapManager::MapManager(sf::RenderWindow* window) : windowInstance(window) {
 
 // Adds a new map with the specified parameters
 void MapManager::addMap(const std::string& mapName, uint64_t tileWidth, uint64_t tileHeight, uint64_t rowSpriteCount, uint64_t colSpriteCount, uint64_t mapWidth, uint64_t mapHeight) {
-    // Create a new map with the specified dimensions and tile size
-    std::shared_ptr<Map> map = std::make_shared<Map>(tileWidth, tileHeight, rowSpriteCount, colSpriteCount, mapWidth, mapHeight);
-
-    // Add the new map to the maps collection
-    maps[mapName] = map;
+    // Create a new map with the specified dimensions and tile size and add the new map to the maps collection
+    maps[mapName] = std::make_shared<Map>(tileWidth, tileHeight, rowSpriteCount, colSpriteCount, mapWidth, mapHeight);
 }
 
 void MapManager::addLayer(const std::string& mapName, uint16_t layerID, const std::string& tileset) {
@@ -92,8 +89,7 @@ void MapManager::setTileMap(const std::string& mapName, int layerID, const std::
         for (uint64_t row = 0; row < map->mapWidth; row++) {
             int16_t tileID = std::atoi(mapData[col][row].c_str());
             if (tileID != -1) {
-                auto& sprite = layer.tileSprites[col * map->mapWidth + row];
-                sprite.setTextureRect(layer.tileTextureRect[tileID]);
+                layer.tileSprites[col * map->mapWidth + row].setTextureRect(layer.tileTextureRect[tileID]);
             }
         }
     }
