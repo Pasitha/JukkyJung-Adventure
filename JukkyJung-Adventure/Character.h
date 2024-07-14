@@ -10,7 +10,7 @@ enum class ElementalPower {
 class Character {
 public:
     // Explicit constructor to initialize the Character object
-    explicit Character();
+    explicit Character(sf::RenderWindow* window);
 
     // Getter methods for individual attributes
     std::string getName(const std::string& characterName) const;
@@ -24,11 +24,13 @@ public:
     void setAttack(const std::string& characterName, int newAttack);
     void setElementalPower(const std::string& characterName, ElementalPower newElementalPower);
 
-    // Private helper function to add a character with specified attributes
+    // Function to add a character with specified attributes
     void addCharacter(const std::string& name, int health, int attack, ElementalPower elementalPower, const std::string& characterTexturePath);
 
+    // void setCharacterPosition(const std::string characterName, const sf::Vector2f& characterPosition, const bool isFlip = false);
+
     // Function to draw the character on the game window
-    void draw(sf::RenderWindow* window, std::string name);
+    void draw(std::string name);
 
 private:
     // Struct to represent attributes of the character
@@ -45,6 +47,9 @@ private:
         // Font and text for displaying health
         sf::Text healthText;
     };
+
+	// Pointer to the SFML render window
+    sf::RenderWindow* windowInstance;
 
     // Static constant for scaling factor of the character
     static const float Scale;
