@@ -62,6 +62,8 @@ public:
      */
     void moveSprite(const std::string& spriteName, sf::Vector2f offset);
 
+    const sf::Sprite& getSprite(const std::string& spriteName) const;
+
     /**
      * Updates the animation frame based on elapsed time.
      * @param spriteName Name of the sprite
