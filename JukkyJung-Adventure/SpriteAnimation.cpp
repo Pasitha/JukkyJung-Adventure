@@ -94,8 +94,8 @@ void SpriteAnimation::setState(const std::string& spriteName, const std::string&
     }
 }
 
-sf::Vector2f SpriteAnimation::getPosition(const std::string& spriteName) {
-    return animationSprites[spriteName].get()->sprite.getPosition();
+const sf::Vector2f& SpriteAnimation::getPosition(const std::string& spriteName) const {
+    return animationSprites.at(spriteName)->getPosition();
 }
 
 // Change to a different state
@@ -127,6 +127,10 @@ void SpriteAnimation::moveSprite(const std::string& spriteName, sf::Vector2f off
     // Update debug shape position when moving the sprite
     debugShape[spriteName].move(offset);
 #endif
+}
+
+const sf::Sprite& SpriteAnimation::getSprite(const std::string& spriteName) const {
+    return animationSprites[spriteName];
 }
 
 // Update the animation frame based on elapsed time
