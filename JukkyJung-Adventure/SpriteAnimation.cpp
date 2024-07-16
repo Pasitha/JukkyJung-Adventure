@@ -129,10 +129,6 @@ void SpriteAnimation::moveSprite(const std::string& spriteName, sf::Vector2f off
 #endif
 }
 
-const sf::Sprite& SpriteAnimation::getSprite(const std::string& spriteName) const {
-    return animationSprites[spriteName];
-}
-
 // Update the animation frame based on elapsed time
 void SpriteAnimation::updateAnimation(const std::string& spriteName, float deltaTime) {
     if (animationSprites[spriteName]->currentState) {
