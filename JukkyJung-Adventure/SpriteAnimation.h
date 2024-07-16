@@ -58,7 +58,7 @@ public:
      * @param spriteName Name of the sprite
      * @return Reference to the position of the sprite
      */
-    const sf::Vector2f getPosition(const std::string& spriteName);
+    const sf::Vector2f& getPosition(const std::string& spriteName) const;
 
     /**
      * Moves the sprite by a given offset.
@@ -104,6 +104,11 @@ private:
         AnimationState* currentState;                            // Pointer to the current animation state
 
         AnimationSprite() : rowCount(0), currentState(nullptr) {}
+
+        // Method to get the position of the sprite
+        const sf::Vector2f& getPosition() const {
+            return sprite.getPosition();
+        }
     };
 
     sf::RenderWindow* windowInstance;  // Pointer to the SFML render window
