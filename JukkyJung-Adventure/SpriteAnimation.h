@@ -53,7 +53,12 @@ public:
      */
     void changeState(const std::string& spriteName, const std::string& stateName, bool resetCurrentFrame = false);
 
-    sf::Vector2f getPosition(const std::string& spriteName);
+    /**
+     * Returns a reference to the position of the sprite.
+     * @param spriteName Name of the sprite
+     * @return Reference to the position of the sprite
+     */
+    const sf::Vector2f getPosition(const std::string& spriteName);
 
     /**
      * Moves the sprite by a given offset.
