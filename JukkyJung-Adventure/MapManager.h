@@ -55,6 +55,15 @@ public:
     void setTileMap(const std::string& mapName, int layerID, const std::string& tileset, const std::vector<std::vector<std::string>>& mapData);
 
     /**
+     * Sets a character to a specified position on a map.
+     * @param mapName Name of the map
+     * @param characterName Name of the character sprite
+     * @param coordinateX X coordinate on the map
+     * @param coordinateY Y coordinate on the map
+     */
+    void setCharacterToMap(const std::string& mapName, const std::string& characterName, uint16_t coordinateX, uint16_t coordinateY);
+    
+    /**
      * Draws all maps managed by the MapManager.
      * @param mapName Name of the map to be drawn
      */
@@ -112,6 +121,4 @@ private:
     sf::View camera;                         // Camera view for the map
 
     std::unordered_map<std::string, std::shared_ptr<Map>> maps; // Unordered map of maps, keyed by their names
-
 };
-
