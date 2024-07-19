@@ -89,8 +89,16 @@ std::future<bool> FileManager::LoadAsync(const std::string& fileName) {
 // Helper function for asynchronous loading
 template<typename T>
 void FileManager::LoadAsync(T& resource, const std::string& fileName, std::promise<bool>& promise) {
-    bool success = LoadFromFile(resource, fileName);
-    promise.set_value(success);
+    std::promise<T> promise;
+    auto future = promise.get_future();
+
+    std::thread([fileName, &promise]() {
+        T resource;
+        bool success = LoadFromFile(resource, fileName);
+        promise.set_value(resource);
+    }).detach();
+
+    return future;
 }
 
 // Function to parse a CSV file and return a 2D vector of strings
