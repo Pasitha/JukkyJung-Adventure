@@ -4,6 +4,7 @@
 #include <sstream>
 #include <fstream>
 #include <functional>  // for function objects
+#include <stdexcept> // for standard exceptions
 
 #include <future>
 #include <thread>
