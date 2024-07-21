@@ -96,7 +96,6 @@ void MapManager::setTileMap(const std::string& mapName, int layerID, const std::
 }
 
 void MapManager::setCharacterToMap(const std::string& mapName, const std::string& characterName, uint16_t coordinateX, uint16_t coordinateY) {
-    
 
 }
 
