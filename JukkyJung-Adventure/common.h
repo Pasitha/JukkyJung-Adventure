@@ -28,6 +28,7 @@
 #include <discord.h>
 
 #include "Discord.h"
+#include "FileLoadException.h"
 #include "FileManager.h"
 #include "SpriteAnimation.h"
 #include "MapManager.h"
