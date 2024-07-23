@@ -35,27 +35,31 @@ template <typename T> std::unordered_map<std::string, T>& FileManager::GetCache(
 // Template function to load a resource from a file
 template <typename T>
 bool FileManager::LoadFromFile(T& resource, const std::string& fileName) {
-    // Check if the resource is already in the cache
-    auto& cache = GetCache<T>();
+    try {
+		// Check if the resource is already in the cache
+		auto& cache = GetCache<T>();
 
-    auto it = cache.find(fileName);
-    if (it != cache.end()) {
-        // Use the cached resource if available
-        resource = it->second;
-        return true;
-    }
-    else {
-        // Load the resource from file
-        if (!resource.loadFromFile(fileName)) {
-            // Throw an exception on loading failure
-            throw std::runtime_error("Failed to load file: " + fileName);
-            return false;
-        }
-        else {
-            // If loading is successful, add it to the cache
-            cache[fileName] = resource;
-            return true;
-        }
+		auto it = cache.find(fileName);
+		if (it != cache.end()) {
+			// Use the cached resource if available
+			resource = it->second;
+			return true;
+		}
+		else {
+			// Load the resource from file
+			if (!resource.loadFromFile(fileName)) {
+				// Throw an exception on loading failure
+				throw std::runtime_error("Failed to load file: " + fileName);
+				return false;
+			}
+			else {
+				// If loading is successful, add it to the cache
+				cache[fileName] = resource;
+				return true;
+			}
+		}
+    } catch (const std::runtime_error& e) {
+        throw FileLoadException("Failed to load file: " + fileName + ", Error: " + e.what());
     }
 }
 
