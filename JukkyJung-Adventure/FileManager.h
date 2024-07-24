@@ -50,6 +50,8 @@ public:
     // Function to parse a CSV file and return a 2D vector of strings
     static std::vector<std::vector<std::string>> ParseCSV(const std::string& fileName);
 
+    static std::vector<std::vector<std::string>> ParseCSV(const std::string& fileName, char delimiter = ',', char quote = '"');
+
     // Function to clear the entire cache
     static void ClearCache();
 
