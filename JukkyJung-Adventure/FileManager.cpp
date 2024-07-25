@@ -125,6 +125,46 @@ std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& f
     return data;
 }
 
+std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName, char delimiter = ',', char quote = '"') {
+    // Parse CSV data into a vector of vectors of strings
+    std::vector<std::vector<std::string>> result;
+    std::istringstream ss(fileName);
+    std::string line;
+
+    while (std::getline(ss, line)) {
+        // Parse each line of CSV data
+        std::vector<std::string> row;
+        std::istringstream lineStream(line);
+        std::string field;
+
+        bool inQuotes = false;
+        while (std::getline(lineStream, field, delimiter)) {
+            // Handle quoted fields and empty fields
+            if (inQuotes) {
+                // Append delimiter to field if currently in quotes
+                field += delimiter;
+            }
+            else if (field.empty() && !lineStream.eof()) {
+                // Skip empty fields if not at end of line
+                continue;
+            }
+            else if (field.back() == quote) {
+                // Remove trailing quote if found
+                field.pop_back();
+                inQuotes = !inQuotes;
+            }
+            else if (field.find(quote) != std::string::npos) {
+                // Handle fields with embedded quotes
+                inQuotes = true;
+            }
+            row.push_back(field);
+        }
+        result.push_back(row);
+    }
+
+    return result;
+}
+
 // Function to clear the entire cache
 void FileManager::ClearCache() {
     imageCache.clear();
