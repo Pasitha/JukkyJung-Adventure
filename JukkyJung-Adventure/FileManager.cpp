@@ -125,6 +125,7 @@ std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& f
     return data;
 }
 
+// Parses a CSV string into a vector of vectors of strings
 std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName, char delimiter = ',', char quote = '"') {
     // Parse CSV data into a vector of vectors of strings
     std::vector<std::vector<std::string>> result;
