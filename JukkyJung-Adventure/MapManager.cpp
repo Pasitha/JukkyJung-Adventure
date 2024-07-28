@@ -96,7 +96,16 @@ void MapManager::setTileMap(const std::string& mapName, int layerID, const std::
 }
 
 void MapManager::setCharacterToMap(const std::string& mapName, const std::string& characterName, uint16_t coordinateX, uint16_t coordinateY) {
+    auto& map = maps[mapName];
 
+    // Create and add a new character
+    sf::Sprite characterSprite;
+    // Assuming the character texture is already loaded (you need to load it somewhere)
+    // characterSprite.setTexture(characterTexture);
+    Character character(characterName, characterSprite, coordinateX, coordinateY);
+    character.sprite.setPosition(coordinateX * map->tileWidth, coordinateY * map->tileHeight);
+
+    characters.push_back(character);
 }
 
 // Draws the specified map managed by the MapManager
@@ -109,6 +118,11 @@ void MapManager::draw(const std::string& mapName) {
 		for (const auto& tile : Layer.tileSprites) {
 			windowInstance->draw(tile);
 		}
+    }
+
+    // Draw all characters
+    for (const auto& character : characters) {
+        windowInstance->draw(character.sprite);
     }
 
     // Reset the view to default (optional, if you need to draw UI or other elements)
