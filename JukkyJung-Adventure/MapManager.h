@@ -116,9 +116,34 @@ private:
             : tileWidth(w), tileHeight(h), rowSpriteCount(rsc), colSpriteCount(cpc), mapWidth(mw), mapHeight(mh) {}
     };
 
+    // Struct representing a character in the game
+    struct Character {
+        std::string name;          // Name of the character
+        sf::Sprite sprite;         // Sprite for the character
+        uint16_t posX;             // X coordinate on the map
+        uint16_t posY;             // Y coordinate on the map
+
+        /**
+         * Constructor to initialize a character with default values.
+         */
+        Character() : posX(0), posY(0) {}
+
+        /**
+         * Constructor to initialize a character with the specified parameters.
+         * @param characterName Name of the character
+         * @param characterSprite Sprite for the character
+         * @param x X coordinate on the map
+         * @param y Y coordinate on the map
+         */
+        Character(const std::string& characterName, const sf::Sprite& characterSprite, uint16_t x, uint16_t y)
+            : name(characterName), sprite(characterSprite), posX(x), posY(y) {}
+    };
+
     sf::RenderWindow* windowInstance;        // Pointer to the SFML window for rendering
 
     sf::View camera;                         // Camera view for the map
 
     std::unordered_map<std::string, std::shared_ptr<Map>> maps; // Unordered map of maps, keyed by their names
+
+    std::vector<Character> characters;       // List of characters
 };
