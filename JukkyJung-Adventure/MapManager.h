@@ -145,5 +145,6 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<Map>> maps; // Unordered map of maps, keyed by their names
 
-    std::vector<Character> characters;       // List of characters
+    // Existing member variables...
+    std::map<std::string, sf::Vector2i> characters;  // Store characters and their grid positions
 };
