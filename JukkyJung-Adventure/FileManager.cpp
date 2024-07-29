@@ -106,7 +106,7 @@ void FileManager::LoadAsync(T& resource, const std::string& fileName, std::promi
 }
 
 // Function to parse a CSV file and return a 2D vector of strings
-std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName) {
+std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName, char delimiter) {
     std::vector<std::vector<std::string>> data;
     std::ifstream file(fileName); // Open the file
     if (!file.is_open()) {
@@ -118,52 +118,11 @@ std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& f
     // Read each line from the file
     while (std::getline(file, line)) {
         // Split the line into tokens and add to data
-        data.push_back(SplitLine(line, ','));
+        data.push_back(SplitLine(line, delimiter));
     }
 
     file.close(); // Close the file
     return data;
-}
-
-// Parses a CSV string into a vector of vectors of strings
-std::vector<std::vector<std::string>> FileManager::ParseCSV(const std::string& fileName, char delimiter = ',', char quote = '"') {
-    // Parse CSV data into a vector of vectors of strings
-    std::vector<std::vector<std::string>> result;
-    std::istringstream ss(fileName);
-    std::string line;
-
-    while (std::getline(ss, line)) {
-        // Parse each line of CSV data
-        std::vector<std::string> row;
-        std::istringstream lineStream(line);
-        std::string field;
-
-        bool inQuotes = false;
-        while (std::getline(lineStream, field, delimiter)) {
-            // Handle quoted fields and empty fields
-            if (inQuotes) {
-                // Append delimiter to field if currently in quotes
-                field += delimiter;
-            }
-            else if (field.empty() && !lineStream.eof()) {
-                // Skip empty fields if not at end of line
-                continue;
-            }
-            else if (field.back() == quote) {
-                // Remove trailing quote if found
-                field.pop_back();
-                inQuotes = !inQuotes;
-            }
-            else if (field.find(quote) != std::string::npos) {
-                // Handle fields with embedded quotes
-                inQuotes = true;
-            }
-            row.push_back(field);
-        }
-        result.push_back(row);
-    }
-
-    return result;
 }
 
 // Function to clear the entire cache
