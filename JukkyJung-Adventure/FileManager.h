@@ -91,17 +91,7 @@ public:
      * @param fileName The name of the CSV file to parse.
      * @return A 2D vector of strings representing the parsed CSV data.
      */
-    static std::vector<std::vector<std::string>> ParseCSV(const std::string& fileName);
-
-    /**
-     * Parses a CSV string into a vector of vectors of strings.
-     * Handles basic CSV formatting, including quoted fields and empty values.
-     * @param fileName The name of the CSV file to parse.
-     * @param delimiter The delimiter character (default: ',').
-     * @param quote The quote character (default: '"').
-     * @return A vector of vectors of strings representing the parsed CSV data.
-     */
-    static std::vector<std::vector<std::string>> ParseCSV(const std::string& fileName, char delimiter = ',', char quote = '"');
+    static std::vector<std::vector<std::string>> ParseCSV(const std::string& fileName, char delimiter = ',');
 
     /**
      * Clears the entire cache.
