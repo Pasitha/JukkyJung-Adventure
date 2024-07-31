@@ -61,7 +61,15 @@ public:
      * @param coordinateX X coordinate on the map
      * @param coordinateY Y coordinate on the map
      */
-    void setCharacterToMap(const std::string& mapName, const std::string& characterName, uint16_t coordinateX, uint16_t coordinateY);
+    void setCharacterToMap(const std::string& mapName, const std::string& characterName, int gridX, int gridY);
+
+    void updateCharacterPosition(const std::string& characterName, int gridX, int gridY);
+
+    sf::Vector2i getCharacterPosition(const std::string& characterName);
+
+    void drawCharacters(SpriteAnimation* spriteAnimation);
+
+    sf::Vector2f convertToWorldPosition(const sf::Vector2i& gridPosition);
     
     /**
      * Draws all maps managed by the MapManager.
