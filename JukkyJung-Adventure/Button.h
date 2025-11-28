@@ -1,61 +1,33 @@
 #pragma once
-#include "common.h"
+#include "UIElement.h"
+#include <functional>
 
-// Forward declarations for classes used in Button
-class Button;
-
-// Button class is responsible for managing buttons, handling hover effects, and rendering them.
-class Button {
+/**
+ * @class Button
+ * @brief A clickable button UI element.
+ *
+ * This class implements a standard button that can be clicked to trigger an action.
+ * It inherits from the UIElement base class.
+ */
+class Button : public UIElement {
 public:
-    // Constructor and destructor
-    Button(sf::RenderWindow* window);
-#ifdef _DEBUG
-    ~Button();
-#endif
+    /**
+     * @brief Constructs a Button object.
+     * @param text The text to be displayed on the button.
+     * @param font The font to be used for the button's text.
+     * @param position The position of the button on the screen.
+     * @param onClick A callback function to be executed when the button is clicked.
+     */
+    Button(const std::string& text, const sf::Font& font, const sf::Vector2f& position, std::function<void()> onClick);
 
-    // Add a new button with a given label and position
-    void addButton(const std::string& buttonLabel, const sf::Vector2f& buttonPosition);
-    
-    // Set the position of a button by its ID
-    void setPosition(unsigned short buttonId, const sf::Vector2f& position);
-
-    // Set the color of a button by its ID
-    void setDefaultColor(unsigned short buttonId);
-    
-    // Check if any button is being hovered and apply hover effect
-    void isHover();
-    
-    // Get the ID of the button being hovered (-1 if none)
-    int whichButtonHover();
-    
-    // Update and render the buttons
-    void update();
+    void handleEvent(sf::Event& event) override;
+    void update(sf::Time deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
+    bool isMouseOver(sf::Vector2f mousePos) override;
 
 private:
-    // Constants for button colors
-    static const sf::Color NORMAL_COLOR;
-    static const sf::Color HOVER_COLOR;
-    
-    // Alpha values for color transparency
-    static const int COLOR_ALPHA_NORMAL = 255;
-    static const int COLOR_ALPHA_HOVER = 155;
-
-    // Number of buttons
-    size_t numberOfButtons;
-
-    // Pointer to the SFML render window
-    sf::RenderWindow* windowInstance;
-
-    // SFML font, texture, sprite, and text for buttons
-    sf::Font buttonFont;
-    sf::Texture buttonTexture;
-    sf::Sprite buttonSprite;
-    sf::Text buttonText;
-
-    // Map to associate button IDs with their components (Sprite and Text)
-    std::map<size_t, std::pair<sf::Sprite, sf::Text>> buttonComponents;
-#ifdef _DEBUG
-    std::map<size_t, sf::RectangleShape> debugSprite;
-    std::map<size_t, sf::RectangleShape> debugTextRectangle;
-#endif
+    sf::Text text;
+    sf::RectangleShape shape;
+    std::function<void()> onClick;
+    bool isPressed;
 };

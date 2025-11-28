@@ -20,20 +20,5 @@
 #include <cstdlib> // for general utilities (e.g., atoi)
 #include <csignal> // for signal handling
 
-// SFML
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
-// Discord SDK
-#include <discord.h>
-
-#include "Discord.h"
 #include "FileLoadException.h"
 #include "FileManager.h"
-#include "SpriteAnimation.h"
-#include "MapManager.h"
-#include "Button.h"
-#include "UIElementManager.h"
-#include "Character.h"
-#include "Combat.h"
-#include "Game.h"

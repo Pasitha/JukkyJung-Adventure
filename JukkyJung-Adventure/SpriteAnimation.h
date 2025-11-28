@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "AssetManager.h"
 
 // SpriteAnimation class is responsible for managing and displaying sprite animations
 class SpriteAnimation {
@@ -93,7 +94,7 @@ private:
 
     // Structure to hold information about an animation sprite
     struct AnimationSprite {
-        sf::Texture texture;                                     // Texture of the sprite sheet
+        sf::Texture* texture;                                     // Texture of the sprite sheet
         sf::Sprite sprite;                                       // Sprite to display the current frame
         sf::Vector2i frameSize;                                  // Size of each frame
         uint64_t rowCount;                                       // Number of rows in the sprite sheet
@@ -112,6 +113,7 @@ private:
     sf::RenderWindow* windowInstance;  // Pointer to the SFML render window
 
     std::unordered_map<std::string, std::shared_ptr<AnimationSprite>> animationSprites;  // Map of sprite names to their AnimationSprite
+    AssetManager<sf::Texture>& textureManager; // Manages the textures
 
 #ifdef _DEBUG
     std::map<std::string, sf::RectangleShape> debugShape;  // Debug shape to visualize the sprite boundaries in debug mode

@@ -1,101 +1,93 @@
 #pragma once
 #include "common.h"
+#include "Scene.h"
+#include "Renderer.h"
+#include <SFML/Graphics.hpp>
+#include <unordered_map>
+#include <memory>
 
-// Forward declarations for classes used in Game
-class UIElementManager;
-class SpriteAnimation;
-class MapManager;
-class Character;
-class Combat;
+// Forward declarations for scene classes to avoid circular dependencies
+class MainMenuScene;
+class GamePlayScene;
+class SettingScene;
+class PauseMenuScene;
 
-// Game class is responsible for managing the game loop, handling events, and rendering scenes.
+/**
+ * @class Game
+ * @brief The main engine of the game.
+ *
+ * This class is responsible for initializing the game, managing the game loop,
+ * handling scene transitions, and holding global game resources like the window and fonts.
+ * It follows the Singleton pattern to ensure that there is only one instance of the game engine.
+ */
 class Game {
-private:
-    // Enumeration representing different scenes in the game
-    enum class Scene {
-        MainMenu,    // Main menu scene
-        Setting,     // Setting scene
-        GamePlay,    // Game play scene
-        WalkingScene,// Walking scene
-        Combat,      // Combat Gameplay scene
-        Story,       // Cut scene and story scene
-        PauseMenu    // Pause menu scene
-    };
-
-    // Struct representing game components for each scene, including Button, UIElementManager, SpriteAnimation, and Combat components
-    struct SceneComponents {
-        std::unique_ptr<UIElementManager> uiElement;      // UI elements manager for the scene
-        std::unique_ptr<SpriteAnimation> spriteAnimation; // Sprite animation component for the scene
-        std::unique_ptr<MapManager> map;                  // Map manager for the scene
-        std::unique_ptr<Combat> combat;                   // Combat component for the scene
-    };
-
 public:
-    // Constructor to initialize the game
+    /**
+     * @brief Constructs the Game object.
+     * Initializes the window, renderer, loads global assets, and sets up the scene manager.
+     */
     Game();
-
-    // Destructor added only in debug mode as a reminder for cleanup
-#ifdef _DEBUG
     ~Game();
-#endif
 
-public:
-    // Main game loop function
-    void GameLoop();
+    /**
+     * @brief Provides access to the single instance of the Game class.
+     * @return A pointer to the Game instance.
+     */
+    static Game* getInstance();
+
+    /**
+     * @brief Starts and runs the main game loop.
+     */
+    void run();
+
+    /**
+     * @brief Changes the current active scene.
+     * @param sceneType The type of the scene to switch to.
+     */
+    void changeScene(Scene::Type sceneType);
+
+    /**
+     * @brief Provides access to the main render window.
+     * @return A reference to the sf::RenderWindow.
+     */
+    sf::RenderWindow& getWindow() { return window; }
+
+    /**
+     * @brief Provides access to the global game font.
+     * @return A constant reference to the sf::Font.
+     */
+    const sf::Font& getFont() const { return gameFont; }
+
+    /**
+     * @brief Retrieves a specific scene from the scene manager.
+     * @param sceneType The type of the scene to retrieve.
+     * @return A pointer to the requested Scene object.
+     */
+    Scene* getScene(Scene::Type sceneType);
 
 private:
-    sf::RenderWindow window;                  // SFML window for rendering
-    sf::View camera;                          // SFML view for camera control
-
-    Scene currentScene;                       // Current scene in the game
-    std::unordered_map<Scene, std::unique_ptr<SceneComponents>> sceneComponents;  // Map of scenes to their components
-    sf::Font gameFont;                        // Font used in the game for text rendering
-    bool isGamePaused;                        // Flag indicating whether the game is in a paused state
-    bool isEscapePressed;                     // Flag to track if the Escape key is currently pressed
-    
-    sf::Text backgroundPauseMenuText;         // Text displayed in the background during pause
-    sf::RectangleShape backgroundPauseMenu;   // Background shape during pause
-
-    float deltaTime = 0.f;                    // Time elapsed between frames
-    sf::Clock clock;                          // Clock for measuring time
-
-private:
     /**
-     * Handles hover events based on the current scene.
-     * This function is responsible for updating button hover states.
-     * @param currentScene The current scene in the game
-     * @param isGamePaused Flag indicating whether the game is paused
+     * @brief Handles all SFML events, polling them from the window.
      */
-    void HandleHover(Scene currentScene, bool isGamePaused);
+    void handleEvents();
 
     /**
-     * Handles button press events based on the current scene.
-     * This function processes button clicks and updates the game state accordingly.
-     * @param buttonHoverId ID of the button that was pressed
+     * @brief Updates the current scene's logic.
+     * @param deltaTime The time elapsed since the last frame.
      */
-    void HandleButtonPress(int buttonHoverId);
+    void update(sf::Time deltaTime);
 
     /**
-     * Handles player movement in the GamePlay scene.
-     * This function updates the player's position based on input.
+     * @brief Renders the current scene to the window.
      */
-    void HandlePlayerMovement();
+    void render();
 
-    /**
-     * Handles user input events.
-     * This function processes input from the user, such as keyboard and mouse events.
-     */
-    void HandleEvents();
+    sf::RenderWindow window; ///< The main render window.
+    sf::Font gameFont;       ///< The global font used throughout the game.
+    Renderer renderer;       ///< The renderer responsible for all drawing operations.
 
-    /**
-     * Updates the camera position and settings based on the current game state.
-     * This function ensures the camera follows the player or other target.
-     */
-    void UpdateCamera();
+    std::unordered_map<Scene::Type, std::unique_ptr<Scene>> scenes; ///< A map holding all game scenes.
+    Scene* currentScene;     ///< A pointer to the currently active scene.
 
-    /**
-     * Renders the current state of the game.
-     * This function draws all game objects to the window.
-     */
-    void Render();
+    static Game* instance;   ///< The static instance of the Game class for the Singleton pattern.
 };

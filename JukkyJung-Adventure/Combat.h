@@ -1,13 +1,23 @@
 #pragma once
-#include "common.h"
+#include "Character.h"
+#include <vector>
+#include <memory>
+
+class Enemy; // Forward declaration
 
 class Combat {
 public:
-    Combat(const std::vector<Character>& team1, const std::vector<Character>& team2);
+    Combat(std::unique_ptr<Character> player, std::unique_ptr<Enemy> enemy);
 
-    void PerformAttack(const std::vector<Character>& team1, const std::vector<Character>& team2);
+    void start();
+    void playerAttack();
+    void playerUseItem(const std::string& itemName);
 
 private:
-    std::vector<Character> team1;
-    std::vector<Character> team2;
+    void nextTurn();
+    void enemyTurn();
+
+    std::unique_ptr<Character> player;
+    std::unique_ptr<Enemy> enemy;
+    bool isPlayerTurn;
 };
